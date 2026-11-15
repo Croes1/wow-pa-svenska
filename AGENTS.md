@@ -1,105 +1,109 @@
-# AGENTS.md — read me first (AI agents working in this repo)
+# AGENTS.md
 
-Wow på Svenska: a WoW (classic era) addon that swaps English game text for
-Swedish while playing (enUS client). This folder holds the shipped
-`Data/*.lua` databases (generated — never edit them by hand), the in-game Lua
-code, and the translation-round machinery under `translation/`.
+Instructions for AI coding agents working in this repository.
 
-## The three hard rules
+## Project
 
-1. **NO translation APIs. Ever.** Do not call any external AI service, model
-   or translation API — no LLM endpoints, no HTTP calls of any kind. **You —
-   the agent in the VS Code chat — are the translator**: you read the TASK
-   blocks, segment the English
-   yourself, write the Swedish yourself, and save it straight to the TSV
-   files. The only programs you may run are the offline, network-free tools
-   in `tools/` (checkers, batchers, parsers). The old API runner
-   (`tools/run-gemma.py`) and the API key (`.env`) were removed on
-   2026-11-15 on purpose — do not re-add them or any substitute.
-2. **Never touch `Data/*.lua` during a translation round.** They are
-   generated files containing years of reviewed Swedish; every existing
-   translation must be preserved. The merge of finished TSVs into them is a
-   separate, separately reviewed task — and the translation loop **stops
-   before it**.
-3. **Never invent text.** Segmentation (TASK A) is an exact partition of the
-   source row; translation (TASK B) keeps every game token (`$B`, `$b`, `#/#`,
-   `%s`, `$2oa`, color/link markup) byte for byte. If you are unsure about a
-   field: leave it empty/English and route the row to review.
+Wow på Svenska is a World of Warcraft Classic Era addon for WoW Forever. It replaces English game text with Swedish on an enUS client.
 
-## Read next, in this order
+- `*.lua` — addon code and translation data.
+- `Data/` — game text databases.
+- `translation/` — translation sources, glossary, prompts and batches.
+- `tools/` — offline parsing, translation and validation tools.
+- `tests/` — automated tests.
 
-1. `translation/PIPELINE.md` — the full loop: how new data arrives, the
-   offline tools, the per-batch steps (segment → verify → review → translate
-   → validate), the acceptance gate, and the STOP boundary.
-2. `translation/PROMPT-GEMMA.md` — the TASK A (segment), TASK B (translate)
-   and NPC-variant blocks you must follow verbatim (the file name is
-   historical; no "Gemma chat" is involved anymore).
-3. `translation/PROMPT-translation.md` — style rules for the Swedish prose
-   (address the player as "du", ellipsis as " ...", straight quotes,
-   glossary-first naming, …).
-4. `translation/batches/review/DECISIONS-2026-11-15.md` — the recorded
-   field-placement and terminology decisions (fragment rows, writs,
-   Skullsplitter etc.) — follow them for consistency.
+## Rules
 
-## How new data arrives in this repo
+1. **No external APIs or network calls.** Translation work must use the repository's offline tools. Do not introduce translation APIs, external AI services, HTTP requests or API credentials.
+2. **Preserve existing translations.** Never overwrite reviewed translations. Generated data files must not be edited manually during translation rounds. Merging translations into game data is a separate, explicitly reviewed step.
+3. **Preserve game formatting.** Keep all placeholders, color codes, links, escape sequences and game-specific tokens exactly as they appear in the source.
+4. **Do not guess.** If a translation or field placement is uncertain, leave it for review rather than inventing text.
+5. **Follow the existing project conventions.** Avoid unnecessary dependencies, generated files, unrelated refactoring and duplicated documentation.
 
-New English data comes from the enUS client's own WDB caches
-(`Cache/WDB/questcache.wdb`, `Cache/WDB/creaturecache.wdb`) — written
-automatically while playing, no addon involved. The maintainer converts them
-with `tools/parse-wdb.py` into two TAB-separated caches in `translation/`:
+## Before making changes
 
-- `translation/questcache-en.tsv` — `id<TAB>text` (one glued line per quest:
-  title+objectives+description+progress+reward)
-- `translation/creaturecache-en.tsv` — `id<TAB>name<TAB>title`
+1. Check the current Git status and inspect existing changes.
+2. Read `translation/PIPELINE.md` before working on translations.
+3. Read `translation/PROMPT-GEMMA.md` for segmentation and translation instructions.
+4. Read `translation/PROMPT-translation.md` for Swedish writing conventions.
+5. Check `translation/glossary-core.tsv` and relevant review decisions for established terminology.
+6. Run the existing tests before making substantial changes:
 
-(A voluntary in-game **Collector** addon is planned but does not exist yet;
-if it one day appears, treat its SavedVariables dump as raw input only —
-the WDB route above is what works today.)
+   ```bash
+   python3 -m unittest discover -s tests
+   ```
 
-- `translation/questcache-en.tsv` — `id<TAB>text` (one glued line per quest:
-  title+objectives+description+progress+reward)
-- `translation/creaturecache-en.tsv` — `id<TAB>name<TAB>title`
+## Translation workflow
 
-Plus, from time to time: `/wps fel` reports — players are told to `/reload` (or
-log out) and then send the file
-`WTF/Account/<account>/SavedVariables/WPSDB.lua`; the maintainer copies the
-`WPSDB.reports` table out of it. Game-data exports (items/spells/zones from
-wago.tools or cmangos) — the latter arrive as *maintainer* edits to `Data/`,
-never as part of your round.
+Follow `translation/PIPELINE.md` for the complete workflow, including:
 
-## What to say to the agent (one-liner, next data round)
+- Importing new English game text.
+- Selecting untranslated entries and creating batches.
+- Segmenting and validating source text.
+- Translating and reviewing entries.
+- Running validation before merging.
 
-> "Ny data är sparad i translation/questcache-en.tsv (+ creaturecache-en.tsv).
-> Läs AGENTS.md och translation/PIPELINE.md och kör nästa översättningsrunda."
+Do not skip validation or start a new translation round while an earlier round is unfinished.
 
-## What the agent does BEFORE translating anything
+## After changes
 
-1. Read `AGENTS.md` → `translation/PIPELINE.md` → the TASK/style files above.
-2. Sanity-check the new caches (UTF-8, TAB-separated, column counts, a few
-   eyeballed rows).
-3. Run `python3 -m unittest discover -s tests` once (must end `OK`).
-4. Run `python3 tools/select-untranslated.py <questcache-en.tsv>
-   <creaturecache-en.tsv>` — regenerates
-   `translation/quest-not-translated.tsv` / `npcs-not-translated.tsv`
-   (watch the `overlapp > 0` confirmation).
-5. Run `python3 tools/make-batches.py` — regenerates
-   `translation/batches/*.tsv` (10 quests / 150 NPCs per file). This is the
-   ground truth for the whole round; check `wc -l translation/batches/*.tsv`.
-6. Heed the **stale rule** in PIPELINE.md (finish/archive the old round
-   before pulling new data).
-7. Only now pick the first unfinished batch and start TASK A.
+- Run relevant tests and validation tools.
+- Check that existing translations and game formatting are preserved.
+- Review the Git diff for unintended changes.
+- Do not merge generated translations into `Data/` unless explicitly requested.
 
-## Status (2026-11-15)
+Keep changes focused and documentation concise. When in doubt, follow the existing implementation rather than introducing a new approach# AGENTS.md
 
-- The 2026-11-15 round is complete: 1 139 NPC rows and 133 quest rows
-  (batches 01–14) translated and verified by the offline checkers; the 5
-  stubborn rows (79677, 586, 5763, 94221, 98248) were done by hand — see
-  `translation/batches/review/DECISIONS-2026-11-15.md`.
-- The old API machinery (runner, tests, key, queue scripts) was removed.
-- **MERGED (2026-11-15):** `tools/merge-translation.py` created
-  `Data/QuestExtra.lua` (+133 quests) and `Data/NpcExtra.lua` (+1 139 names)
-  and `.toc` loads both files after their main Data files. Verified with
-  lua5.1 (parse + runtime WPS-stub check, `if LQ[id] == nil` guard so
-  reviewed Data/*.lua can never be overwritten). Rollback = remove those two
-  files + the two `.toc` lines. Next loop restarts at Loop Point 1 when new
-  cache data arrives.
+Instructions for AI coding agents working in this repository.
+
+## Project
+
+Wow på Svenska is a World of Warcraft Classic Era addon for WoW Forever. It replaces English game text with Swedish on an enUS client.
+
+- `*.lua` — addon code and translation data.
+- `Data/` — game text databases.
+- `translation/` — translation sources, glossary, prompts and batches.
+- `tools/` — offline parsing, translation and validation tools.
+- `tests/` — automated tests.
+
+## Rules
+
+1. **No external APIs or network calls.** Translation work must use the repository's offline tools. Do not introduce translation APIs, external AI services, HTTP requests or API credentials.
+2. **Preserve existing translations.** Never overwrite reviewed translations. Generated data files must not be edited manually during translation rounds. Merging translations into game data is a separate, explicitly reviewed step.
+3. **Preserve game formatting.** Keep all placeholders, color codes, links, escape sequences and game-specific tokens exactly as they appear in the source.
+4. **Do not guess.** If a translation or field placement is uncertain, leave it for review rather than inventing text.
+5. **Follow the existing project conventions.** Avoid unnecessary dependencies, generated files, unrelated refactoring and duplicated documentation.
+
+## Before making changes
+
+1. Check the current Git status and inspect existing changes.
+2. Read `translation/PIPELINE.md` before working on translations.
+3. Read `translation/PROMPT-GEMMA.md` for segmentation and translation instructions.
+4. Read `translation/PROMPT-translation.md` for Swedish writing conventions.
+5. Check `translation/glossary-core.tsv` and relevant review decisions for established terminology.
+6. Run the existing tests before making substantial changes:
+
+   ```bash
+   python3 -m unittest discover -s tests
+   ```
+
+## Translation workflow
+
+Follow `translation/PIPELINE.md` for the complete workflow, including:
+
+- Importing new English game text.
+- Selecting untranslated entries and creating batches.
+- Segmenting and validating source text.
+- Translating and reviewing entries.
+- Running validation before merging.
+
+Do not skip validation or start a new translation round while an earlier round is unfinished.
+
+## After changes
+
+- Run relevant tests and validation tools.
+- Check that existing translations and game formatting are preserved.
+- Review the Git diff for unintended changes.
+- Do not merge generated translations into `Data/` unless explicitly requested.
+
+Keep changes focused and documentation concise. When in doubt, follow the existing implementation rather than introducing a new approach..
