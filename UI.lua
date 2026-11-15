@@ -269,6 +269,91 @@ local function HookGameTooltip()
 end
 
 ---------------------------------------------------------------------------
+-- /wps dump: samlar osträngade texter från de fönster som är öppna
+-- (statistik-, anseende- och färdighetslistorna måste skrollas/-klickas
+-- igenom). Material för en uppdateringsrunda — som /wps fel, men allt på
+-- en gång. Sparas i WPSDB.uiDump (SavedVariables) med fönstret som först
+-- visade texten som värde; /reload eller utloggning sparar filen.
+---------------------------------------------------------------------------
+local function DumpFrame(frame, out, depth)
+	if (frame.IsForbidden and frame:IsForbidden()) or not frame:IsVisible() then return end
+	for _, r in ipairs({ frame:GetRegions() }) do
+		if r:GetObjectType() == "FontString" and r:IsVisible() then
+			local text = r:GetText()
+			if type(text) == "string" and text ~= "" and not isSecret(text)
+				and text:find("[A-Za-z]") and not text:find("|H")
+				and Translate(text, 0) == nil then
+				out[text] = out[text] or (frame.GetName and frame:GetName() or "?")
+			end
+		end
+	end
+	if depth < 30 then
+		for _, child in ipairs({ frame:GetChildren() }) do
+			DumpFrame(child, out, depth + 1)
+		end
+	end
+end
+
+local dumpTicker, dumpSession = nil, 0
+
+local function DumpPass()
+	local db = WPS.db
+	if not db then return 0, 0 end
+	db.uiDump = db.uiDump or {}
+	local before = 0
+	for _ in pairs(db.uiDump) do before = before + 1 end
+	for _, name in ipairs(PANELS) do
+		local f = _G[name]
+		if f and f.IsVisible and f:IsVisible() then pcall(DumpFrame, f, db.uiDump, 0) end
+	end
+	if GameTooltip and GameTooltip.IsVisible and GameTooltip:IsVisible() then
+		pcall(DumpFrame, GameTooltip, db.uiDump, 0)
+	end
+	local total = 0
+	for _ in pairs(db.uiDump) do total = total + 1 end
+	return total - before, total
+end
+
+local function DumpStop()
+	if dumpTicker then dumpTicker:Cancel() dumpTicker = nil end
+	dumpSession = dumpSession + 1
+	local total = 0
+	if WPS.db and WPS.db.uiDump then
+		for _ in pairs(WPS.db.uiDump) do total = total + 1 end
+	end
+	WPS.Print(("dump: klar — %d texter total. /reload eller logga ut för att spara, skicka sedan WPSDB.lua."):format(total))
+end
+
+function WPS.UIDump(arg)
+	if not WPS.db then return end
+	if arg == "stop" or arg == "0" then DumpStop() return end
+	if not WPS.On("ui") then
+		WPS.Print("dump: rutan \"Fönster och knappar\" är av — kryssa i den först.")
+		return
+	end
+	local seconds = tonumber(arg) or 60
+	if dumpTicker then dumpTicker:Cancel() dumpTicker = nil end
+	dumpSession = dumpSession + 1
+	local session = dumpSession
+	local added, total = DumpPass()
+	WPS.Print(("dump: %d nya texter direkt (%d su). Samplar %d sekunder — klicka/skrolla igenom listorna; sluta tidigt med /wps dump stop."):format(added, total, seconds))
+	dumpTicker = C_Timer.NewTicker(0.5, function()
+		if session ~= dumpSession then return end
+		local a, t = DumpPass()
+		if t >= 5000 then
+			DumpStop()
+			WPS.Print("dump: uppnått maxantalet (5000) — stoppar.")
+			return
+		end
+		if a > 0 then WPS.Print(("dump: %d nya (su %d)"):format(a, t)) end
+	end, math.max(1, math.floor(seconds / 0.5)))
+	C_Timer.After(seconds + 0.2, function()
+		if session ~= dumpSession then return end
+		DumpStop()
+	end)
+end
+
+---------------------------------------------------------------------------
 -- Menyer
 ---------------------------------------------------------------------------
 

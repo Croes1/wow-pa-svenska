@@ -90,3 +90,50 @@ posterna funnits länge). Sidoeffekt: även andra exaktmatchande strängar i
 tooltips ("Poor"="Dålig" m.fl.) får svensk text; samma ruta "Fönster och
 knappar" styr. Provkörs i spelet; om sidoeffekten är stötande begränsas
 walken till första raden (TextLeft1).
+
+## Tillägg: omgång 2 — fullsvit ur /wps dump (2026-11-15)
+
+Spelaren körde `/wps dump` och skickade `WPSDB.lua`; `WPSDB.uiDump`
+extraherades och renades till `translation/ui/dump-2026-11-15-{en,sv}.tsv`
+(217 strängar: statistik i sin helhet, färdighetsbeskrivningar,
+fraktionsbeskrivningar, statspanel, PvP/valuta, flikknappar). Alla poster
+inlagda i `Data/UiExtra.lua` under "[2026-11-15, omgång 2]".
+
+Fyra nycklar från omgång 1 hade aldrig matchat i spel (dumpen avslöjade):
+Darkspear- och ingenjörsbeskrivningen har DUBBELA mellanslag efter
+meningsslutet ("Horde.  They"), honorbeskrivningen har "PvP" (ej "PVP"),
+och "Season 1" har inledande mellanslag — alla tre åtgärdade (den sista med
+nyckeln " Season 1" → " Säsong 1").
+
+Terminologi (nya beslut, konsekventa med glosor där de finns):
+
+- Honorable Kills = **Ärorika dråp**; Killing Blows = **Dödande slag**;
+  kills = **dräp** (statistikton, jfr "dräp"-stilen i questtexter)
+- Alterac Valley = **Alteracdalen**; Arathi Basin = **Arathibäckenet**;
+  The Barrens = **Kargmarkerna** (enligt README:s ortlista);
+  Darkspear Islands = **Darkspearöarna** (serverns egen arena; namnet
+  bevaras)
+- Warsong Gulch, Orgrimmar, Durotar m.fl. egennamn står orörda
+- Expertise = **Sakkunskap** (jfr träffchans/väjning-paradigmet)
+- Glancing Blows = **Halvträffar**; disenchant = **uttrulla**; soulstone =
+  **själsten**; Earthen Ring = **Jordringen**
+- Powderfuse = **Krutstubinen** (jfr Spärrhake/Utkiken-stilen för
+  gobelfraktioner); Blackwater Raiders = **Blackwaters pirater**;
+  Bloodsail Buccaneers = **Blodssegelfribytarna**
+- Gutterspeak = **Rännspråk**, Orcish = **Orkiska** ("Language: %s" =
+  "Språk: %s" som fallback-format)
+- "raid" behålls (jfr "Konvertera till raid"); instans = dungeon
+- Serverns humorsträngar översätts rakt: facepalms/LOL heuristiskt
+  ("Totala facepalms", "Totalt antal LOL"), "världens minsta fiol",
+  "hejarop", "vågor" — /wps fel avgör vid speltest
+
+Formatnycklar denna omgång: "Language: %s"; markup-varianterna av
+"Rank Points:"/"Each week..."/"Rank #%s for your level"/"Chance to ..."
+(|cnHIGHLIGHT_FONT_COLOR:/|cFFFFFFFF/-wrappar kopieras, siffror fångas
+oförändrade i samma ordning).
+
+Brus i dumpen som INTE fick poster (redan rätt på skärmen via
+basposter+kolon-tricket, därför oförändrade kopior i sv-filen): "Arkan:",
+"Bihand:", "Eld:", "Energi:", "Huvudhand:", "Parering:", "Rustning:",
+"Skugga:" samt "Maximalt". Item-/quest-tooltipsraderna (GameTooltip-området,
+t.ex. "Vendor", "63 Armor") lämnas till en senare föremålsomgång.
