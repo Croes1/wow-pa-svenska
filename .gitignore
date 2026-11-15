@@ -1,0 +1,60 @@
+# --- Secrets & credentials (never commit) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# --- Logs & temporary files ---
+*.log
+logs/
+*.tmp
+*.bak
+*~
+*.orig
+
+# --- OS / IDE ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# --- Python runtime junk ---
+__pycache__/
+*.py[cod]
+
+# --- Junk files from the stuck-VS-Code-terminal artifact (see AGENTS.md hand-over):
+# --- if these reappear in the repo root, they are not real project files.
+/noop
+/arg_value
+/setsid
+/sleep
+
+# --- Raw game data & player submissions (transient — convert first, keep the
+# --- TSV result, never commit the raw upload). Whether an uploaded test/data
+# --- file should be kept depends on what kind it is, so the defaults are:
+#
+# WDB client caches from Cache/WDB (convert with tools/parse-wdb.py):
+*.wdb
+# /wps fel reports from players (SavedVariables dump):
+WPSDB*.lua
+# Collector SavedVariables dumps:
+VarldenAvKrigskraft_Collector.lua
+WPSCollectorDB.lua
+*CollectorDB*.lua
+
+# --- NOTE on test files ---
+# Proper offline unit tests (tests/test_*.py) ARE committed - the whole agent
+# pipeline depends on them (`python3 -m unittest discover -s tests` must end OK).
+# Uploaded/ad-hoc test data of the kinds above (*.wdb, WPSDB*.lua, *Collector*.lua)
+# is NOT committed regardless of which session produced it. A one-off test file
+# that does not match those globs must be judged by hand: commit it only if
+# another developer needs it to reproduce a result.
+
+# --- translation/ is intentionally NOT ignored ---
+# The round's caches, batches, segmented files, out/*.tsv, review files and
+# review/DECISIONS-*.md notes are the hand-over package -> keep in git.
+
+saker_som_behover_fixa.md

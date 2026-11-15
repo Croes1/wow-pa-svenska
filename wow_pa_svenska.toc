@@ -1,0 +1,29 @@
+## Interface: 16001
+## Title: Wow på Svenska
+## Notes: Svensk översättning av quests, items, spells, buffar, NPC:er och chattmeddelanden. /wps
+## Author: Croes
+## Version: 0.2.0
+## X-License: GPL-3.0-or-later
+## SavedVariables: WPSDB
+## IconTexture: Interface\Icons\INV_Misc_Book_09
+
+Core.lua
+Template.lua
+Data\Quest.lua
+Data\QuestExtra.lua
+Data\Item.lua
+Data\Spell.lua
+Data\Gossip.lua
+Data\Npc.lua
+Data\NpcExtra.lua
+Data\Zone.lua
+Data\Glossary.lua
+Data\Ui.lua
+Data\UiExtra.lua
+Quest.lua
+Tooltips.lua
+Chat.lua
+UI.lua
+Units.lua
+GossipText.lua
+Options.lua

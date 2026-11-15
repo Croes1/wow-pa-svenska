@@ -1,0 +1,10 @@
+# Project rules for every agent session. Full entry point: AGENTS.md.
+
+- NEVER call any external AI or translation API (no LLM/model/HTTP endpoints).
+  You translate yourself in this chat; only the offline tools in tools/ may run.
+- Never edit Data/*.lua in a translation round; the loop STOPS before the merge.
+- Never invent text; segmentations must build the source line back byte for byte.
+- Read first: AGENTS.md, then translation/PIPELINE.md.
+- New data round: before ANY translation run
+  python3 tools/select-untranslated.py ... and python3 tools/make-batches.py,
+  then work batch by batch with the checks (verify-segmentation/validate-batch).

@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="WPS_TOGGLE" header="WPS" category="ADDONS">
+		WPS_ToggleOriginal()
+	</Binding>
+</Bindings>
