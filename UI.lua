@@ -239,6 +239,35 @@ local function WalkStatic()
 	end
 end
 
+-- Tooltips utan datatyp (t.ex. fliktooltipsen på karaktärssidan): GameTooltip
+-- läggs inte ut via TooltipDataProcessor och finns inte i PANELS, så den gås
+-- igenom vid OnShow och sedan medan den syns (innehållet fylls ofta på efter
+-- att tooltipen visats). Post-hooks bara, alltså ingen taint.
+local function HookGameTooltip()
+	local f = GameTooltip
+	if not f or hooked.GameTooltip or not f.HookScript then return end
+	local ok = pcall(function()
+		f:HookScript("OnShow", function(self)
+			SafeWalk(self)
+			if tickers.GameTooltip then tickers.GameTooltip:Cancel() end
+			tickers.GameTooltip = C_Timer.NewTicker(INTERVAL, function()
+				if self:IsVisible() then
+					SafeWalk(self)
+				elseif tickers.GameTooltip then
+					tickers.GameTooltip:Cancel()
+					tickers.GameTooltip = nil
+				end
+			end)
+		end)
+		f:HookScript("OnHide", function()
+			if tickers.GameTooltip then tickers.GameTooltip:Cancel() end
+			tickers.GameTooltip = nil
+		end)
+	end)
+	hooked.GameTooltip = ok
+	WPS.hooks["Fliktooltips (GameTooltip)"] = ok
+end
+
 ---------------------------------------------------------------------------
 -- Menyer
 ---------------------------------------------------------------------------
@@ -288,6 +317,7 @@ WPS.OnLogin(function()
 	BuildMaps()
 	HookMenus()
 	HookPanels()
+	HookGameTooltip()
 	WalkStatic()
 	C_Timer.NewTicker(3, WalkStatic)
 	-- Blizzard_*-fönster som laddas vid behov (spellboken, yrkena) finns först efter sitt ADDON_LOADED.

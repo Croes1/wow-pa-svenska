@@ -51,3 +51,42 @@ Ovanstående placeringar är nu sammanfogade och verifierade:
 npc 1 660) grönt. Spårrader (`l`) saknas fortfarande — de förblir engelska.
 `$2oa` skickas orörd (se "Öppna runtime-frågor" i PROMPT-GEMMA.md). Vid nästa
 omgång gäller samma tumregel som alltid: `/wps fel` är domare.
+
+## Tillägg: UI-strängar på karaktärssidan (2026-11-15)
+
+Utöver uppdragsbatcherna gjordes samma dag en omgång gränssnittssträngar
+(sex skärmbilder: statistik, valuta, PvP, färdigheter, anseende, rollfigur).
+Transkribering/översättning i `translation/ui/screens-2026-11-15-{en,sv}.tsv`,
+analys och steg i `translation/ui/UI-PLAN-2026-11-15.md`. Posterna är exakta
+matchningar eller %-format i `WPS.L.ui` (Data/UiExtra.lua) — inga quest-/NPC-id.
+
+Terminologibeslut (nya poster; ingen av termerna fanns tidigare i ordlistan):
+
+- Honor Points = **Äropoäng** ("Honor" = Ära)
+- Rank Points = **Gradpoäng** (jfr ui["Rank"]="Grad")
+- Civilian = **Civilist** (PvP grad 0, båda sidorna)
+- Season 1 = **Säsong 1** (+ formatpost "Season %s" = "Säsong %s" som skydd)
+- Maximum = **Maximalt** (alternativ "Högsta antal" — byt vid speltest om
+  det ser fel ut bredvid talet)
+- Faction Tabard = **Fraktionsvapenskjorta**; Hall of Legends =
+  **Legendarernas hall** (ingen ordlistepost, fri men konsekvent)
+- Schematics = **ritningar** (jfr "Schematic: X"="Ritning: X" i Data/Glossary.lua)
+- Times camped = **Gånger blivit campad** (dataterm; om betydelsen i klienten
+  visar sig vara "gånger utlogga i läger" byts frasen vid nästa granskning)
+- Talent tree respecs = **Omspecialiseringar av talangträdet** (alt.
+  "Ändringar av talangträdet")
+- Wealth = **Förmögenhet**; Statistics = **Statistik**; Energy = **Energi**
+
+Formatsträngar (WPS.CompileFormat): "Rank Points: %s / %s",
+"Cap increase this week: %s", "Next Rewards at Rank %s", "Season %s",
+"Each week, the Rank Points cap is increased, up to a maximum of %s for
+Rank %s." — talen fångas och stoppas in oförändrade, i samma ordning.
+
+Kodtillägg i **UI.lua**: `HookGameTooltip` (OnShow/OnHide post-hooks + kort
+ticker medan GameTooltip syns, kopplad i OnLogin) — fliktooltipsen på
+karaktärssidan går inte via TooltipDataProcessor och nåddes därmed aldrig
+(tidigare stod "Character"/"Reputation"/"Skills" osv. på engelska trots att
+posterna funnits länge). Sidoeffekt: även andra exaktmatchande strängar i
+tooltips ("Poor"="Dålig" m.fl.) får svensk text; samma ruta "Fönster och
+knappar" styr. Provkörs i spelet; om sidoeffekten är stötande begränsas
+walken till första raden (TextLeft1).

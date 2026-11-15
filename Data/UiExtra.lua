@@ -1,9 +1,10 @@
 -- Tillägg till WPS.L.ui, tillagda för hand. Den här filen genereras inte av
 -- pipeline/vak.py build (som bara skriver Data/Ui.lua) och skrivs alltså inte över
 -- vid en ny build. Lägg därför nya gränssnittssträngar här, inte i Data/Ui.lua.
--- Alla poster är exakta matchningar (inga %s-format) och styrs av rutan
--- "Fönster och knappar" i /wps. Saknas en sträng i klienten sker inget – extra
--- poster som aldrig matchas är ofarliga.
+-- Poster utan %s/%d matchas exakt; poster med %s/%d är formatsträngar och
+-- kompileras av WPS.CompileFormat (Chat.lua), precis som Data/Ui.lua:s
+-- "Level %d". Allt styrs av rutan "Fönster och knappar" i /wps. Saknas en
+-- sträng i klienten sker inget – extra poster som aldrig matchas är ofarliga.
 local _, WPS = ...
 local ui = WPS.L.ui
 
@@ -150,3 +151,66 @@ ui["Zandalar Tribe"] = "Zandalarklanen"
 ui["Brood of Nozdormu"] = "Nozdormus kull"
 ui["Gelkis Clan Centaur"] = "Gelkisklanens kentaurer"
 ui["Magram Clan Centaur"] = "Magramklanens kentaurer"
+
+---------------------------------------------------------------------------
+-- [2026-11-15] Karaktärssidan i sin helhet: statistik, valuta, PvP,
+-- yrkesbeskrivningar, fraktionsbeskrivningar. Källsträngar med id:er i
+-- translation/ui/screens-2026-11-15-{en,sv}.tsv; beslut, alternativ och
+-- plan i translation/ui/UI-PLAN-2026-11-15.md + DECISIONS-2026-11-15.md.
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+-- Rollfigur: statspanelen
+---------------------------------------------------------------------------
+ui["Energy"] = "Energi"
+
+---------------------------------------------------------------------------
+-- Anseende: fraktionsbeskrivningar i höger panel
+---------------------------------------------------------------------------
+ui["This tribe of exiled trolls has joined forces with Thrall and the Horde. They now call Durotar their home, which they share with their orc allies."] = "Den här stammen av förvisade troll har slagit sig samman med Thrall och Horden. De kallar numera Durotar för sitt hem, som de delar med sina orchallierade."
+
+---------------------------------------------------------------------------
+-- Färdigheter: yrkesbeskrivningar i höger panel
+---------------------------------------------------------------------------
+ui["Higher engineering skill allows you to learn higher level engineering schematics. Schematics can be found on trainers around the world as well as from quests and monsters."] = "Högre ingenjörskonst gör att du kan lära dig planritningar på högre nivåer. Planritningar hittar du hos lärare runt om i världen samt från uppdrag och monster."
+
+---------------------------------------------------------------------------
+-- Spelare mot spelare (gradpoäng, veckotak, belöningar)
+---------------------------------------------------------------------------
+ui["Season 1"] = "Säsong 1"
+ui["Season %s"] = "Säsong %s" -- skydd om klienten skriver "Season 2" o.d.
+ui["Civilian"] = "Civilist"
+ui["Rank Points: %s / %s"] = "Gradpoäng: %s / %s"
+ui["Cap increase this week: %s"] = "Taket ökas den här veckan med: %s"
+ui["Next Rewards at Rank %s"] = "Nästa belöningar vid grad %s"
+ui["Faction Tabard"] = "Fraktionsvapenskjorta"
+ui["Rewards may be purchased at the Hall of Legends in Orgrimmar."] = "Belöningar kan köpas i Legendarernas hall i Orgrimmar."
+ui["Each week, the Rank Points cap is increased, up to a maximum of %s for Rank %s."] = "Varje vecka ökas taket för gradpoäng, upp till som mest %s för grad %s."
+
+---------------------------------------------------------------------------
+-- Valuta (äropoäng och gränssnittet runt listan)
+---------------------------------------------------------------------------
+ui["Honor Points"] = "Äropoäng"
+ui["Honor is gained by killing members of the opposite faction in PVP combat. You can use honor points to purchase special items."] = "Ära tjänas genom att döda medlemmar av motståndarsidan i PvP-strid. Du kan använda äropoäng för att köpa specialföremål."
+ui["Maximum"] = "Maximalt" -- alternativ: "Högsta antal"
+ui["Unused"] = "Oanvända"
+ui["Show on Backpack"] = "Visa på ryggväskan"
+
+---------------------------------------------------------------------------
+-- Statistik (titel, kategorier och rader)
+---------------------------------------------------------------------------
+ui["Statistics"] = "Statistik"
+ui["Wealth"] = "Förmögenhet"
+ui["Times camped"] = "Gånger blivit campad" -- dataterm; beslut i planen
+ui["Talent tree respecs"] = "Omspecialiseringar av talangträdet" -- alternativ: "Ändringar av talangträdet"
+ui["Total gold acquired"] = "Totalt samlat guld"
+ui["Average gold earned per day"] = "Genomsnittligt förtjänat guld per dag"
+ui["Gold looted"] = "Plundrat guld"
+ui["Gold from quest rewards"] = "Guld från uppdragsbelöningar"
+ui["Gold earned from auctions"] = "Guld intjänat på auktioner"
+ui["Auctions posted"] = "Upplagda auktioner"
+ui["Auction purchases"] = "Auktionsköp"
+ui["Most expensive bid on auction"] = "Dyresta budet på auktion"
+ui["Most expensive auction sold"] = "Dyresta sålda auktionen"
+ui["Gold from vendors"] = "Guld från handlare"
+ui["Gold spent on travel"] = "Guld spenderat på resor"
