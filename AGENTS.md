@@ -4,106 +4,57 @@ Instructions for AI coding agents working in this repository.
 
 ## Project
 
-Wow på Svenska is a World of Warcraft Classic Era addon for WoW Forever. It replaces English game text with Swedish on an enUS client.
+**WoW på Svenska** is a World of Warcraft Classic Era addon for WoW Forever. It translates English game text into Swedish on an enUS client.
 
-- `*.lua` — addon code and translation data.
-- `Data/` — game text databases.
-- `translation/` — translation sources, glossary, prompts and batches.
-- `tools/` — offline parsing, translation and validation tools.
-- `tests/` — automated tests.
+Repository structure:
 
-## Rules
+- `*.lua` — Addon code and translation logic.
+- `Data/` — Game text and translation databases.
+- `translation/` — Translation sources, glossary and documentation.
+- `tools/` — Scripts for extracting, processing and validating game data.
+- `tests/` — Automated tests.
 
-1. **No external APIs or network calls.** Translation work must use the repository's offline tools. Do not introduce translation APIs, external AI services, HTTP requests or API credentials.
-2. **Preserve existing translations.** Never overwrite reviewed translations. Generated data files must not be edited manually during translation rounds. Merging translations into game data is a separate, explicitly reviewed step.
-3. **Preserve game formatting.** Keep all placeholders, color codes, links, escape sequences and game-specific tokens exactly as they appear in the source.
-4. **Do not guess.** If a translation or field placement is uncertain, leave it for review rather than inventing text.
-5. **Follow the existing project conventions.** Avoid unnecessary dependencies, generated files, unrelated refactoring and duplicated documentation.
+## General rules
 
-## Before making changes
+1. **Preserve existing translations.** Never overwrite reviewed translations or change established terminology without a reason.
+2. **Preserve game formatting.** Keep placeholders, color codes, hyperlinks, escape sequences and game-specific tokens intact.
+3. **Do not guess.** Leave uncertain translations or data mappings for review.
+4. **Avoid unnecessary changes.** Follow existing conventions and avoid unrelated refactoring, dependencies and generated files.
+5. **No external translation services.** Translation and data-processing workflows must use the project's existing tools. Do not introduce external translation APIs or network-dependent services.
+6. **Keep documentation focused.** Avoid duplicating information already documented elsewhere.
 
-1. Check the current Git status and inspect existing changes.
-2. Read `translation/PIPELINE.md` before working on translations.
-3. Read `translation/PROMPT-GEMMA.md` for segmentation and translation instructions.
-4. Read `translation/PROMPT-translation.md` for Swedish writing conventions.
-5. Check `translation/glossary-core.tsv` and relevant review decisions for established terminology.
-6. Run the existing tests before making substantial changes:
+## Working with translations
 
-   ```bash
-   python3 -m unittest discover -s tests
-   ```
+Before modifying translation data:
 
-## Translation workflow
+- Check `translation/glossary-core.tsv` for established terminology.
+- Follow the Swedish writing conventions in the translation documentation.
+- Preserve the original English source text and its formatting.
+- Do not overwrite reviewed translations with generated output.
+- Keep generated translation batches separate from the addon data until they have been validated and reviewed.
 
-Follow `translation/PIPELINE.md` for the complete workflow, including:
+Follow the documented translation workflow in `translation/` when importing, processing, translating or merging game text.
 
-- Importing new English game text.
-- Selecting untranslated entries and creating batches.
-- Segmenting and validating source text.
-- Translating and reviewing entries.
-- Running validation before merging.
+## Development and testing
 
-Do not skip validation or start a new translation round while an earlier round is unfinished.
+Before making changes:
 
-## After changes
+1. Check the Git status and inspect existing changes.
+2. Understand the existing implementation before modifying it.
+3. Run relevant tests before and after substantial changes.
 
-- Run relevant tests and validation tools.
-- Check that existing translations and game formatting are preserved.
+Run the test suite with:
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+Also run relevant validation tools when modifying translation data or extraction scripts.
+
+## Before finishing
+
 - Review the Git diff for unintended changes.
-- Do not merge generated translations into `Data/` unless explicitly requested.
-
-Keep changes focused and documentation concise. When in doubt, follow the existing implementation rather than introducing a new approach# AGENTS.md
-
-Instructions for AI coding agents working in this repository.
-
-## Project
-
-Wow på Svenska is a World of Warcraft Classic Era addon for WoW Forever. It replaces English game text with Swedish on an enUS client.
-
-- `*.lua` — addon code and translation data.
-- `Data/` — game text databases.
-- `translation/` — translation sources, glossary, prompts and batches.
-- `tools/` — offline parsing, translation and validation tools.
-- `tests/` — automated tests.
-
-## Rules
-
-1. **No external APIs or network calls.** Translation work must use the repository's offline tools. Do not introduce translation APIs, external AI services, HTTP requests or API credentials.
-2. **Preserve existing translations.** Never overwrite reviewed translations. Generated data files must not be edited manually during translation rounds. Merging translations into game data is a separate, explicitly reviewed step.
-3. **Preserve game formatting.** Keep all placeholders, color codes, links, escape sequences and game-specific tokens exactly as they appear in the source.
-4. **Do not guess.** If a translation or field placement is uncertain, leave it for review rather than inventing text.
-5. **Follow the existing project conventions.** Avoid unnecessary dependencies, generated files, unrelated refactoring and duplicated documentation.
-
-## Before making changes
-
-1. Check the current Git status and inspect existing changes.
-2. Read `translation/PIPELINE.md` before working on translations.
-3. Read `translation/PROMPT-GEMMA.md` for segmentation and translation instructions.
-4. Read `translation/PROMPT-translation.md` for Swedish writing conventions.
-5. Check `translation/glossary-core.tsv` and relevant review decisions for established terminology.
-6. Run the existing tests before making substantial changes:
-
-   ```bash
-   python3 -m unittest discover -s tests
-   ```
-
-## Translation workflow
-
-Follow `translation/PIPELINE.md` for the complete workflow, including:
-
-- Importing new English game text.
-- Selecting untranslated entries and creating batches.
-- Segmenting and validating source text.
-- Translating and reviewing entries.
-- Running validation before merging.
-
-Do not skip validation or start a new translation round while an earlier round is unfinished.
-
-## After changes
-
+- Verify that existing translations and game formatting are preserved.
 - Run relevant tests and validation tools.
-- Check that existing translations and game formatting are preserved.
-- Review the Git diff for unintended changes.
-- Do not merge generated translations into `Data/` unless explicitly requested.
-
-Keep changes focused and documentation concise. When in doubt, follow the existing implementation rather than introducing a new approach..
+- Do not merge unreviewed generated translations into `Data/`.
+- Summarize what changed and mention any tests that could not be run.
