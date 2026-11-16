@@ -4,7 +4,7 @@
 
 A Swedish translation addon for **WoW Forever**. Explore Azeroth in your own language, from quests and items to abilities, NPCs and the game interface.
 
-This project is a fork of **Världen av Krigskraft**, originally created by **Ninsew**. The fork builds on the original translations and adds new translations and support for WoW Forever.
+This project is a fork of **Världen av Krigskraft**, originally created by **Ninsew**. It builds on the original translations and adds new translations and support for WoW Forever.
 
 New translations are AI-assisted and reviewed using shared terminology and translation guidelines. Player feedback helps improve them over time.
 
@@ -60,9 +60,9 @@ Rapporterna sparas i:
 
 `WTF/Account/<konto>/SavedVariables/WPSDB.lua`
 
-Skicka filen via ett [GitHub Issue](https://github.com/Croes1/wow-pa-svenska/issues) så kan översättningen granskas och rättas.
+Skicka rapporten via ett [GitHub Issue](https://github.com/Croes1/wow-pa-svenska/issues) så kan översättningen granskas och rättas.
 
-Vill du hjälpa till att samla in ny text? Spela med en engelsk klient och öppna uppdrag och prata med NPC:er. Spelet sparar automatiskt text i `Cache/WDB`. Dessa filer kan användas för att utöka översättningen.
+Vill du hjälpa till att samla in ny text? Spela med en engelsk klient, öppna uppdrag och prata med NPC:er. Spelet sparar automatiskt text i `Cache/WDB`. Dessa filer kan användas för att utöka översättningen.
 
 ### Kända begränsningar
 
@@ -90,23 +90,17 @@ It is a fork of **Världen av Krigskraft**, originally created by **Ninsew**. Ne
 
 ### Contributing
 
-Found a mistranslation? Use `/wps fel <comment>` in-game and submit the generated report through [GitHub Issues](https://github.com/Croes1/wow-pa-svenska/issues).
+Found a mistranslation or want to help improve the addon?
 
-Developers and translators can start with [AGENTS.md](AGENTS.md) and [translation/PIPELINE.md](translation/PIPELINE.md).
+- [Read the contribution guidelines](CONTRIBUTING.md).
+- [Report a bug or suggest an improvement](https://github.com/Croes1/wow-pa-svenska/issues).
+- [Read the translation workflow](translation/PIPELINE.md).
 
 ## Sources and credits
 
 - Original addon: **Världen av Krigskraft**, by **Ninsew**.
 - Game data: [wago.tools](https://wago.tools).
 - Quest source data: [cmangos classic-db](https://github.com/cmangos/classic-db).
-
-## Contributing
-
-Found an incorrect translation or want to help improve the addon?
-
-- [Report an issue](https://github.com/Croes1/wow-pa-svenska/issues)
-- [Read the contribution guidelines](CONTRIBUTIONS.md)
-- [Read the translation workflow](translation/PIPELINE.md)
 
 ## License and disclaimer
 
