@@ -7,7 +7,7 @@ local function Status()
 	for _, c in ipairs(WPS.CATEGORIES) do
 		WPS.Print(("  %s: %s – %s"):format(c.key, WPS.db[c.key] and "|cff00ff00på|r" or "|cffff4444av|r", c.label))
 	end
-	WPS.Print("Kommandon: /wps (öppna panelen), /wps orig (växla original/svenska), /wps diag, /wps status, /wps fel <kommentar>")
+	WPS.Print("Kommandon: /wps (öppna panelen), /wps orig (växla original/svenska), /wps diag, /wps status, /wps fel <kommentar>, /wps dump (samla engelska texter)")
 	WPS.Print("Tips: håll Alt över en tooltip för engelskan. Bind en tangent under Alternativ > Tangentbindningar > AddOns.")
 end
 
@@ -195,6 +195,16 @@ WPS.OnLogin(function()
 	pcall(BuildPanel)
 end)
 
+-- /wps dump: samla engelska gränssnittstexter som syns just nu (se UI.lua,
+-- WPS.UIDump). Material för en uppdateringsrunda; hamnar i WPSDB.uiDump.
+local function Dump(arg)
+	if not WPS.UIDump then
+		WPS.Print("dump: UI.lua saknar kommandot (för gammal kopia på disk?).")
+		return
+	end
+	WPS.UIDump(arg)
+end
+
 SLASH_WPS1 = "/wps"
 SlashCmdList.WPS = function(msg)
 	if not WPS.db then return end
@@ -214,6 +224,8 @@ SlashCmdList.WPS = function(msg)
 		WPS.Toggle()
 	elseif cmd == "diag" then
 		Diag()
+	elseif cmd == "dump" then
+		Dump(arg)
 	elseif WPS.db[cmd] ~= nil then
 		if arg == "on" or arg == "off" then
 			WPS.db[cmd] = arg == "on"

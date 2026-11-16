@@ -51,3 +51,89 @@ Ovanstående placeringar är nu sammanfogade och verifierade:
 npc 1 660) grönt. Spårrader (`l`) saknas fortfarande — de förblir engelska.
 `$2oa` skickas orörd (se "Öppna runtime-frågor" i PROMPT-GEMMA.md). Vid nästa
 omgång gäller samma tumregel som alltid: `/wps fel` är domare.
+
+## Tillägg: UI-strängar på karaktärssidan (2026-11-15)
+
+Utöver uppdragsbatcherna gjordes samma dag en omgång gränssnittssträngar
+(sex skärmbilder: statistik, valuta, PvP, färdigheter, anseende, rollfigur).
+Transkribering/översättning i `translation/ui/screens-2026-11-15-{en,sv}.tsv`,
+analys och steg i `translation/ui/UI-PLAN-2026-11-15.md`. Posterna är exakta
+matchningar eller %-format i `WPS.L.ui` (Data/UiExtra.lua) — inga quest-/NPC-id.
+
+Terminologibeslut (nya poster; ingen av termerna fanns tidigare i ordlistan):
+
+- Honor Points = **Äropoäng** ("Honor" = Ära)
+- Rank Points = **Gradpoäng** (jfr ui["Rank"]="Grad")
+- Civilian = **Civilist** (PvP grad 0, båda sidorna)
+- Season 1 = **Säsong 1** (+ formatpost "Season %s" = "Säsong %s" som skydd)
+- Maximum = **Maximalt** (alternativ "Högsta antal" — byt vid speltest om
+  det ser fel ut bredvid talet)
+- Faction Tabard = **Fraktionsvapenskjorta**; Hall of Legends =
+  **Legendarernas hall** (ingen ordlistepost, fri men konsekvent)
+- Schematics = **ritningar** (jfr "Schematic: X"="Ritning: X" i Data/Glossary.lua)
+- Times camped = **Gånger blivit campad** (dataterm; om betydelsen i klienten
+  visar sig vara "gånger utlogga i läger" byts frasen vid nästa granskning)
+- Talent tree respecs = **Omspecialiseringar av talangträdet** (alt.
+  "Ändringar av talangträdet")
+- Wealth = **Förmögenhet**; Statistics = **Statistik**; Energy = **Energi**
+
+Formatsträngar (WPS.CompileFormat): "Rank Points: %s / %s",
+"Cap increase this week: %s", "Next Rewards at Rank %s", "Season %s",
+"Each week, the Rank Points cap is increased, up to a maximum of %s for
+Rank %s." — talen fångas och stoppas in oförändrade, i samma ordning.
+
+Kodtillägg i **UI.lua**: `HookGameTooltip` (OnShow/OnHide post-hooks + kort
+ticker medan GameTooltip syns, kopplad i OnLogin) — fliktooltipsen på
+karaktärssidan går inte via TooltipDataProcessor och nåddes därmed aldrig
+(tidigare stod "Character"/"Reputation"/"Skills" osv. på engelska trots att
+posterna funnits länge). Sidoeffekt: även andra exaktmatchande strängar i
+tooltips ("Poor"="Dålig" m.fl.) får svensk text; samma ruta "Fönster och
+knappar" styr. Provkörs i spelet; om sidoeffekten är stötande begränsas
+walken till första raden (TextLeft1).
+
+## Tillägg: omgång 2 — fullsvit ur /wps dump (2026-11-15)
+
+Spelaren körde `/wps dump` och skickade `WPSDB.lua`; `WPSDB.uiDump`
+extraherades och renades till `translation/ui/dump-2026-11-15-{en,sv}.tsv`
+(217 strängar: statistik i sin helhet, färdighetsbeskrivningar,
+fraktionsbeskrivningar, statspanel, PvP/valuta, flikknappar). Alla poster
+inlagda i `Data/UiExtra.lua` under "[2026-11-15, omgång 2]".
+
+Fyra nycklar från omgång 1 hade aldrig matchat i spel (dumpen avslöjade):
+Darkspear- och ingenjörsbeskrivningen har DUBBELA mellanslag efter
+meningsslutet ("Horde.  They"), honorbeskrivningen har "PvP" (ej "PVP"),
+och "Season 1" har inledande mellanslag — alla tre åtgärdade (den sista med
+nyckeln " Season 1" → " Säsong 1").
+
+Terminologi (nya beslut, konsekventa med glosor där de finns):
+
+- Honorable Kills = **Ärorika dråp**; Killing Blows = **Dödande slag**;
+  kills = **dräp** (statistikton, jfr "dräp"-stilen i questtexter)
+- Alterac Valley = **Alteracdalen**; Arathi Basin = **Arathibäckenet**;
+  The Barrens = **Kargmarkerna** (enligt README:s ortlista);
+  Darkspear Islands = **Darkspearöarna** (serverns egen arena; namnet
+  bevaras)
+- Warsong Gulch, Orgrimmar, Durotar m.fl. egennamn står orörda
+- Expertise = **Sakkunskap** (jfr träffchans/väjning-paradigmet)
+- Glancing Blows = **Halvträffar**; disenchant = **uttrulla**; soulstone =
+  **själsten**; Earthen Ring = **Jordringen**
+- Powderfuse = **Krutstubinen** (jfr Spärrhake/Utkiken-stilen för
+  gobelfraktioner); Blackwater Raiders = **Blackwaters pirater**;
+  Bloodsail Buccaneers = **Blodssegelfribytarna**
+- Gutterspeak = **Rännspråk**, Orcish = **Orkiska** ("Language: %s" =
+  "Språk: %s" som fallback-format)
+- "raid" behålls (jfr "Konvertera till raid"); instans = dungeon
+- Serverns humorsträngar översätts rakt: facepalms/LOL heuristiskt
+  ("Totala facepalms", "Totalt antal LOL"), "världens minsta fiol",
+  "hejarop", "vågor" — /wps fel avgör vid speltest
+
+Formatnycklar denna omgång: "Language: %s"; markup-varianterna av
+"Rank Points:"/"Each week..."/"Rank #%s for your level"/"Chance to ..."
+(|cnHIGHLIGHT_FONT_COLOR:/|cFFFFFFFF/-wrappar kopieras, siffror fångas
+oförändrade i samma ordning).
+
+Brus i dumpen som INTE fick poster (redan rätt på skärmen via
+basposter+kolon-tricket, därför oförändrade kopior i sv-filen): "Arkan:",
+"Bihand:", "Eld:", "Energi:", "Huvudhand:", "Parering:", "Rustning:",
+"Skugga:" samt "Maximalt". Item-/quest-tooltipsraderna (GameTooltip-området,
+t.ex. "Vendor", "63 Armor") lämnas till en senare föremålsomgång.
