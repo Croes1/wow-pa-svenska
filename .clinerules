@@ -1,4 +1,5 @@
-# Project rules for every agent session.
+Read and follow `AGENTS.md` before making any changes.
 
-Read and follow `AGENTS.md`. It is the canonical source for repository rules
-and the translation workflow.
+It contains the repository-wide rules, coding conventions, translation requirements and development workflows.
+
+Do not duplicate those instructions here.
