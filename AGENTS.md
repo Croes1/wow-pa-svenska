@@ -10,7 +10,7 @@ Repository structure:
 
 - `*.lua` — Addon code and translation logic.
 - `Data/` — Game text and translation databases.
-- `translation/` — Translation sources, glossary and documentation.
+- `translation/` — Glossary, workflow documentation and test fixtures. Per-round batches and caches are gitignored.
 - `tools/` — Scripts for extracting, processing and validating game data.
 - `tests/` — Automated tests.
 
