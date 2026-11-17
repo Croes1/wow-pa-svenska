@@ -38,13 +38,17 @@ These files help identify missing translations.
 
 ## Contributing translations
 
-If you want to work directly with translations:
+If you want to suggest or improve translations:
 
-1. Check `translation/glossary-core.tsv` for established terminology.
-2. Follow the Swedish writing conventions in `translation/PROMPT-translation.md`.
-3. Follow the workflow in `translation/PIPELINE.md`.
-4. Validate your changes using the provided tools.
-5. Have translations reviewed before they are merged into the addon.
+1. Use the existing translations in `Data/` as a reference for tone and style.
+2. Use `translation/glossary-core.tsv` for fixed terminology.
+3. Open an issue or pull request with the proposed change. A maintainer reviews it before it is merged into the addon.
+
+### Running the translation tools
+
+Maintainers and contributors who process collected game data with the scripts in `tools/` should follow the workflow in `translation/PIPELINE.md` and the writing conventions in `translation/PROMPT-translation.md`. Validate changes with the provided tools before they are reviewed.
+
+Generated per-round files (`translation/out/`, `segmented/`, `cache/` and most of `batches/`) are not tracked in git.
 
 ### Translation guidelines
 
