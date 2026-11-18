@@ -75,4 +75,13 @@ NPC-/mobnamn med fri översättning: se `translation/out/npcs-batch-*-sv.tsv` (s
 `translation/batches/gameobjects-batch-01..07.tsv` innehåller **dubbletter av id** (cache 952 rader, 598 unika id). `validate-batch.py` svarar för varje batch
 `FEL: kalla: id N forekommer flere ganger` (batch 01: 17 id; 02: 17; 03: 14; 04: 11; 05: 15; 06: 20; 07: 5) och sammanlagt `RESULTAT: N FEL ... rakna inte in batchen`.
 Inga andra fel (kolumner, ordning, antal rader stämmer 1:1 med källan). Översättningarna ligger i `translation/out/gameobjects-batch-XX-sv.tsv` i exakt källordning,
-men id→namn är tvetydigt för de upprepade id:na, så batcherna ska inte slås ihop innan id-kollisionen i `translation/gameobjectcache-en.tsv` / `tools/parse-wdb.py` lösts.
+men id→namn är tvetydigt för de upprepade id:na. Id:n återkommer *med avsikt* i cachen (se `tools/combine-wdb.py`: "entry ids repeat by design"), så det är inget parserfel. Batcherna ska inte slås ihop och lämnades utanför commit; en ändring kräver annan nyckel (t.ex. id + namn) i verktyg och körtidstabell, som separat granskad ändring.
+
+## Sammanfogning (MERGE) — gjord 2026-11-18
+
+`tools/merge-translation.py` kördes efter att bärande rader (54 quests, 3 NPC:er som bara fanns i de levererade Extra-filerna) lagts i
+`translation/out/quests-batch-32-sv.tsv` och `translation/out/npcs-batch-27-sv.tsv`. Verktyget bygger om Extra-filerna HELT ur `out/`
+(det hoppar bara över id:n som redan finns i `Quest.lua` / `Npc.lua`), därför krävs bärande rader.
+Resultat: `QuestExtra.lua` 133 → 359 rader, `NpcExtra.lua` 1139 → 3891 rader, 0 rader förlorade.
+Ändrade id:n (24): 544 6143 79361 86576 92519 93225 93429 93663 93680 94481 95955 95982 96063 96774 96986 96988 97196 97265 97287 97386 97539 97985 98069 98070.
+`luac5.1 -p` och testsviten gröna. UI: `dump-2026-11-16` (identisk med `dump-2027-11-17_1`) översatt; 43 poster i `Data/UiExtra.lua`.

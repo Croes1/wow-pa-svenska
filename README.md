@@ -16,8 +16,8 @@ New translations are AI-assisted and reviewed using shared terminology and trans
 |---|---|
 | Föremål | Namn och beskrivningar, cirka 17 700 |
 | Förmågor | Nästan alla namn och cirka 3 200 beskrivningar |
-| Uppdrag | Cirka 1 700 av 4 200, inklusive alla uppdrag upp till nivå 30 för båda sidor |
-| NPC:er | Cirka 520 namn och 100 dialogtexter |
+| Uppdrag | Cirka 2 100 av 4 200, inklusive alla uppdrag upp till nivå 30 för båda sidor |
+| NPC:er | Cirka 4 400 namn och 100 dialogtexter |
 | Buffar och debuffar | De vanligaste |
 | Gränssnitt | Menyer, karaktärspanel, karta, spellista och yrkesfönster |
 | Chatt | Cirka 190 typer av systemmeddelanden |
