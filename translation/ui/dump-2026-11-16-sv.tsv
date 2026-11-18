@@ -1,0 +1,321 @@
+id	sv
+001	 Säsong 1
+002	0/1 Arikaras ormskinn
+003	0/1 Blodstenskil
+004	0/1 Blodstenskula
+005	0/1 Blodstensoval
+006	0/1 Felfri tigerinnetand
+007	0/1 Gan'zulahs huvud
+008	0/1 Nezzlioks huvud
+009	0/1 Smutsig nyckel
+010	0/10 Boulderfist-ordningsvakt dräpt
+011	0/10 Djungellurpassare dräpt
+012	0/10 Mosh'Ogg-råskinn dräpt
+013	0/10 Sliten stenbricka
+014	0/10 Strypetörnstiger dräpt
+015	0/5 Mosh'Ogg-häxdoktor dräpt
+016	0/6 Köttätande växt dräpt
+017	0/8 Boulderfist-oger dräpt
+018	Som en stark arm av Ångvisslekartellen är denna hamn hem för sjöfolk och bakgatshandlare som spänner över de östra sjöhandelsrutterna.
+019	Aku'mai-dräp (Blackfathom Deeps)
+020	Lärda alkemirecept
+021	Ger tillstånd att bära tygrustning.
+022	Ger tillstånd att bära läderrustning.
+023	Ärorika dråp i Alteracdalen
+024	Dödande slag i Alteracdalen
+025	Strider i Alteracdalen
+026	Erövrade torn i Alteracdalen
+027	Försvarade torn i Alteracdalen
+028	Segrar i Alteracdalen
+029	Ärorika dråp i Arathibäckenet
+030	Dödande slag i Arathibäckenet
+031	Angripna baser i Arathibäckenet
+032	Försvarade baser i Arathibäckenet
+033	Strider i Arathibäckenet
+034	Segrar i Arathibäckenet
+035	Ärkimagen Arugals dräp (Shadowfang Keep)
+036	Arkan:
+037	Uppdrag fullbordade i genomsnitt per dag
+038	Azshara |cffff1919(45-55)|r
+039	Mest använda förband
+040	Använda förband
+041	Ärorika dråp på slagfält
+042	Dödande slag på slagfält
+043	Slagfält med flest ärorika dråp
+044	Slagfält med flest dödande slag
+045	Slagfält
+046	Spelade slagfält
+047	Vunna slagfält
+048	Bazzalans dräp (Ragefire Chasm)
+049	Konsumerade drycker
+050	Bihand:
+051	Lärda smidesritningar
+052	Sprängda landen |cffff1919(45-55)|r
+053	Bossdräp
+054	För Fizzles brev till Martek den landsförvisade i Ofärdsmarken.
+055	Cairne Bloodhoof leder sitt folk, de stolta taurenerna, från denna mäktiga hordhuvudstad.
+056	Huvudstad i Ångvisslekartellen och hem för goblingsläktets främsta ingenjörer, alkemister och handelsmän.
+057	Staden Dalaran
+058	Förbrukningsartiklar
+059	Världsdel med flest ärorika dråp
+060	Världsdel med flest dödande slag
+061	Kända matlagningsrecept
+062	Fullbordade matlagningsdaguppdrag
+063	Matlagningsfärdighet
+064	Oftast dräpt varelsestyp
+065	Varelser
+066	Dräpta varelser
+067	Dräpta smådjur
+068	Markör: ---
+069	Markör: -12.2 X, -56.9 Y  |  Spelare: 29.9 X , 10.9 Y
+070	Markör: -22.7 X, -53.9 Y  |  Spelare: 29.9 X , 10.9 Y
+071	Markör: 1.4 X, -57.9 Y  |  Spelare: 29.9 X , 10.9 Y
+072	Markör: 10.3 X, 79.3 Y  |  Spelare: 29.9 X , 10.9 Y
+073	Markör: 106.8 X, -13.2 Y  |  Spelare: 29.9 X , 10.9 Y
+074	Markör: 106.8 X, 32.9 Y  |  Spelare: 29.9 X , 10.9 Y
+075	Markör: 117.5 X, -108.7 Y  |  Spelare: 29.9 X , 10.9 Y
+076	Markör: 12.9 X, 13.0 Y  |  Spelare: 29.9 X , 10.9 Y
+077	Markör: 123.6 X, -53.4 Y  |  Spelare: 29.9 X , 10.9 Y
+078	Markör: 14.5 X, 85.9 Y  |  Spelare: 29.9 X , 10.9 Y
+079	Markör: 15.0 X, 54.7 Y  |  Spelare: 29.9 X , 10.9 Y
+080	Markör: 16.0 X, 64.6 Y  |  Spelare: 29.9 X , 10.9 Y
+081	Markör: 16.8 X, 51.9 Y  |  Spelare: 29.9 X , 10.9 Y
+082	Markör: 17.2 X, 52.1 Y  |  Spelare: 29.9 X , 10.9 Y
+083	Markör: 17.9 X, 72.0 Y  |  Spelare: 29.9 X , 10.9 Y
+084	Markör: 18.3 X, 82.8 Y  |  Spelare: 29.9 X , 10.9 Y
+085	Markör: 20.5 X, 52.4 Y  |  Spelare: 29.9 X , 10.9 Y
+086	Markör: 23.1 X, 68.3 Y  |  Spelare: 29.9 X , 10.9 Y
+087	Markör: 23.6 X, 65.5 Y  |  Spelare: 29.9 X , 10.9 Y
+088	Markör: 24.7 X, 40.6 Y  |  Spelare: 29.9 X , 10.9 Y
+089	Markör: 25.0 X, 37.1 Y  |  Spelare: 29.9 X , 10.9 Y
+090	Markör: 29.3 X, 77.6 Y  |  Spelare: 29.9 X , 10.9 Y
+091	Markör: 3.3 X, -46.8 Y  |  Spelare: 29.9 X , 10.9 Y
+092	Markör: 307.2 X, -31.9 Y  |  Spelare: 29.9 X , 10.9 Y
+093	Markör: 33.9 X, 33.7 Y  |  Spelare: 29.9 X , 10.9 Y
+094	Markör: 338.9 X, -74.0 Y  |  Spelare: 29.9 X , 10.9 Y
+095	Markör: 339.9 X, -76.3 Y  |  Spelare: 29.9 X , 10.9 Y
+096	Markör: 46.1 X, -44.0 Y  |  Spelare: 29.9 X , 10.9 Y
+097	Markör: 54.5 X, 6.4 Y  |  Spelare: 29.9 X , 10.9 Y
+098	Markör: 64.6 X, 21.1 Y  |  Spelare: 29.9 X , 10.9 Y
+099	Markör: 71.5 X, 54.7 Y  |  Spelare: 29.9 X , 10.9 Y
+100	Markör: 73.6 X, 37.8 Y  |  Spelare: 29.9 X , 10.9 Y
+101	Markör: 74.3 X, 66.2 Y  |  Spelare: 29.9 X , 10.9 Y
+102	Markör: 77.6 X, 16.0 Y  |  Spelare: 29.9 X , 10.9 Y
+103	Markör: 79.9 X, 42.5 Y  |  Spelare: 29.9 X , 10.9 Y
+104	Markör: 81.6 X, 55.8 Y  |  Spelare: 29.9 X , 10.9 Y
+105	Markör: 82.5 X, -33.1 Y  |  Spelare: 29.9 X , 10.9 Y
+106	Markör: 85.0 X, -239.9 Y  |  Spelare: 29.9 X , 10.9 Y
+107	Markör: 91.1 X, -8.0 Y  |  Spelare: 29.9 X , 10.9 Y
+108	Dalaran
+109	Förvärvade matlagningsutmärkelser från Dalaran
+110	Mörkstranden |cff7f7f7f(10-20)|r
+111	Ärorika dråp på Darkspearöarna
+112	Dödande slag på Darkspearöarna
+113	Angripna baser på Darkspearöarna
+114	Försvarade baser på Darkspearöarna
+115	Strider på Darkspearöarna
+116	Erövrade flaggor på Darkspearöarna
+117	Segrar på Darkspearöarna
+118	Dödsfall
+119	Dödsfall orsakade av Hogger
+120	Dödsfall orsakade av Vanndar Stormpike
+121	Dödsfall genom drunkning
+122	Dödsfall genom fall
+123	Dödsfall av utmattning
+124	Dödsfall genom eld och lava
+125	Dödsfall i Alteracdalen
+126	Dödsfall i Arathibäckenet
+127	Dödsfall på Darkspearöarna
+128	Dödsfall i Warsong Gulch
+129	Lämna Klippvaktslånghornsrapport till Nataka Longhorn vid Spökvandrarposten i Ödelandet.
+130	Olika dräpta varelsestyper
+131	Förlorade dueller
+132	Vunna dueller
+133	Instanser & rais
+134	Instanser och rais
+135	Skymningsskogen |cff3fbf3f(18-30)|r
+136	Dammträsket |cffffd100(35-45)|r
+137	Varje vecka ökas taket för gradpoäng, upp till som mest |cffffd20024750|r för |cffffd200grad 14|r.
+138	Edwin VanCleefs dräp (Deadmines)
+139	Eld:
+140	Konsumerade elixir
+141	Lärda förtrollningsformler
+142	Energi:
+143	Lärda ingenjörsritningar
+144	Förvärvade episka föremål
+145	Plundrade episka föremål
+146	Utrusta
+147	Utrustade episka föremål i föremålsplatser
+148	Sakkunskap:
+149	Köpta extra bankplatser
+150	Fördärvsskogen |cffff1919(48-55)|r
+151	Feralas |cffff1919(40-50)|r
+152	Lärda första-hjälpen-manualer
+153	Färdighet i första hjälpen
+154	Fångad fisk och annat
+155	Fångad fisk
+156	Fullbordade fiskedaguppdrag
+157	Fiskefärdighet
+158	Konsumerade elixirflaskor
+159	Använda flyglinjer
+160	Förtärd mat
+161	Denna hordhuvudstad grundades av Thrall och är hem för många av Durotars stolta orkklaner.
+162	Utrustning
+163	Guld spenderat hos barberare
+164	Guld spenderat på porto
+165	Guld spenderat på omspecialiseringar av talangträdet
+166	Girighetsslag på byte
+167	Konsumerade läkande drycker
+168	Använda hälsostensar
+169	Högre matlagningskunskap gör att du kan lära dig recept på högre nivåer. Recept hittar du hos lärare runt om i världen samt från uppdrag och som plundring från monster.
+170	Högre försvar gör dig svårare att träffa och gör att monster i mindre utsträckning landar ett förkrossande slag.
+171	Högre ingenjörskonst gör att du kan lära dig planritningar på högre nivåer. Planritningar hittar du hos lärare runt om i världen samt från uppdrag och monster.
+172	Högre första-hjälpen-kunskap gör att du kan lära dig första-hjälpen-förmågor på högre nivåer. Förmågorna hittar du hos lärare runt om i världen samt från uppdrag och som plundring från monster.
+173	Högre fiskekunskap ökar din chans att fånga fisk i vattendrag runt om i världen. Har du svårt att fånga fisk i ett visst område, bege dig till ett område på lägre nivå eller köp ett fiskelock och försök igen.
+174	Högre gruvbrytningskunskap låter dig bryta svårare mineraler runt om i världen. Kan du inte bryta en viss mineral, öka din kunskap genom att bryta lättare mineraler i områden på lägre nivå.
+175	Högre giftkunskap gör att starkare gifter kan framställas. Material köps av giftförsäljare och skumma handlare och kombineras till dödliga brygder som ruttnar, försvagar och förtär fiender.
+176	Högre kunskap ökar din chans att träffa.
+177	Högre vapenkunskap ökar din chans att träffa.
+178	Högsta alkemikunskap
+179	Högsta smideskunskap
+180	Högsta förtrollningskunskap
+181	Högsta ingenjörskunskap
+182	Högsta örtkunskap
+183	Högsta inskriptionskunskap
+184	Högsta lädersmideskunskap
+185	Högsta gruvbrytningskunskap
+186	Högsta flåningskunskap
+187	Högsta skrädderikunskap
+188	Hillsbrads förberg |cff3fbf3f(20-30)|r
+189	Ära tjänas genom att döda medlemmar av motståndarsidan i PvP-strid. Du kan använda äropoäng för att köpa specialföremål.
+190	Ärorika dråp
+191	Huvudhand:
+192	Lärda inskriptioner
+193	Uttrullade föremål
+194	Dödande slag
+195	Dräp
+196	Språk: Rännspråk
+197	Språk: Orkiska
+198	Största kastade läkning
+199	Största mottagna läkning
+200	Största utdelade träff
+201	Största mottagna träff
+202	Lärda lädersmidesmönster
+203	Under Sylvanas Windrunners ledning har de bortglömda ingått en skör allians med Horden och upprättat denna huvudstad i de djupa gångarna under Lordaerons ruiner.
+204	Förvärvade legendariska föremål
+205	Tänd Livets heliga eld
+206	Använda magikerportaler
+207	Mest använda magikerportal
+208	Konsumerade manadrycker
+209	Material utvunna vid uttrullning
+210	Mekgineer Thermapluggs dräp (Gnomeregan)
+211	Flest hordfraktioner på Upphöjd
+212	Flest fraktioner på Upphöjd
+213	Flest fraktioner på Ärad eller högre
+214	Flest fraktioner på Vördad eller högre
+215	Flest guld någonsin i ägo
+216	Ägda ridjur
+217	Mulgore |cff7f7f7f(1-10)|r
+218	Mutanus den Uppslukares dräp (Wailing Caverns)
+219	Natur:
+220	Behovsslag på byte
+221	Ny uppsättning
+222	Antal kramar
+223	Antal hemteleporteringar
+224	Parering:
+225	En del av Ångvisslekartellen; denna goblinstad erbjuder en neutral tillflykt för den som vill handla med varor och tjänster i Kargmarkerna.
+226	Spelare
+227	Krutstubinen
+228	Yrken på maxfärdighet
+229	Lärda yrken
+230	Övergivna uppdrag
+231	Fullbordade uppdrag
+232	Rath'mael-dräp (Ruins of Lordaeron)
+233	Pånyttfödda av druiderna
+234	Förlossade av paladiner
+235	Återupplivade av präster
+236	Återupplivade av själstenar
+237	Återväckta av druiderna
+238	Rustning:
+239	Spara
+240	Sekundära färdigheter på maxfärdighet
+241	Välj en valuta för att se dess detaljer.
+242	Skugga:
+243	Lärda smältningsrecept
+244	Tala med Felgur Twocuts vid Spökvandrarposten i Ödelandet.
+245	Tala med hamnmästare Lozgil i Bytesbukten.
+246	Spelare: 29.92, 10.87
+247	Andar återförda till kroppen av schamaner
+248	Strypetörnsdalen |cffffd100(30-45)|r
+249	Antagna framkallningar
+250	Lärda skrädderimönster
+251	Tanaris |cffff1919(40-50)|r
+252	Jordringen är en lös sammanslutning av hordvänliga schamaner och drudier som söker bevara och vårda naturens balans på Azeroth.
+253	Den här blomstrande kuststaden drivs av baron Revilgaz från Blackwaters pirater. Dödsfiender till Blodssegelfribytarna och en del av Ångvisslekartellen.
+254	Den här stammen av förvisade troll har slagit sig samman med Thrall och Horden. De kallar numera Durotar för sitt hem, som de delar med sina orchallierade.
+255	Totalt besökta 10-mans rais
+256	Totalt besökta 20-mans rais
+257	Totalt besökta 40-mans rais
+258	Totalt besökta 5-mans instanser
+259	Totalt antal ärorika dråp
+260	Totalt antal dödande slag
+261	Totalt antal hejarop
+262	Totalt utdelad skada
+263	Totalt mottagen skada
+264	Totalt dödsfall
+265	Totalt dödsfall orsakade av motståndarsidan
+266	Totalt dödsfall orsakade av andra spelare
+267	Totalt dödsfall i 10-mans rais
+268	Totalt dödsfall i 20-mans rais
+269	Totalt dödsfall i 40-mans rais
+270	Totalt dödsfall i 5-mans instanser
+271	Totala facepalms
+272	Totalt antal påträffade fraktioner
+273	Totalt utdelad läkning
+274	Totalt mottagen läkning
+275	Totalt antal dräp
+276	Totalt antal dräp som ger erfarenhet eller ära
+277	Totalt dödsfall i instanser och rais
+278	Totalt antal LOL
+279	Antal gånger världens minsta fiol spelats
+280	Totalt antal vågor
+281	Resor
+282	Res till Hammarfall i Arathihöglandet och tala med Zengu.
+283	Uppdrag: |cffffffff25|r|cffffffff/40|r
+284	Ägda sällskapsdjur
+285	Ärorika dråp i Warsong Gulch
+286	Dödande slag i Warsong Gulch
+287	Strider i Warsong Gulch
+288	Erövrade flaggor i Warsong Gulch
+289	Återförda flaggor i Warsong Gulch
+290	Segrar i Warsong Gulch
+291	Vapenfärdigheter på maxfärdighet
+292	Ärorika dråp i omvärlden
+293	Dödande slag i omvärlden
+294	[32] Hammaren kan falla
+295	[32] Kolkar i Ödelandet
+296	[33] Helculars hämnd
+297	[33] Nyckeln till staden
+298	[33] Pantermästerskap
+299	[33] Inbrott i fängelset
+300	[33] Stentokens
+301	[33] Tigerbehärskning
+302	[34] Infiltration
+303	[35+] Inkrusterade stjärtfenor
+304	[35] Släktträd
+305	[35] Martek den landsförvisade
+306	[37+] Det vidriga revet
+307	[37] Goblinsponsring
+308	[37] Försvaret av Grom'gol
+309	[37] Trollbane
+310	[38] Mok'thardins förtrollning
+311	[38] Ogräsröjt
+312	[41] Blodskalpklanens huvuden
+313	[41] Raptormästerskap
+314	|cffffffffMot raidbossar|r
+315	|cffffffffJämnivåfiende|r
+316	|cff40ff40Fiske 25|r
+317	|cff40ff40Fiske 75|r
+318	|cffff4040Fiske 150|r
+319	|cffff4040Fiske 225|r
+320	|cffff4040Fiske 300|r

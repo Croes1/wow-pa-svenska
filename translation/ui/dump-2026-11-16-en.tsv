@@ -1,0 +1,321 @@
+id	area	en
+001	?	 Season 1
+002	?	0/1 Arikaras ormskinn
+003	?	0/1 Blodstenskil
+004	?	0/1 Blodstenskula
+005	?	0/1 Blodstensoval
+006	?	0/1 Felfri tigerinnetand
+007	?	0/1 Gan'zulahs huvud
+008	?	0/1 Nezzlioks huvud
+009	?	0/1 Smutsig nyckel
+010	?	0/10 Boulderfist Enforcer slain
+011	?	0/10 Jungle Stalker slain
+012	?	0/10 Mosh'Ogg Brute slain
+013	?	0/10 Sliten stenbricka
+014	?	0/10 Stranglethorn Tiger slain
+015	?	0/5 Mosh'Ogg Witch Doctor slain
+016	?	0/6 Carnivorous Weed slain
+017	?	0/8 Boulderfist Ogre slain
+018	?	A strong arm of the Steamwheedle Cartel, this port is home to seafaring sailors and back-alley dealers spanning the eastern sea trading routes.
+019	?	Aku'mai kills (Blackfathom Deeps)
+020	?	Alchemy Recipes learned
+021	?	Allows the wearing of cloth armor.
+022	?	Allows the wearing of leather armor.
+023	?	Alterac Valley Honorable Kills
+024	?	Alterac Valley Killing Blows
+025	?	Alterac Valley battles
+026	?	Alterac Valley towers captured
+027	?	Alterac Valley towers defended
+028	?	Alterac Valley victories
+029	?	Arathi Basin Honorable Kills
+030	?	Arathi Basin Killing Blows
+031	?	Arathi Basin bases assaulted
+032	?	Arathi Basin bases defended
+033	?	Arathi Basin battles
+034	?	Arathi Basin victories
+035	?	Archmage Arugal kills (Shadowfang Keep)
+036	?	Arkan:
+037	?	Average quests completed per day
+038	?	Azshara |cffff1919(45-55)|r
+039	?	Bandage used most
+040	?	Bandages used
+041	?	Battleground Honorable Kills
+042	?	Battleground Killing Blows
+043	?	Battleground with the most Honorable Kills
+044	?	Battleground with the most Killing Blows
+045	?	Battlegrounds
+046	?	Battlegrounds played
+047	?	Battlegrounds won
+048	?	Bazzalan kills (Ragefire Chasm)
+049	?	Beverages consumed
+050	?	Bihand:
+051	?	Blacksmithing Plans learned
+052	?	Blasted Lands |cffff1919(45-55)|r
+053	?	Boss Kills
+054	?	Bring Fizzle's Letter to Martek the Exiled in the Badlands.
+055	?	Cairne Bloodhoof leads his people, the Proud Tauren, from this mighty Horde capital.
+056	?	Capital of the Steamwheedle Cartel and home to goblinhood's finest engineers, alchemists and merchants.
+057	?	City of Dalaran
+058	?	Consumables
+059	?	Continent with the most Honorable Kills
+060	?	Continent with the most Killing Blows
+061	?	Cooking Recipes known
+062	?	Cooking daily quests completed
+063	?	Cooking skill
+064	?	Creature type killed the most
+065	?	Creatures
+066	?	Creatures killed
+067	?	Critters killed
+068	TomTomWorldFrame	Cursor: ---
+069	?	Cursor: -12.2 X, -56.9 Y  |  Player: 29.9 X , 10.9 Y
+070	?	Cursor: -22.7 X, -53.9 Y  |  Player: 29.9 X , 10.9 Y
+071	?	Cursor: 1.4 X, -57.9 Y  |  Player: 29.9 X , 10.9 Y
+072	?	Cursor: 10.3 X, 79.3 Y  |  Player: 29.9 X , 10.9 Y
+073	?	Cursor: 106.8 X, -13.2 Y  |  Player: 29.9 X , 10.9 Y
+074	?	Cursor: 106.8 X, 32.9 Y  |  Player: 29.9 X , 10.9 Y
+075	?	Cursor: 117.5 X, -108.7 Y  |  Player: 29.9 X , 10.9 Y
+076	?	Cursor: 12.9 X, 13.0 Y  |  Player: 29.9 X , 10.9 Y
+077	?	Cursor: 123.6 X, -53.4 Y  |  Player: 29.9 X , 10.9 Y
+078	?	Cursor: 14.5 X, 85.9 Y  |  Player: 29.9 X , 10.9 Y
+079	?	Cursor: 15.0 X, 54.7 Y  |  Player: 29.9 X , 10.9 Y
+080	?	Cursor: 16.0 X, 64.6 Y  |  Player: 29.9 X , 10.9 Y
+081	?	Cursor: 16.8 X, 51.9 Y  |  Player: 29.9 X , 10.9 Y
+082	?	Cursor: 17.2 X, 52.1 Y  |  Player: 29.9 X , 10.9 Y
+083	?	Cursor: 17.9 X, 72.0 Y  |  Player: 29.9 X , 10.9 Y
+084	?	Cursor: 18.3 X, 82.8 Y  |  Player: 29.9 X , 10.9 Y
+085	?	Cursor: 20.5 X, 52.4 Y  |  Player: 29.9 X , 10.9 Y
+086	?	Cursor: 23.1 X, 68.3 Y  |  Player: 29.9 X , 10.9 Y
+087	?	Cursor: 23.6 X, 65.5 Y  |  Player: 29.9 X , 10.9 Y
+088	?	Cursor: 24.7 X, 40.6 Y  |  Player: 29.9 X , 10.9 Y
+089	?	Cursor: 25.0 X, 37.1 Y  |  Player: 29.9 X , 10.9 Y
+090	?	Cursor: 29.3 X, 77.6 Y  |  Player: 29.9 X , 10.9 Y
+091	?	Cursor: 3.3 X, -46.8 Y  |  Player: 29.9 X , 10.9 Y
+092	?	Cursor: 307.2 X, -31.9 Y  |  Player: 29.9 X , 10.9 Y
+093	?	Cursor: 33.9 X, 33.7 Y  |  Player: 29.9 X , 10.9 Y
+094	?	Cursor: 338.9 X, -74.0 Y  |  Player: 29.9 X , 10.9 Y
+095	?	Cursor: 339.9 X, -76.3 Y  |  Player: 29.9 X , 10.9 Y
+096	?	Cursor: 46.1 X, -44.0 Y  |  Player: 29.9 X , 10.9 Y
+097	?	Cursor: 54.5 X, 6.4 Y  |  Player: 29.9 X , 10.9 Y
+098	?	Cursor: 64.6 X, 21.1 Y  |  Player: 29.9 X , 10.9 Y
+099	?	Cursor: 71.5 X, 54.7 Y  |  Player: 29.9 X , 10.9 Y
+100	?	Cursor: 73.6 X, 37.8 Y  |  Player: 29.9 X , 10.9 Y
+101	?	Cursor: 74.3 X, 66.2 Y  |  Player: 29.9 X , 10.9 Y
+102	?	Cursor: 77.6 X, 16.0 Y  |  Player: 29.9 X , 10.9 Y
+103	?	Cursor: 79.9 X, 42.5 Y  |  Player: 29.9 X , 10.9 Y
+104	?	Cursor: 81.6 X, 55.8 Y  |  Player: 29.9 X , 10.9 Y
+105	?	Cursor: 82.5 X, -33.1 Y  |  Player: 29.9 X , 10.9 Y
+106	?	Cursor: 85.0 X, -239.9 Y  |  Player: 29.9 X , 10.9 Y
+107	?	Cursor: 91.1 X, -8.0 Y  |  Player: 29.9 X , 10.9 Y
+108	?	Dalaran
+109	?	Dalaran Cooking Awards gained
+110	?	Darkshore |cff7f7f7f(10-20)|r
+111	?	Darkspear Islands Honorable Kills
+112	?	Darkspear Islands Killing Blows
+113	?	Darkspear Islands bases assaulted
+114	?	Darkspear Islands bases defended
+115	?	Darkspear Islands battles
+116	?	Darkspear Islands flags captured
+117	?	Darkspear Islands victories
+118	?	Deaths
+119	?	Deaths from Hogger
+120	?	Deaths from Vanndar Stormpike
+121	?	Deaths from drowning
+122	?	Deaths from falling
+123	?	Deaths from fatigue
+124	?	Deaths from fire and lava
+125	?	Deaths in Alterac Valley
+126	?	Deaths in Arathi Basin
+127	?	Deaths in Darkspear Islands
+128	?	Deaths in Warsong Gulch
+129	?	Deliver Cliffwatcher Longhorn Report to Nataka Longhorn at Ghost Walker Post in Desolace.
+130	?	Different creature types killed
+131	?	Duels lost
+132	?	Duels won
+133	?	Dungeons & Raids
+134	?	Dungeons and Raids
+135	?	Duskwood |cff3fbf3f(18-30)|r
+136	?	Dustwallow Marsh |cffffd100(35-45)|r
+137	?	Each week, the Rank Points cap is increased, up to a maximum of |cnHIGHLIGHT_FONT_COLOR:24750|r for |cnHIGHLIGHT_FONT_COLOR:Rank 14|r.
+138	?	Edwin VanCleef Kills (Deadmines)
+139	?	Eld:
+140	?	Elixirs consumed
+141	?	Enchanting formulae learned
+142	?	Energi:
+143	?	Engineering Schematics learned
+144	?	Epic items acquired
+145	?	Epic items looted
+146	PaperDollFrameEquipSet	Equip
+147	?	Equipped epic items in item slots
+148	?	Expertise:
+149	?	Extra bank slots purchased
+150	?	Felwood |cffff1919(48-55)|r
+151	?	Feralas |cffff1919(40-50)|r
+152	?	First Aid Manuals learned
+153	?	First Aid skill
+154	?	Fish and other things caught
+155	?	Fish caught
+156	?	Fishing daily quests completed
+157	?	Fishing skill
+158	?	Flasks consumed
+159	?	Flight paths taken
+160	?	Food eaten
+161	?	Founded by Thrall, this Horde capital city is home to many of the proud orc clans of Durotar.
+162	?	Gear
+163	?	Gold spent at barber shops
+164	?	Gold spent on postage
+165	?	Gold spent on talent tree respecs
+166	?	Greed rolls made on loot
+167	?	Health potions consumed
+168	?	Healthstones used
+169	?	Higher cooking skill allows you to learn higher level cooking recipes.  Recipes can be found on trainers around the world as well as from quests and as drops from monsters.
+170	?	Higher defense makes you harder to hit and makes monsters less likely to land a crushing blow.
+171	?	Higher engineering skill allows you to learn higher level engineering schematics.  Schematics can be found on trainers around the world as well as from quests and monsters.
+172	?	Higher first aid skill allows you to learn higher level first aid abilities.  First aid abilities can be found on trainers around the world as well as from quests and as drops from monsters.
+173	?	Higher fishing skill increases your chance of catching fish in bodies of water around the world.  If you are having trouble catching fish in a given area, move to a lower level area or purchase a fishing lure and try again.
+174	?	Higher mining skill allows you to harvest more difficult minerals nodes around the world.  If you cannot harvest a specific mineral, then increase your skill by mining easier to mine minerals in lower level areas.
+175	?	Higher poison skill allows more powerful poisons to be crafted. Reagents can be purchased from poison vendors and shady dealers, then combined into deadly concoctions that rot, weaken, and wither foes.
+176	?	Higher skill increases your chance to hit.
+177	?	Higher weapon skill increases your chance to hit.
+178	?	Highest Alchemy skill
+179	?	Highest Blacksmithing skill
+180	?	Highest Enchanting skill
+181	?	Highest Engineering skill
+182	?	Highest Herbalism skill
+183	?	Highest Inscription skill
+184	?	Highest Leatherworking skill
+185	?	Highest Mining skill
+186	?	Highest Skinning skill
+187	?	Highest Tailoring skill
+188	?	Hillsbrad Foothills |cff3fbf3f(20-30)|r
+189	?	Honor is gained by killing members of the opposite faction in PvP combat. You can use honor points to purchase special items.
+190	?	Honorable Kills
+191	?	Huvudhand:
+192	?	Inscriptions learned
+193	?	Items disenchanted
+194	?	Killing Blows
+195	?	Kills
+196	?	Language: Gutterspeak
+197	?	Language: Orcish
+198	?	Largest heal cast
+199	?	Largest heal received
+200	?	Largest hit dealt
+201	?	Largest hit received
+202	?	Leatherworking Patterns learned
+203	?	Led by Sylvanas Windrunner, the Forsaken have joined a tenuous alliance with the Horde and established this capital in the vast depths under the Ruins of Lordaeron.
+204	?	Legendary items acquired
+205	?	Light the Sacred Fire of Life
+206	?	Mage Portals taken
+207	?	Mage portal taken most
+208	?	Mana potions consumed
+209	?	Materials produced from disenchanting
+210	?	Mekgineer Thermaplugg kills (Gnomeregan)
+211	?	Most Horde factions at Exalted
+212	?	Most factions at Exalted
+213	?	Most factions at Honored or higher
+214	?	Most factions at Revered or higher
+215	?	Most gold ever owned
+216	?	Mounts owned
+217	?	Mulgore |cff7f7f7f(1-10)|r
+218	?	Mutanus the Devourer kills (Wailing Caverns)
+219	?	Nature:
+220	?	Need rolls made on loot
+221	PaperDollFrameNewSet	New Set
+222	?	Number of hugs
+223	?	Number of times hearthed
+224	?	Parering:
+225	?	Part of the Steamwheedle Cartel, this goblin city provides a neutral haven for those that wish to trade goods and services in the Barrens.
+226	?	Player
+227	?	Powderfuse
+228	?	Professions at maximum skill
+229	?	Professions learned
+230	?	Quests abandoned
+231	?	Quests completed
+232	?	Rath'mael Kills (Ruins of Lordaeron)
+233	?	Rebirthed by druids
+234	?	Redeemed by paladins
+235	?	Resurrected by priests
+236	?	Resurrected by soulstones
+237	?	Revived by druids
+238	?	Rustning:
+239	PaperDollFrameSaveSet	Save
+240	?	Secondary skills at maximum skill
+241	TokenDetailFrame	Select a currency to view its details.
+242	?	Skugga:
+243	?	Smelting Recipes learned
+244	?	Speak with Felgur Twocuts at Ghost Walker Post in Desolace.
+245	?	Speak with Wharfmaster Lozgil in Booty Bay.
+246	TomTomWorldFrame	Spelare: 29.92, 10.87
+247	?	Spirit returned to body by shamans
+248	?	Stranglethorn Vale |cffffd100(30-45)|r
+249	?	Summons accepted
+250	?	Tailoring Patterns learned
+251	?	Tanaris |cffff1919(40-50)|r
+252	?	The Earthen Ring is a loose collective of Horde-aligned shamans and druids who seek to maintain and nurture the balance of nature on Azeroth.
+253	?	This booming coastal city is run by Baron Revilgaz of the Blackwater Raiders.  Mortal enemies of the Bloodsail Buccaneers and part of the Steamwheedle Cartel.
+254	?	This tribe of exiled trolls has joined forces with Thrall and the Horde.  They now call Durotar their home, which they share with their orc allies.
+255	?	Total 10-player raids entered
+256	?	Total 20-player raids entered
+257	?	Total 40-player raids entered
+258	?	Total 5-player dungeons entered
+259	?	Total Honorable Kills
+260	?	Total Killing Blows
+261	?	Total cheers
+262	?	Total damage done
+263	?	Total damage received
+264	?	Total deaths
+265	?	Total deaths from opposite faction
+266	?	Total deaths from other players
+267	?	Total deaths in 10-player raids
+268	?	Total deaths in 20-player raids
+269	?	Total deaths in 40-player raids
+270	?	Total deaths in 5-player dungeons
+271	?	Total facepalms
+272	?	Total factions encountered
+273	?	Total healing done
+274	?	Total healing received
+275	?	Total kills
+276	?	Total kills that grant experience or honor
+277	?	Total raid and dungeon deaths
+278	?	Total times LOL'd
+279	?	Total times playing world's smallest violin
+280	?	Total waves
+281	?	Travel
+282	?	Travel to Hammerfall in the Arathi Highlands and speak with Zengu.
+283	QuestLogCount	Uppdrag: |cffffffff25|r|cffffffff/40|r
+284	?	Vanity pets owned
+285	?	Warsong Gulch Honorable Kills
+286	?	Warsong Gulch Killing Blows
+287	?	Warsong Gulch battles
+288	?	Warsong Gulch flags captured
+289	?	Warsong Gulch flags returned
+290	?	Warsong Gulch victories
+291	?	Weapon skills at maximum skill
+292	?	World Honorable Kills
+293	?	World Killing Blows
+294	?	[32] The Hammer May Fall
+295	?	[32] The Kolkar of Desolace
+296	?	[33] Helcular's Revenge
+297	?	[33] Key to the City
+298	?	[33] Panther Mastery
+299	?	[33] Prison Break In
+300	?	[33] Stone Tokens
+301	?	[33] Tiger Mastery
+302	?	[34] Infiltration
+303	?	[35+] Encrusted Tail Fins
+304	?	[35] Family Tree
+305	?	[35] Martek the Exiled
+306	?	[37+] The Vile Reef
+307	?	[37] Goblin Sponsorship
+308	?	[37] The Defense of Grom'gol
+309	?	[37] Trollbane
+310	?	[38] Mok'thardin's Enchantment
+311	?	[38] Weed Whacked
+312	?	[41] Bloodscalp Clan Heads
+313	?	[41] Raptor Mastery
+314	?	|cFFFFFFFFAgainst Raid Bosses|r
+315	?	|cFFFFFFFFEqual-Level Enemy|r
+316	?	|cff40ff40Fishing 25|r
+317	?	|cff40ff40Fishing 75|r
+318	?	|cffff4040Fishing 150|r
+319	?	|cffff4040Fishing 225|r
+320	?	|cffff4040Fishing 300|r
