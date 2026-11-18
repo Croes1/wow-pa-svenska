@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 tools/parse-wdb.py - parser for the WoW client cache files in Cache/WDB
-(questcache.wdb = WQST, creaturecache.wdb = WMOB, gameobjectcache.wdb = WGOB).
+(quest=WQST, creature=WMOB, game object=WGOB, page text=WPTX).
+Empty WNPC and WPTN caches are recognized but not decoded.
 
 Verified layout (Forever client build 70938):
   header   = 24 bytes: magic, build, locale('enUS'), u32, u32, 0
@@ -27,22 +28,28 @@ import re
 import struct
 import sys
 
-NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9'\"()\-. ]{2,}$")
+# Names may start with a letter, a quote or a bracket ("Plucky" Johnson,
+# [DNT] Challenge) and may contain common punctuation (&, !, ?, :, ,).
+NAME_RE = re.compile(r"^[A-Za-z\"\[][A-Za-z0-9'\"()\-. &!?,:\[\]#/]{2,}$")
 
 
 def u32(d, off):
     return struct.unpack_from("<I", d, off)[0]
 
 
-def cstrings(data, lo, hi, min_len=1):
-    """All NUL-terminated strings in data[lo:hi] with their offsets."""
+def cstrings(data, lo, hi, min_len=1, newlines=False):
+    """All NUL-terminated strings in data[lo:hi] with their offsets.
+
+    newlines=True lets \\n and \\r count as text (quest bodies contain them).
+    """
     out = []
     i = lo
+    allowed_ctrl = (9, 10, 13) if newlines else (9,)
     while i < hi:
         j = i
         while j < hi and j - i < 65536:
             b = data[j]
-            if b == 0 or not (32 <= b < 127 or b == 9 or b >= 0x80):
+            if b == 0 or not (32 <= b < 127 or b in allowed_ctrl or b >= 0x80):
                 break
             j += 1
         terminated = j < hi and data[j] == 0
@@ -82,8 +89,11 @@ def try_records(data, start):
 
 def extract_row(magic, rid, blob):
     """(id, col1, col2) per cache type, or None for junk records."""
-    strings = [s for _, s in cstrings(blob, 0, len(blob), min_len=1)]
+    strings = [s for _, s in cstrings(blob, 0, len(blob), min_len=1,
+                                      newlines=(magic == "WQST"))]
     if magic == "WQST":
+        # The quest text is one long run that may contain newlines; it is
+        # kept whole, and the newlines are escaped when the TSV is written.
         longs = [s for s in strings if len(s) >= 50]
         if not longs:
             return None
@@ -103,6 +113,14 @@ def extract_row(magic, rid, blob):
             return None
         key = inner if 0 < inner < 1000000 else rid
         return (key, names[0].strip(), "")
+    if magic == "WPTX":
+        if len(blob) < 12:
+            return None
+        pages = [s.strip() for _, s in cstrings(blob, 12, len(blob), min_len=1)]
+        if not pages:
+            return None
+        page_id = u32(blob, 0)
+        return (page_id or rid, max(pages, key=len), "")
     return None
 
 def hexdump(data, lo, hi):
@@ -160,7 +178,22 @@ def scan(data):
 
 def tsv_mode(data, outpath):
     magic = data[:4][::-1].decode("latin1")
+    headers = {
+        "WQST": "id\ttext",
+        "WMOB": "id\tname\textra",
+        "WGOB": "id\tname\textra",
+        "WPTX": "id\ttext",
+        "WNPC": "id\ttext",
+        "WPTN": "id\ttext",
+    }
+    if magic not in headers:
+        raise ValueError(f"unsupported cache magic: {magic}")
+    if magic in ("WNPC", "WPTN") and data[0x18:] != b"\0" * 8:
+        raise ValueError(f"{magic} cache has data, but its record format is not supported")
+
     recs, trailer = try_records(data, 0x18)
+    if magic in ("WNPC", "WPTN") and recs:
+        raise ValueError(f"{magic} cache has data, but its record format is not supported")
     rows, skipped = [], 0
     for rid, blob in recs:
         row = extract_row(magic, rid, blob)
@@ -168,11 +201,11 @@ def tsv_mode(data, outpath):
             rows.append(row)
         else:
             skipped += 1
-    wide = magic in ("WMOB", "WGOB")
     with open(outpath, "w", encoding="utf-8") as fh:
-        fh.write("id\tname\textra\n" if wide else "id\ttext\n")
+        fh.write(headers[magic] + "\n")
         for rid, a, b in rows:
-            b = b.replace("\t", " ").replace("\n", "\\n")
+            a = a.replace("\t", " ").replace("\r", "\\r").replace("\n", "\\n")
+            b = b.replace("\t", " ").replace("\r", "\\r").replace("\n", "\\n")
             fh.write(f"{rid}\t{a}\t{b}\n" if b else f"{rid}\t{a}\n")
     print(f"tsv: wrote {len(rows)} rows to {outpath} (skipped {skipped})")
     if magic == "WQST" and rows:
@@ -207,7 +240,10 @@ def main():
     elif mode == "tsv":
         if len(sys.argv) < 4:
             sys.exit(__doc__)
-        tsv_mode(data, sys.argv[3])
+        try:
+            tsv_mode(data, sys.argv[3])
+        except ValueError as exc:
+            sys.exit(str(exc))
     else:
         sys.exit(__doc__)
 

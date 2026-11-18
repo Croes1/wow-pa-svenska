@@ -168,12 +168,9 @@ class SegmentationToolTest(unittest.TestCase):
         self.assertEqual(res.returncode, 1)
         self.assertIn("5 kolumner (vantade 6)", res.stdout)
 
-    def test_real_batch14_roundtrip_routes_only_98070(self):
-        src = ROOT / "translation" / "batches" / "quests-batch-14.tsv"
-        if not src.exists():
-            self.skipTest("quests-batch-14.tsv saknas")
-        seg = write_file(self.dir, "seg14.tsv",
-                         "1482\tThe Corrupter\tBring an Oracle Crystal to Maurin Bonesplitter in Desolace.\t"
+    def test_fragment_roundtrip_routes_only_incomplete_row(self):
+        segmented = (
+            "1482\tThe Corrupter\tBring an Oracle Crystal to Maurin Bonesplitter in Desolace.\t"
                          "An oracle crystal would do nicely. They are crafted by the naga for their oracles to use."
                          "$B$BNorthwest of here, along the coast, is a vast coral reef that the naga have taken as "
                          "their home when this close to the shore. You can find their oracles there. The Slitherblade "
@@ -188,6 +185,12 @@ class SegmentationToolTest(unittest.TestCase):
                          "weakened, their stronghold brought to ruin.$b$bThe sword is protected by several sigils "
                          "that were divided among the survivors of Stromgarde, and we must retrieve them.$b$b"
                          "The first was taken by the Syndicate, one of their men in Stromgarde should have it.\t\t\n")
+        source_rows = []
+        for line in segmented.splitlines():
+            parts = line.split("\t")
+            source_rows.append(f"{parts[0]}\t{''.join(parts[1:])}")
+        src = write_file(self.dir, "quests-batch-14.tsv", "id\ttext\n" + "\n".join(source_rows) + "\n")
+        seg = write_file(self.dir, "seg14.tsv", segmented)
         res = run_tool(str(src), seg, review=os.path.join(self.dir, "rev14.tsv"))
         self.assertEqual(res.returncode, 0, res.stdout)
         self.assertIn("RESULTAT: OK", res.stdout)
