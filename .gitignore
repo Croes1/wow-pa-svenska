@@ -53,9 +53,24 @@ WPSCollectorDB.lua
 # that does not match those globs must be judged by hand: commit it only if
 # another developer needs it to reproduce a result.
 
-# --- translation/ is intentionally NOT ignored ---
-# The round's caches, batches, segmented files, out/*.tsv, review files and
-# review/DECISIONS-*.md notes are the hand-over package -> keep in git.
-
+# --- Local notes and agent config ---
 saker_som_behover_fixas.md
+att_gora.txt
+found_issues/
+.clinerules
 .cline*
+
+# --- translation/: keep docs, glossaries, tools input and test fixtures;
+# --- ignore bulky per-round material (regenerate with tools/).
+translation/out/
+translation/segmented/
+translation/cache/*
+!translation/cache/README.md
+translation/*cache-en.tsv
+translation/ui/dump-*
+translation/batches/*
+!translation/batches/quests-batch-01.tsv
+!translation/batches/quests-batch-14.tsv
+!translation/batches/review/
+translation/batches/review/*
+!translation/batches/review/DECISIONS-*.md

@@ -94,7 +94,8 @@ Found a mistranslation or want to help improve the addon?
 
 - [Read the contribution guidelines](CONTRIBUTING.md).
 - [Report a bug or suggest an improvement](https://github.com/Croes1/wow-pa-svenska/issues).
-- [Read the translation workflow](translation/PIPELINE.md).
+- Translating? Use the existing text in `Data/` as a reference for tone and terminology, and `translation/glossary-core.tsv` for fixed terms.
+- Running the extraction tools? See the [translation workflow](translation/PIPELINE.md).
 
 ## Sources and credits
 
