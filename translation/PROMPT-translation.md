@@ -96,3 +96,40 @@ så sök i den utanför modellen och lägg bara träffarna i omgången.
   `pipeline/overrides.csv` och `CLAUDE.md` finns inte i den här mappen.
 - Den här promptfilen ersätter inte pipelinens kvalitetskontroll (validate-steget) –
   återkoppling via `/wps fel` är fortfarande källan till förbättringar.
+
+## Ordval och sammanhang (beslut 2026-11-18, se `translation/batches/review/DECISIONS-2026-11-18.md`)
+
+Rader med tabellen `decisions` i `glossary-core.tsv` hör till detta avsnitt.
+Principen: naturlig svenska före ordagrann översättning, men behåll
+Warcraft-fantasyns ordförråd (häxdoktor, myrmidon, vederstygglighet, åsködla).
+
+- **Stamnamn + titel binds med bindestreck**: Vissenbark-yxkastare,
+  Boulderfist-oger, Slitherblade-myrmidoner. Stamnamnet i sig böjs som i
+  skickad data (Vissenbarkstrollen).
+- **oger** är standardformen i all text: en oger, ogern, oger, ogerna
+  (Boulderfist-ogerna). Aldrig "ogre/ogrer/ograr". Äldre rader i `Data/`
+  är åtgärdade 2026-11-18.
+- **Crystalline Silk** = "Kristallint silke" överallt (silke = materialet,
+  siden = tyget). Item-namn och questtext ska vara identiska.
+- **"Bring N X to Y in Z"** när X redan innehåller platsen: upprepa inte
+  platsen i målet ("Lämna de 8 stulna förnödenheterna till Jandia.").
+- **Idiom översätts efter mening**, inte ordagrant: "Other Fish to Fry" =
+  "Annat att ta itu med". Behåll ordleken bara om motivet är ordleken.
+- **Dialekt/röst**: översätt inte till helt neutral svenska. Lätt talspråk
+  räcker (inte fonetisk stavning): "Samvetet mitt", "steka de där nagorna".
+- **bra/god**: "god" om mat som smakar gott ("God träskmat"), "bra" om
+  kvalitet generellt.
+- **soak up**: välj efter objektet. kunskap = suga åt sig, sol = njuta av,
+  vatten = suga upp, en bonus/effekt = suga i sig.
+- **oomph** = "tryck" (inte "kläm" eller "pondus").
+- **Djurs boplats**: näste för farliga varelser (harpyor), lya för däggdjur.
+- **vrak vs strandat**: "skeppsvrak" om skeppet är förstört; "strandat"
+  bara om källan säger att det gått på grund.
+- **from/to + plats** är olika riktningar: "från Frivindsposten" (ursprung)
+  skiljs från "till Frivindsposten" (mål). Kontrollera mot källan.
+- **tam** hellre än "foglig" om vilda djur; "inte direkt känd för att vara tam".
+- **supplies** = förnödenheter (avlägsen bosättning); förråd = lager, varor =
+  för generellt.
+- **Titel på person med rang**: kocken Torka, vakt Thomas, Herr Amiral.
+- Hitta inte på namn som saknas i källan ("Lord Admiral" utan namn =
+  "Herr Amiral").
