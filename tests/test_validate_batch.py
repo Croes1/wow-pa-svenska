@@ -228,9 +228,16 @@ class ValidatorQuestTest(unittest.TestCase):
         dst = write_file(self.dir, "dst01.tsv", quests_out(rows))
         res = run_tool(str(src), dst, "quests")
         self.assertEqual(res.returncode, 0, res.stdout)
-        corrupt = rows[0][1].replace("$b$b", "$b", 1)
-        dst2 = write_file(self.dir, "dst01b.tsv",
-                          f"{rows[0][0]}\t{corrupt}\t\t\t\t\n" + quests_out(rows[1:]))
+        token_row = next((index for index, (_, body) in enumerate(rows)
+                          if vb.TOKEN_RE.search(body)), None)
+        if token_row is None:
+            self.skipTest("quest batch has no placeholder to corrupt")
+        rid, body = rows[token_row]
+        token = vb.TOKEN_RE.search(body)
+        corrupt = body[:token.start()] + body[token.end():]
+        corrupted_rows = rows.copy()
+        corrupted_rows[token_row] = (rid, corrupt)
+        dst2 = write_file(self.dir, "dst01b.tsv", quests_out(corrupted_rows))
         res = run_tool(str(src), dst2, "quests")
         self.assertEqual(res.returncode, 1)
         self.assertIn("platshallare saknas", res.stdout)

@@ -49,6 +49,8 @@ from collections import Counter
 KIND = {
     "quests": {"in_cols": 2, "out_cols": 6, "in_header": "id\ttext"},
     "npcs": {"in_cols": 3, "out_cols": 2, "in_header": "id\tname\ttitle"},
+    "gameobjects": {"in_cols": 3, "out_cols": 2, "in_header": "id\tname\ttitle"},
+    "pagetext": {"in_cols": 2, "out_cols": 2, "in_header": "id\ttext"},
 }
 FIELDS = ("title", "objectives", "description", "progress", "reward")
 
@@ -193,13 +195,47 @@ def check_npc_row(src_cells, dst_cells, sid, errors, warnings):
         errors.append(f"id {sid}: platshallare tillagda: {fmt_counted(added)}")
 
 
+def check_gameobject_row(src_cells, dst_cells, sid, errors, warnings):
+    """Game object output is its translated display name only."""
+    src_name = src_cells[1]
+    out_name = dst_cells[1]
+    if not out_name.strip():
+        errors.append(f"id {sid}: tomt namn")
+        return
+    if out_name != out_name.strip():
+        warnings.append(f"id {sid}: mellanslag kring namnet")
+    if out_name.strip() == src_name.strip():
+        warnings.append(f"id {sid}: namnet oforandrat (granska om objektbeskrivningen ska oversattas)")
+    lost, added = token_diff(src_name, out_name)
+    if lost:
+        errors.append(f"id {sid}: platshallare saknas: {fmt_counted(lost)}")
+    if added:
+        errors.append(f"id {sid}: platshallare tillagda: {fmt_counted(added)}")
+
+
+def check_pagetext_row(src_text, out_text, sid, errors, warnings):
+    """Validate complete page text without quest-style segmentation."""
+    if not out_text.strip():
+        errors.append(f"id {sid}: tom text")
+        return
+    if out_text != out_text.strip():
+        warnings.append(f"id {sid}: mellanslag i kanten pa texten")
+    if out_text.strip() == src_text.strip():
+        warnings.append(f"id {sid}: oforandrad engelska i texten")
+    lost, added = token_diff(src_text, out_text)
+    if lost:
+        errors.append(f"id {sid}: platshallare saknas: {fmt_counted(lost)}")
+    if added:
+        errors.append(f"id {sid}: platshallare tillagda: {fmt_counted(added)}")
+
+
 def main():
     if len(sys.argv) != 4:
-        print("usage: validate-batch.py <in-tsv> <ut-tsv> quests|npcs", file=sys.stderr)
+        print("usage: validate-batch.py <in-tsv> <ut-tsv> quests|npcs|gameobjects|pagetext", file=sys.stderr)
         return 2
     inp, outp, kind = sys.argv[1], sys.argv[2], sys.argv[3]
     if kind not in KIND:
-        print(f"okand sort {kind!r}: anvand quests eller npcs", file=sys.stderr)
+        print(f"okand sort {kind!r}: anvand quests, npcs, gameobjects eller pagetext", file=sys.stderr)
         return 2
     spec = KIND[kind]
 
@@ -229,8 +265,12 @@ def main():
         sid = sparts[0]
         if kind == "quests":
             check_quest_row(sparts[1], dparts, sid, errors, warnings)
-        else:
+        elif kind == "npcs":
             check_npc_row(sparts, dparts, sid, errors, warnings)
+        elif kind == "gameobjects":
+            check_gameobject_row(sparts, dparts, sid, errors, warnings)
+        else:
+            check_pagetext_row(sparts[1], dparts[1], sid, errors, warnings)
 
     print(f"indata: {len(src_rows)} rader   utdata: {len(dst_rows)} rader   jamforda: {pairs}")
     for msg in errors:
