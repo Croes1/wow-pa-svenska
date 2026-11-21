@@ -1,5 +1,62 @@
 -- Ordlistan (WPS.L.names_*), namn utan id, samt uppdragstexter (WPS.L.qtext). Filen underhålls
 -- direkt och är addonets källdata: redigera den här.
+---------------------------------------------------------------------------
+-- TERMINOLOGIBESLUT
+-- Gäller ny text och granskning. Ändra inte befintliga översättningar utan skäl.
+-- Beslut om en enskild post står som kommentar vid den posten. Sök bland
+-- kommentarerna med: python3 tools/check-data.py search TERM --lang comment
+--
+-- Generella regler
+--  * Personnamn står kvar på engelska (Karu, Demnul Farmountain, Ana'thek den Grymme).
+--    Det gäller även varelser med eget namn, t.ex. Carnage (titeln på uppdrag 98283);
+--    namnet på besvärjelsen Carnage är däremot "Blodbad". En rang eller titel framför
+--    namnet översätts: vakt Thomas, Konstapel Feldon, kocken Torka, Herr Amiral.
+--  * Beskrivande namn (varelsetyper, grupper, föremål) översätts till naturliga
+--    sammansättningar enligt ordlistan: Skogsspindel, Övergiven ande.
+--  * Stamnamn + titel binds med bindestreck, och stamnamnet böjs som i skickad data:
+--    Vissenbark-yxkastare, Boulderfist-oger, Slitherblade-myrmidon, Skullsplitter-jägare
+--    (stammen: Skullsplitterna). Efternamn på -hoof följer skickad data (Bena Vinterhov).
+--  * Naturlig svenska före ordagrann översättning, men behåll fantasyns ordförråd
+--    (häxdoktor, myrmidon, vederstygglighet, åsködla).
+--  * Idiom översätts efter mening, inte ordagrant: Other Fish to Fry = Annat att ta itu med.
+--  * Dialekt och röst: lätt talspråk räcker, inte fonetisk stavning ("Samvetet mitt").
+--  * Hitta inte på namn som saknas i källan: "Lord Admiral" utan namn = "Herr Amiral".
+--  * bra/god: "God träskmat" om mat som smakar gott, annars "bra".
+--  * soak up: kunskap = suga åt sig, sol = njuta av, vatten = suga upp, bonus/effekt = suga i sig.
+--    oomph = tryck (inte "kläm" eller "pondus"). tam hellre än "foglig" om vilda djur.
+--  * Boplats: näste för farliga varelser (harpyor), lya för däggdjur.
+--  * Skeppsvrak om skeppet är förstört; "strandat" bara om källan säger att det gått på grund.
+--  * "från X" (ursprung) och "till X" (mål) är olika riktningar: kontrollera mot källan.
+--  * "Bring N X to Y in Z" där X redan innehåller platsen: upprepa inte platsen i målet
+--    ("Lämna de 8 stulna förnödenheterna till Jandia.").
+--  * "raid" behålls; instans = dungeon.
+--
+-- Termer utan egen post (engelska = svenska)
+--  Lord Admiral = Herr Amiral; Executor = exekutor (High Executor = högexekutor);
+--  Master Apothecary = mästerapotekare; Mountaineer = bergsjägare; Cook (rang före namn) = kocken.
+--  Headhunter = huvudjägare; Witch Doctor = häxdoktor; Witherbark Axe Thrower = Vissenbark-yxkastare;
+--  Slitherblade Myrmidon = Slitherblade-myrmidon; Slitherblade Sorceress = Slitherblade-trollkvinna.
+--  Highland Strider = Höglandsstövare; Highland Thrasher = Höglandspiskare;
+--  Shadowmaw Panther = Skuggkäftspanter (Shadowmaw = Skuggkäft); Broodmother = honummöder;
+--  Tarnished (Shadowvale) = Fläckad; abomination = vederstygglighet; harpies = harpyor.
+--  supplies = förnödenheter (avlägsen bosättning; "förråd" = lager, "varor" är för generellt);
+--  Stolen Freewind Supplies = Stulna förnödenheter från Frivindsposten (föremålet, uppdrag 98069).
+--  camping item = lägerutrustning; Kormek's Hut = Kormeks hydda; Bone Collector = Bensamlare;
+--  Ranazjar Isle = Ranazjarön; Grom'gol Base Camp = Grom'gol-baslägret; Blackwater Raiders = Blackwaters pirater;
+--  Roon's Kodo Horn = Roons kodohorn; Bubbling Cauldron = den bubblande kitteln (fri översättning).
+--  Craftsman's Writ (uppdragstitlar) = Hantverksorder; Golden Rod = Guldstav (stavfamiljen:
+--  Kopparstav, Silverstav); Panther Mastery = Pantermästerskap; Tiger Mastery = Tigerbehärskning.
+--  Ana'thek the Cruel = Ana'thek den Grymme; broken/shattered armor = sönderslagna rustningen.
+--  Venture Co. i löpande text = Äventyrsbolaget / Äventyrsbolagets (inline vid ordlisteposten).
+--
+-- Kända avvikelser mellan dessa beslut och befintliga poster (kontrollerade 2026-11-21, inte ändrade)
+--  * Föremål: names_item "Craftsman's Writ ..." = "Yrkesmannens skrivelse ..." (uppdragstitlarna
+--    heter "Hantverksorder: ..."). names_item och Item.lua 279383 ger "Stulna frivindsförnödenheter".
+--  * names_general "Skullsplitter" = "Skallkluvare" (föremål och besvärjelser), medan uppdragstext
+--    behåller stamnamnet. "Bloodsail Buccaneers" = "Blodseglens bukanjärer" här men
+--    "Blodssegelfribytarna" i Ui.lua. "Honor Points" = "Ärepoäng" i spell-namn men "Äropoäng"
+--    i Ui.lua; "Rank Points" = "Rankpoäng" i spell-namn men "Gradpoäng" i Ui.lua.
+---------------------------------------------------------------------------
 local _, WPS = ...
 WPS.L.names_glossary_zone = {
 ["Academy of Arcane Arts and Sciences"]="Akademin för arkana konster och vetenskaper",
@@ -181,7 +238,7 @@ WPS.L.names_glossary_zone = {
 ["Garden of Stalvan"]="Stalvans trädgård",
 ["Garren's Haunt"]="Garrens tillhåll",
 ["Ghost Walker Post"]="Spökvandrarposten",
-["Gloomrise"]="Dysterhöjden",
+["Gloomrise"]="Dysterhöjden", -- spinnare/ungar/soldater därifrån: Dysterhöjdens spinnare (inte Dysterhöjdsspinnare)
 ["Gnarlpine Hold"]="Knotteltallsfästet",
 ["Gnomeregan"]="Gnomeregan",
 ["Gol'Bolar Quarry"]="Gol'Bolar-stenbrottet",
@@ -667,7 +724,7 @@ WPS.L.names_glossary_npc = {
 ["Nek'rosh"]="Nek'rosh",
 ["Nekros"]="Nekros",
 ["Nightlash"]="Nattpiskan",
-["Ogre"]="Oger",
+["Ogre"]="Oger", -- oger: en oger, ogern, oger, ogerna; aldrig ogre/ogrer/ograr. Med stamnamn: Boulderfist-oger
 ["Ol' Sooty"]="Gamle Sotfläcken",
 ["Old Icebeard"]="Gamle Isskägg",
 ["Ombassa"]="Ombassa",
@@ -1035,7 +1092,7 @@ WPS.L.names_general = {
 ["Sandfury"]="Sandraseri",
 ["Sapphiron"]="Sapphiron",
 ["Sawtooth"]="Sågtand",
-["Scarlet Crusade"]="Scharlakanskorståget",
+["Scarlet Crusade"]="Scharlakanskorståget", -- en medlem: Scharlakansröd
 ["Scooby Snack"]="Scooby-godis",
 ["Scourge"]="Gisslet",
 ["Scythe of Elune"]="Elunes lie",
@@ -1122,7 +1179,7 @@ WPS.L.names_general = {
 ["VOCE WELL"]="VOCE WELL",
 ["Valthalak"]="Valthalak",
 ["Vek'zol"]="Vek'zol",
-["Venture Co."]="Äventyrsbolaget",
+["Venture Co."]="Äventyrsbolaget", -- i löpande text: Äventyrsbolaget / Äventyrsbolagets
 ["Vile Fin"]="Vidrigfen",
 ["Vilebranch"]="Vämjegren",
 ["WUBBA WUBBA"]="WUBBA WUBBA",
@@ -1139,7 +1196,7 @@ WPS.L.names_general = {
 ["Winter Veil"]="Vinterslöjan",
 ["Winter Wondervolt"]="Vinterundervolten",
 ["Winterfall"]="Vinterfall",
-["Winterhoof"]="Vinterhov",
+["Winterhoof"]="Vinterhov", -- efternamn på -hoof följer skickad data: Bena Vinterhov (Tah/Nida/Komin/Mani Vinterhov)
 ["Witchwing"]="Häxvinge",
 ["Witherbark"]="Vissenbark",
 ["Woodpaw"]="Trätass",
@@ -17072,7 +17129,7 @@ WPS.L.names_item = {
 ["Crystalized Honey"]="Kristalliserad honung",
 ["Crystalized Scales"]="Kristalliserade fjäll",
 ["Crystalline Axe"]="Kristallin yxa",
-["Crystalline Silk"]="Kristallint silke",
+["Crystalline Silk"]="Kristallint silke", -- silke = materialet, siden = tyget; föremålsnamn och questtext ska vara lika
 ["Crystallized Azsharite"]="Kristalliserad azsharit",
 ["Crystallized Elemental Shard"]="Kristalliserad elementarskärva",
 ["Crystallized Lightning"]="Kristalliserad blixt",

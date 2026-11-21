@@ -438,6 +438,26 @@ WPS.L.ui = {
 -- translation/ui/screens-2026-11-15-{en,sv}.tsv; beslut, alternativ och
 -- plan i translation/ui/UI-PLAN-2026-11-15.md + DECISIONS-2026-11-15.md.
 ---------------------------------------------------------------------------
+-- Terminologibeslut för UI-texter (posterna ligger i avsnitten nedan)
+--  Honor Points = Äropoäng ("Honor" = Ära); Rank Points = Gradpoäng (jfr ui["Rank"] = "Grad");
+--  Civilian = Civilist (PvP grad 0, båda sidorna); Faction Tabard = Fraktionsvapenskjorta;
+--  Hall of Legends = Legendarernas hall (ingen ordlistepost, fri men konsekvent);
+--  Schematics = ritningar (jfr "Schematic: X" = "Ritning: X" i Data/Glossary.lua);
+--  Wealth = Förmögenhet; Statistics = Statistik; Energy = Energi.
+--  Honorable Kills = Ärorika dråp; Killing Blows = Dödande slag; kills = dräp (statistiktonen);
+--  Expertise = Sakkunskap (jfr träffchans/väjning); Glancing Blows = Halvträffar;
+--  disenchant = uttrulla; soulstone = själsten.
+--  Earthen Ring = Jordringen; Powderfuse = Krutstubinen (jfr Spärrhake/Utkiken för gobelfraktioner);
+--  Blackwater Raiders = Blackwaters pirater; Bloodsail Buccaneers = Blodssegelfribytarna.
+--  Gutterspeak = Rännspråk; Orcish = Orkiska; "Language: %s" = "Språk: %s" som reservformat.
+--  Alterac Valley = Alteracdalen; Arathi Basin = Arathibäckenet; The Barrens = Kargmarkerna;
+--  Darkspear Islands = Darkspearöarna (serverns egen arena, namnet bevaras).
+--  Warsong Gulch, Orgrimmar, Durotar m.fl. egennamn står orörda.
+--  "raid" behålls (jfr "Konvertera till raid"); instans = dungeon.
+--  Serverns humorsträngar översätts rakt (facepalms, LOL, "världens minsta fiol", hejarop, vågor).
+--  Nyckeln måste matcha källan tecken för tecken, även dubbla mellanslag ("Horde.  They") och
+--  inledande mellanslag (" Season 1"), annars träffar posten aldrig.
+---------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------
 -- Rollfigur: statspanelen
