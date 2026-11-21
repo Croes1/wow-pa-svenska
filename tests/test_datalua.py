@@ -310,6 +310,28 @@ class InsertTest(unittest.TestCase):
         df.insert("npc", [(31, "Ny")], comment="batch 7")
         self.assertEqual(df.text().split("\n")[-3], '[31]="Ny", -- batch 7')
 
+    def test_intentional_difference_marker_survives_reading_replacing_and_writing(self):
+        text = (HEAD + "WPS.L.qtext = {\n"
+                '["Carnage"]="Carnage", -- wps:skillnad varelsens namn, kvar på engelska\n'
+                '["Other"]="Annat",\n}\n')
+        marker = '["Carnage"]="Carnage", -- wps:skillnad varelsens namn, kvar på engelska'
+        df = parse(text)
+        self.assertEqual(df.text(), text)                              # a plain round trip
+        self.assertEqual(df.table("qtext").index["Carnage"].entry.comment,
+                         "wps:skillnad varelsens namn, kvar på engelska")
+        df.insert("qtext", [("Zed", "Zed")])                           # inserting elsewhere
+        self.assertIn(marker, df.text())
+        df.replace("qtext", "Carnage", "Blodbad")                      # replacing the value
+        self.assertIn('["Carnage"]="Blodbad", -- wps:skillnad varelsens namn, kvar på engelska', df.text())
+        path = Path(tempfile.mkdtemp()) / "Glossary.lua"
+        self.addCleanup(shutil.rmtree, path.parent)
+        path.write_text(text, encoding="utf-8")
+        df = dl.DataFile.read(str(path))
+        df.write()                                                     # the atomic writer
+        self.assertEqual(path.read_text(encoding="utf-8"), text)
+        self.assertEqual(dl.main(["--rewrite", str(path)]), 0)         # and the --rewrite command
+        self.assertEqual(path.read_text(encoding="utf-8"), text)
+
     def test_replace_rewrites_one_line_and_keeps_its_comment(self):
         df = parse(UI)
         df.replace("ui", "Maximum", "Högsta")

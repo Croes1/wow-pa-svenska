@@ -306,6 +306,52 @@ class WarningRulesTest(CheckCase):
         same = self.check(**{"Ui.lua": ("ui", ['["Ogre"]="Oger",', '["ogre"]="oger",']), "Zone.lua": ("zone", ['["Ogre"]="Oger",'])})
         self.assertEqual(same, [])                                                                    # same term, same Swedish
 
+    # ---- intentional-difference marker: "-- wps:skillnad <reason>" ----
+
+    INCONSISTENT = {"Ui.lua": ("ui", ['["Ogre"]="Oger",']), "Zone.lua": ("zone", ['["Ogre"]="Jätte",'])}
+
+    def test_marker_with_a_reason_silences_the_inconsistent_warning(self):
+        self.assertEqual(self.warnings(**self.INCONSISTENT), ["inconsistent"])
+        for marked in ("Ui.lua", "Zone.lua"):                  # on either of the entries
+            with self.subTest(marked=marked):
+                files = dict(self.INCONSISTENT)
+                table, body = files[marked]
+                files[marked] = (table, [line + " -- wps:skillnad medvetet olika" for line in body])
+                self.assertEqual([f.text() for f in self.check(**files)], [])
+        # the term is compared ignoring case, so a marker on "ogre" covers "Ogre"
+        findings = self.check(**{"Ui.lua": ("ui", ['["Ogre"]="Oger",', '["ogre"]="Jätte", -- wps:skillnad ordlek'])})
+        self.assertEqual(findings, [])
+
+    def test_marker_without_a_reason_is_a_warning_and_silences_nothing(self):
+        files = {"Ui.lua": ("ui", ['["Ogre"]="Oger",']),
+                 "Zone.lua": ("zone", ['["Ogre"]="Jätte", -- wps:skillnad'])}
+        self.assertEqual(self.warnings(**files), ["inconsistent", "marker-no-reason"])
+        # not a marker at all: a longer word, or another comment
+        for comment in ("wps:skillnadX orsak", "skillnad: orsak", "see wps:skillnad orsak"):
+            with self.subTest(comment=comment):
+                files = {"Ui.lua": ("ui", ['["Ogre"]="Oger",']),
+                         "Zone.lua": ("zone", ['["Ogre"]="Jätte", -- ' + comment])}
+                self.assertEqual(self.warnings(**files), ["inconsistent"])
+
+    def test_unmarked_inconsistencies_still_warn_next_to_a_marked_one(self):
+        findings = self.check(**{
+            "Ui.lua": ("ui", ['["Ogre"]="Oger",', '["Troll"]="Troll",']),
+            "Zone.lua": ("zone", ['["Ogre"]="Jätte", -- wps:skillnad medvetet', '["Troll"]="Jättetroll",'])})
+        self.assertEqual([(f.code, f.where) for f in findings], [("inconsistent", "'troll'")])
+
+    def test_marker_in_an_id_table_has_no_effect_and_says_so(self):
+        findings = self.check(**{"Npc.lua": ("npc", ['[1]="Namn", -- wps:skillnad orsak'])})
+        self.assertEqual([f.code for f in findings], ["marker-ignored"])
+
+    def test_marked_data_passes_the_command_line_check(self):
+        self.data(**{"Ui.lua": ("ui", ['["Carnage"]="Carnage", -- wps:skillnad varelsens namn, spelet visar det engelskt']),
+                     "Spell.lua": ("names_spell", ['["Carnage"]="Blodbad",'])})
+        code, out = self.run_cli("check")
+        self.assertEqual((code, "inconsistent" in out), (0, False), out)
+        code, out = self.run_cli("search", "skillnad", "--lang", "comment")
+        self.assertEqual(code, 0)
+        self.assertIn("varelsens namn", out)
+
     def test_warnings_never_change_the_exit_status(self):
         self.data(**{"Quest.lua": ("quest", ['[1]={t="T", o="O", d="D"},'])})
         code, out = self.run_cli()

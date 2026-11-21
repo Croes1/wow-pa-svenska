@@ -43,11 +43,28 @@ check
                         spell e,ea,n,d,a,c)
     edge-whitespace     leading/trailing whitespace of the Swedish value differs from the key's
     inconsistent        the same English term (ignoring case) has different Swedish translations
-                        in different entries or tables; a hint, never an instruction to rewrite
+                        in different entries or tables; a hint, never an instruction to rewrite.
+                        Silenced for a term by an intentional-difference marker (see below)
+    marker-no-reason    a wps:skillnad marker without a reason; it does not silence anything
+    marker-ignored      a wps:skillnad marker on an entry of a table that is not checked for
+                        consistency (quest, item, spell, npc, gossip), so it has no effect
 
   Placeholders ($N, $B, $s1, ${formula}, $?a123[..][..], $lword:words; and $gm:f;, |c..|r, |H..|h,
   %s, #/#) are compared as multisets. The words inside $l..;/$g..; and the text inside a
   $?cond[..][..] are translatable and are not compared; the condition itself is.
+
+intentional differences
+  A term that is deliberately translated differently in different places (for example a creature
+  name that stays English in a quest but is a spell name elsewhere) is marked with a trailing
+  comment on one of its entries:
+
+      ["Carnage"]="Carnage", -- wps:skillnad creature name, kept English; the spell is "Blodbad"
+
+  The marker is "wps:skillnad" followed by a reason, which is required. It silences the
+  "inconsistent" warning for that English term (case-insensitive) wherever its entries are, so it
+  is enough to put it on one of them. It is a note for the next maintainer, so say why. Markers are
+  ordinary comments: tools/datalua.py keeps them when it rewrites a file, and
+  "search skillnad --lang comment" lists them all.
 
 gossip keys
   Data/Gossip.lua is keyed by "<byte length>_<djb2 as 8 hex digits>" of the English text after
@@ -357,21 +374,44 @@ def check_table(path, table, out):
                                        f"leading/trailing whitespace differs: {key!r} -> {value!r}"))
 
 
+MARKER = "wps:skillnad"
+
+
+def marker_reason(comment):
+    """None if the trailing comment is not an intentional-difference marker, otherwise its reason
+    ("" when the reason is missing). "wps:skillnadX" is not a marker."""
+    m = re.match(re.escape(MARKER) + r"(?=\s|$)(.*)$", comment or "")
+    return m.group(1).strip() if m else None
+
+
 def check_consistency(parsed, out):
-    """Same English term (ignoring case) with different Swedish across entries and tables."""
+    """Same English term (ignoring case) with different Swedish across entries and tables.
+    A wps:skillnad marker with a reason on any entry of the term silences the warning."""
     seen = defaultdict(dict)    # english -> {swedish: (file, line, table, key)}
+    marked = set()              # casefolded English terms with an intentional-difference marker
     for path, df in parsed:
         for table in df.tables.values():
-            if table.name in ID_TABLES or table.name == "gossip":
-                continue
+            checked = table.name not in ID_TABLES and table.name != "gossip"
             for node in table.nodes:
                 key, value = node.entry.key, node.entry.value
+                reason = marker_reason(node.entry.comment)
+                if reason is not None:
+                    if not checked:
+                        out.append(Finding(WARNING, "marker-ignored", path, node.lineno, where(table.name, key),
+                                           f"{MARKER} has no effect in the {table.name} table"))
+                    elif not reason:
+                        out.append(Finding(WARNING, "marker-no-reason", path, node.lineno, where(table.name, key),
+                                           f"{MARKER} needs a reason after it, e.g. '-- {MARKER} creature name, kept English'"))
+                    elif isinstance(key, str) and key.strip():
+                        marked.add(key.strip().casefold())
+                if not checked:
+                    continue
                 if not (isinstance(key, str) and isinstance(value, str)) or not key.strip() or not value.strip():
                     continue
                 seen[key.strip().casefold()].setdefault(value.strip().casefold(), []).append(
                     (path, node.lineno, table.name, key, value))
     for english, variants in sorted(seen.items()):
-        if len(variants) < 2:
+        if len(variants) < 2 or english in marked:
             continue
         first = [v[0] for v in variants.values()]
         parts = "; ".join(f"{where(t, k)} -> {sv!r}" for _p, _l, t, k, sv in first[:4])
