@@ -11820,7 +11820,7 @@ WPS.L.spell = {
 [25060]={n="Uppvindar"},
 [25063]={n="Öka hot"},
 [25068]={n="Motstånd – större eldmotstånd"},
-[25069]={n="Motstånd – större natummotstånd"},
+[25069]={n="Motstånd – större naturmotstånd"},
 [25070]={n="Minska hot"},
 [25071]={n="Väjning"},
 [25072]={n="Förtrolla handskar - hot",d="Förtrollar handskar permanent så att de ökar hotet från alla attacker och besvärjelser med 2 %."},
