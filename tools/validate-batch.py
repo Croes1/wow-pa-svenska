@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-tools/validate-batch.py - strukturell kontroll av en Gemma-omgang innan
+tools/validate-batch.py - strukturell kontroll av en oversatt omgang innan
 den salls in.
 
 Anvandning (alla sokvagar ar explicita; verktyget laser bara och skriver ingenting):

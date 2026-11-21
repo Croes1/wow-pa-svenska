@@ -2,7 +2,7 @@
 # SavedVariables (WPSDB.uiDump som /wps dump samlar). Nätverksfri.
 #
 # Bruk:
-#   python3 tools/parse-uidump.py <WTF/.../wow_pa_svenska.lua> -o <arbetskatalog>/ui/dump-YYYY-MM-DD-en.tsv
+#   python3 tools/parse-uidump.py <WTF/.../SavedVariables/WPSDB.lua> -o <arbetskatalog>/ui/dump-YYYY-MM-DD-en.tsv
 #
 # -o är obligatorisk: verktyget skriver aldrig i repot på egen hand och skriver
 # inte över en befintlig fil utan --force. Texterna jämförs mot det som redan är
@@ -76,7 +76,7 @@ def extract(path, repo, manual_skips):
 
 def main():
     ap = argparse.ArgumentParser(description="Extrahera osträngade UI-texter ur WPSDB.uiDump")
-    ap.add_argument("wpsdb", help="väg till wow_pa_svenska.lua (SavedVariables)")
+    ap.add_argument("wpsdb", help="väg till WPSDB.lua (SavedVariables)")
     ap.add_argument("-o", "--out", required=True, help="utdata-EN-TSV, t.ex. <arbetskatalog>/ui/dump-YYYY-MM-DD-en.tsv")
     ap.add_argument("--repo", default=None, help="reporot med Data/ (standard: förälder till tools/)")
     ap.add_argument("--skip", default="", help="kommaavgränsade extra strängar att hoppa över")

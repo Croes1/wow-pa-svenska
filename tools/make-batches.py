@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 tools/make-batches.py - delar upp de okoversatta TSV-filerna i
-klistra-in-tanke-omgangar (for chattpastning till Gemma).
+klistra-in-tanke-omgangar (for den som oversatter: agent eller manniska).
 
 Indata: alla numrerade worklistor i <work-dir>/untranslated/, t.ex.
   quests-001.tsv, quests-002.tsv ... (lasta i nummerordning)
