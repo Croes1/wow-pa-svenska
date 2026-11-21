@@ -78,7 +78,8 @@ search
   Looks in keys, values, the English source fields of spells (e, ea), quest tracker lines, trailing
   comments and comment lines (terminology notes) of every Data file. Case-insensitive substring by
   default. Options: --exact, --case-sensitive, --lang en|sv|comment|any, --table NAME, --max N.
-  Each hit is printed as file:line table[key].field and the matching text.
+  Each hit is printed as file:line table[key].field and the matching text. A hit on a key also
+  shows the Swedish value after "  ->  ", so the translation can be read without opening the file.
   Exit status: 0 if something was found, 1 if nothing was, 2 on a usage error.
 """
 import argparse
@@ -522,9 +523,13 @@ def cmd_search(args):
                     hits += 1
                     ref = f"{path}:{line}"
                     what = where(table, key, field if field not in (None, "key") else None) if table else "comment"
+                    shown = short(text, 100)
                     if field == "key":
                         what = where(table, key) + " (key)"
-                    print(f"{ref}  {what}  [{lang}]  {short(text, 100)}")
+                        value = df.table(table).get(key)             # show what the key is translated to
+                        if isinstance(value, str):
+                            shown += "  ->  " + short(value, 100)
+                    print(f"{ref}  {what}  [{lang}]  {shown}")
     print(f"{total} match(es)" + (f", showing the first {hits}" if total > hits else ""))
     return 0 if total else 1
 

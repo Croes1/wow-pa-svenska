@@ -48,7 +48,8 @@ Usage:
   python3 tools/merge-translation.py npcs --input DIR_OR_FILE [--dry-run]
   python3 tools/merge-translation.py ui --input dump-en.tsv --sv dump-sv.tsv [--dry-run]
 
-  --dry-run    report additions, collisions and rejections; write nothing
+  --dry-run    list every entry that would be added (ADD), and the collisions (SKIP) and
+               rejections (REJECT); write nothing
   --data-dir   directory holding the Data files (default: Data/ in this repository)
   --overwrite  replace existing entries instead of skipping them
 
@@ -257,6 +258,13 @@ def short(value, width=60):
     return text if len(text) <= width else text[:width - 3] + "..."
 
 
+def preview(value):
+    """What identifies an entry in the report: the title of a quest, otherwise the value."""
+    if isinstance(value, dict):
+        return value.get("t") or next(iter(value.values()), "")
+    return value
+
+
 def luac_check(tmp):
     luac = shutil.which("luac5.1")
     if luac is None:
@@ -296,6 +304,9 @@ def merge(kind, inputs, sv, data_dir, dry_run, overwrite):
     if len(rejected) > SHOW:
         print(f"REJECT ... and {len(rejected) - SHOW} more")
 
+    if dry_run:                      # a dry run lists every entry it would add; a real run only counts them
+        for key, value in added:
+            print(f"ADD   {spec['file']} {datalua.key_text(key)} {short(preview(value), 70)}")
     verb = "would add" if dry_run else "added"
     print(f"{verb}: {len(added)}   skipped (already in {spec['file']}): {len(skipped)}   "
           f"rejected: {len(rejected)}" + (f"   replaced: {len(replaced)}" if overwrite else ""))

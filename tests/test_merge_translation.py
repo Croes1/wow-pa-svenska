@@ -193,6 +193,18 @@ class MergeBehaviourTest(MergeTestCase):
         self.assertIn("nothing written", result.stdout)
         self.assertEqual(self.snapshot(), before)
 
+    def test_dry_run_lists_every_entry_it_would_add_and_a_real_run_does_not(self):
+        src = self.tsv("quests-batch-01-sv.tsv", "10\tx\t\t\t\t\n2\tNy titel\t\t\t\t\n3\tTredje\t\t\t\t\n")
+        dry = self.run_tool("quests", "--input", str(src), "--dry-run", expect=0).stdout
+        self.assertIn("ADD   Quest.lua [2] 'Ny titel'", dry)
+        self.assertIn("ADD   Quest.lua [3] 'Tredje'", dry)
+        self.assertEqual(dry.count("ADD   "), 2)                       # the collision [10] is a SKIP, not an ADD
+        npcs = self.tsv("npcs-batch-01-sv.tsv", "1\tA\n2\tB\n")
+        self.assertIn("ADD   Npc.lua [1] 'A'", self.run_tool("npcs", "--input", str(npcs), "--dry-run", expect=0).stdout)
+        real = self.run_tool("quests", "--input", str(src), expect=0).stdout
+        self.assertNotIn("ADD   ", real)
+        self.assertIn("added: 2", real)
+
     def test_no_extra_file_is_created_and_the_toc_is_untouched(self):
         for kind, name, row in (("quests", "quests-batch-01-sv.tsv", "1\tA\t\t\t\t\n"),
                                 ("npcs", "npcs-batch-01-sv.tsv", "1\tNpc\n")):

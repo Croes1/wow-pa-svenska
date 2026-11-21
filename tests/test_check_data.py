@@ -406,6 +406,16 @@ class SearchTest(unittest.TestCase):
         code, out = self.search("Stridsmästare", "--table", "gossip")
         self.assertIn("gossip['12_2c8ce38d']", out)
 
+    def test_a_key_hit_also_shows_the_swedish_value(self):
+        code, out = self.search("Accept", "--exact", "--lang", "en", "--table", "ui")
+        self.assertIn("(key)  [en]  Accept  ->  Acceptera", out)
+        # the value is shown even when only the English key matches
+        code, out = self.search("Fuel Regulator Blueprints", "--exact", "--table", "names_item")
+        self.assertIn("Fuel Regulator Blueprints  ->  Ritningar till bränsleregulator", out)
+        # a Swedish-value hit is not changed
+        code, out = self.search("Acceptera", "--exact", "--lang", "sv")
+        self.assertNotIn("->", out)
+
     def test_finds_comments_including_terminology_notes(self):
         code, out = self.search("Neutral, Friendly och Honored", "--lang", "comment")
         self.assertEqual(code, 0)

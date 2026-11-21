@@ -48,7 +48,7 @@ The files in `Data/` are what the addon loads, and they are edited directly. Not
 
 Each file starts with a comment that explains its table. Keep one entry per line, in the style already used. `python3 tools/datalua.py Data/*.lua` verifies that a file is in the format the tools understand.
 
-To look something up (English or Swedish text, keys, comments):
+To look something up (English or Swedish text, keys, comments). A hit on an English key also shows what it is translated to, after `->`:
 
 ```bash
 python3 tools/check-data.py search "Stormwind"                  # anywhere
@@ -101,6 +101,8 @@ python3 tools/select-untranslated.py "$WORK/cache/questcache-en.tsv" "$WORK/cach
 python3 tools/make-batches.py --work-dir "$WORK"
 ```
 
+The batch size is fixed. For a small or test round, copy the rows you want (and the `id<TAB>text` header) into a new file such as `$WORK/batches/quests-batch-99.tsv` and use that file in the steps below. Any number works: the output is named `quests-batch-99-sv.tsv` and the merge picks it up like any other.
+
 **4. Segment the quests** (quests only). The cache holds each quest as one string, with title, objectives, description, progress and reward glued together. Split it into the six columns `id title objectives description progress reward` with the segmentation prompt below, write `$WORK/segmented/quests-batch-NN-en-segmented.tsv` and check it:
 
 ```bash
@@ -113,12 +115,13 @@ It proves that the five fields put back together are exactly the source text. It
 
 ```bash
 python3 tools/validate-batch.py "$WORK/batches/quests-batch-NN.tsv" "$WORK/out/quests-batch-NN-sv.tsv" quests    # or npcs
-python3 tools/fix-empty-columns.py "$WORK/segmented/quests-batch-NN-en-segmented.tsv" "$WORK/out/quests-batch-NN-sv.tsv"
 ```
 
-`validate-batch.py` checks the ids and their order, the column count and that every placeholder occurs as many times as in the source (exit 1 on errors; warnings need a look). `fix-empty-columns.py` restores trailing empty columns that were dropped, only where the English reference is empty too, and rewrites only the file it is given; run the validator again afterwards. Neither tool can tell whether the Swedish is good.
+`validate-batch.py` checks the ids and their order, the column count and that every placeholder occurs as many times as in the source (exit 1 on errors; warnings need a look). Neither tool can tell whether the Swedish is good.
 
-**6. Merge** into `Data/`. Always run `--dry-run` first and read the additions, skips (keys already in `Data/`) and rejections:
+Only if the validator reports a wrong column count (the empty progress and reward columns were dropped), run `python3 tools/fix-empty-columns.py "$WORK/segmented/quests-batch-NN-en-segmented.tsv" "$WORK/out/quests-batch-NN-sv.tsv"` and validate again. It restores trailing empty columns only where the English reference is empty too, and rewrites only the file it is given.
+
+**6. Merge** into `Data/`. Always run `--dry-run` first. It lists every entry it would add (`ADD`, with the id or key and the title or text), the skips (`SKIP`: keys already in `Data/`, the first 10) and the rejections, then the counts:
 
 ```bash
 python3 tools/merge-translation.py quests --input "$WORK/out" --dry-run
@@ -129,16 +132,33 @@ python3 tools/merge-translation.py npcs   --input "$WORK/out"
 
 `--input` is a file or a directory (every `quests-batch-NN-sv.tsv` or `npcs-batch-NN-sv.tsv` in it). `--data-dir DIR` points at another set of Data files. An existing key is never overwritten; `--overwrite` replaces it and lists every old and new value, for a deliberate correction only. A structural error (wrong column count, duplicate or non-numeric id) stops the run before anything is written. New entries go in deterministically (by id, in place), and the file is replaced atomically after the result has been re-parsed and syntax checked. Game objects and page text have no table in the addon, so the tool refuses them; keep that work in the work directory.
 
+A merged quest has title, description, objectives, progress and completion text but no tracker lines (`l`), because the caches do not contain them; the lines in the quest log stay English until someone adds `l` to the entry by hand.
+
 In a TSV a line break is written as `\n` or `\r\n` (and a tab as `\t`), because a row is one line; the merge stores each as a real line break. `$B` stays `$B`. Quotes and lone backslashes are taken literally. Do not write `\\r\\n` into a `Data` file by hand: `check-data.py` reports a literal backslash-r or backslash-n as an error.
 
-**UI strings** follow the same pattern. `/wps dump` in game collects the strings that are not translated yet into `WPSDB.uiDump`:
+**UI strings** follow the same pattern, from a **fresh** dump. `/wps dump` in game collects the strings of the windows you open into `WPSDB.uiDump`; `/reload` or log out to save it. A dump TSV left in a work directory from an earlier round has normally been translated and merged already, so start from the game, not from an old file:
 
 ```bash
 python3 tools/parse-uidump.py "<WTF>/Account/<account>/SavedVariables/wow_pa_svenska.lua" -o "$WORK/ui/dump-YYYY-MM-DD-en.tsv" [--force]
-# translate: a second file "$WORK/ui/dump-YYYY-MM-DD-sv.tsv" with  id<TAB>swedish
-lua5.1 tools/check-ui-translation.lua "$WORK/ui/dump-YYYY-MM-DD-en.tsv" "$WORK/ui/dump-YYYY-MM-DD-sv.tsv"
+```
+
+The dump is raw. It also holds strings that are already in `Data/Ui.lua`, and text that is not game text (other addons, player and guild names, coordinates, quest tracker lines). Check a candidate before translating it: `python3 tools/check-data.py search "TEXT" --exact --lang en --table ui` must find nothing.
+
+Choose the strings you will translate and make two files that contain **only those ids**: the English file (`id<TAB>area<TAB>en`, the dump rows you chose) and the Swedish file (`id<TAB>swedish`). The merge stops if the ids differ between the files, so do not hand it the whole dump.
+
+A string with a number or a name in it is a **format key**: write the English key with `%d` (a number) or `%s` (text) in place of the changing part, and the same placeholders in the Swedish text. The numbers or words are taken from the game text and put back in the same order. Example: the dump has `110/493 Online`, `2/13 Online` and so on; the key is one row:
+
+```text
+dump-en.tsv   018<TAB>?<TAB>%d/%d Online
+dump-sv.tsv   018<TAB>%d/%d online          ->  "110/493 Online" shows as "110/493 online"
+```
+
+Then merge and check. `check-ui-translation.lua` compares each pair with the **current** `Data/Ui.lua`, so it only passes **after** the merge (before it, every row fails with `got="()"`); it also accepts a pair that holds a real dump row such as `110/493 Online`:
+
+```bash
 python3 tools/merge-translation.py ui --input "$WORK/ui/dump-YYYY-MM-DD-en.tsv" --sv "$WORK/ui/dump-YYYY-MM-DD-sv.tsv" --dry-run
 python3 tools/merge-translation.py ui --input "$WORK/ui/dump-YYYY-MM-DD-en.tsv" --sv "$WORK/ui/dump-YYYY-MM-DD-sv.tsv"
+lua5.1 tools/check-ui-translation.lua "$WORK/ui/dump-YYYY-MM-DD-en.tsv" "$WORK/ui/dump-YYYY-MM-DD-sv.tsv"
 ```
 
 A UI key must match the game text character for character, including double and leading spaces; otherwise it never matches.

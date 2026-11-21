@@ -8,8 +8,9 @@
 -- en-rads svar mot sv-filen. Rader där översättningen är oförändrad godtas
 -- (brus). Exit 0 = OK, 1 = FEL. Skriver ingenting. Nätverksfri.
 --
--- Nya rader förs in i Data/Ui.lua med tools/merge-translation.py ui; kör den här
--- kontrollen före och efter.
+-- Nya rader förs in i Data/Ui.lua med tools/merge-translation.py ui. Kör den här
+-- kontrollen EFTER sammanfogningen: den jämför mot nuvarande Data/Ui.lua, så före den
+-- får varje rad "got=()".
 local function Escape(s)
 	return (s:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0"))
 end
