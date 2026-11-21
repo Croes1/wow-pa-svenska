@@ -434,9 +434,8 @@ WPS.L.ui = {
 
 ---------------------------------------------------------------------------
 -- [2026-11-15] Karaktärssidan i sin helhet: statistik, valuta, PvP,
--- yrkesbeskrivningar, fraktionsbeskrivningar. Källsträngar med id:er i
--- translation/ui/screens-2026-11-15-{en,sv}.tsv; beslut, alternativ och
--- plan i translation/ui/UI-PLAN-2026-11-15.md + DECISIONS-2026-11-15.md.
+-- yrkesbeskrivningar, fraktionsbeskrivningar.
+-- Terminologibeslut och alternativ står i blocket nedan och vid enskilda poster.
 ---------------------------------------------------------------------------
 -- Terminologibeslut för UI-texter (posterna ligger i avsnitten nedan)
 --  Honor Points = Äropoäng ("Honor" = Ära); Rank Points = Gradpoäng (jfr ui["Rank"] = "Grad");
@@ -453,7 +452,7 @@ WPS.L.ui = {
 --  Alterac Valley = Alteracdalen; Arathi Basin = Arathibäckenet; The Barrens = Kargmarkerna;
 --  Darkspear Islands = Darkspearöarna (serverns egen arena, namnet bevaras).
 --  Warsong Gulch, Orgrimmar, Durotar m.fl. egennamn står orörda.
---  "raid" behålls (jfr "Konvertera till raid"); instans = dungeon.
+--  dungeon/instance -> instans; raid -> raid (jfr "Konvertera till raid").
 --  Serverns humorsträngar översätts rakt (facepalms, LOL, "världens minsta fiol", hejarop, vågor).
 --  Nyckeln måste matcha källan tecken för tecken, även dubbla mellanslag ("Horde.  They") och
 --  inledande mellanslag (" Season 1"), annars träffar posten aldrig.
@@ -517,8 +516,7 @@ WPS.L.ui = {
 
 ---------------------------------------------------------------------------
 -- [2026-11-15, omgång 2] Fullsvit ur /wps dump (217 strängar): statistik,
--- färdighets- och fraktionsbeskrivningar, statspanel, PvP/valuta. Material:
--- translation/ui/dump-2026-11-15-{en,sv}.tsv. Besluter i DECISIONS-filen.
+-- färdighets- och fraktionsbeskrivningar, statspanel, PvP/valuta.
 
 ---------------------------------------------------------------------------
 -- Formatnycklar (siffror/markup fångas oförändrade)

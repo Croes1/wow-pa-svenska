@@ -29,7 +29,7 @@
 --  * "från X" (ursprung) och "till X" (mål) är olika riktningar: kontrollera mot källan.
 --  * "Bring N X to Y in Z" där X redan innehåller platsen: upprepa inte platsen i målet
 --    ("Lämna de 8 stulna förnödenheterna till Jandia.").
---  * "raid" behålls; instans = dungeon.
+--  * dungeon/instance -> instans; raid -> raid (jfr "Konvertera till raid").
 --
 -- Termer utan egen post (engelska = svenska)
 --  Lord Admiral = Herr Amiral; Executor = exekutor (High Executor = högexekutor);
