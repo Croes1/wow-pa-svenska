@@ -66,7 +66,8 @@
 --    medan uppdrag 98069 heter "Stulna förnödenheter från Frivindsposten".
 --  * "Bloodsail Buccaneers" = "Blodseglens bukanjärer" här men "Blodssegelfribytarna" i Ui.lua.
 --    "Rank Points" = "Rankpoäng" i spell-namn men "Gradpoäng" i Ui.lua.
---  * Skullbasher = Skallkrossaren (föremål 269257) och föremål 9521 heter också Skallkrossaren.
+--  * Föremål 9521 heter Skallkluvaren (ett vapen, inte stammen Skallkrossarna) och behålls så.
+--    Skullbasher = Skallkrossaren (föremål 269257).
 ---------------------------------------------------------------------------
 local _, WPS = ...
 WPS.L.names_glossary_zone = {

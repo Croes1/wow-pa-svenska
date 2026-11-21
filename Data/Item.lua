@@ -5268,7 +5268,7 @@ WPS.L.item = {
 [9518]={n="Muds krossare"},
 [9519]={n="Durtfeets trampstövlar"},
 [9520]={n="Den tysta jägaren"},
-[9521]={n="Skallkrossaren"},
+[9521]={n="Skallkluvaren"},
 [9523]={n="Trollilska"},
 [9528]={n="Edanas mörka hjärta"},
 [9529]={h=3251161265,n="Intern krigarutrustningssats L25",d="Mjuk som pudding"},
