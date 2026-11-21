@@ -438,21 +438,26 @@ WPS.L.ui = {
 -- Terminologibeslut och alternativ står i blocket nedan och vid enskilda poster.
 ---------------------------------------------------------------------------
 -- Terminologibeslut för UI-texter (posterna ligger i avsnitten nedan)
---  Honor Points = Äropoäng ("Honor" = Ära); Rank Points = Gradpoäng (jfr ui["Rank"] = "Grad");
+--  Honor Points = Äropoäng ("Honor" = Ära); Mark of Honor = Hedersmärke (undantag från Honor = Ära);
+--  Rank Points = Gradpoäng (jfr ui["Rank"] = "Grad");
 --  Civilian = Civilist (PvP grad 0, båda sidorna); Faction Tabard = Fraktionsvapenskjorta;
 --  Hall of Legends = Legendernas sal (ingen ordlistepost, fri men konsekvent);
 --  Schematics = ritningar (jfr "Schematic: X" = "Ritning: X" i Data/Glossary.lua);
 --  Wealth = Förmögenhet; Statistics = Statistik; Energy = Energi.
 --  Honorable Kills = Ärorika dråp; Killing Blows = Dödande slag; kills = dräp (statistiktonen);
 --  Expertise = Sakkunskap (jfr träffchans/väjning); Glancing Blows = Halvträffar;
---  disenchant = bryta ner; soulstone = själsten.
+--  disenchant = bryta ner ("Nedbrutna föremål", "Material utvunna vid nedbrytning"; spelnamnet är
+--  Nedbrytning); soulstone = själsten.
 --  Earthen Ring = Jordringen; Powderfuse = Krutstubinen (jfr Spärrhake/Utkiken för gobelfraktioner);
 --  Blackwater Raiders = Blackwaters pirater; Bloodsail Buccaneers = Blodssegelfribytarna.
 --  Gutterspeak = Rännspråk; Orcish = Orkiska; "Language: %s" = "Språk: %s" som reservformat.
 --  Alterac Valley = Alteracdalen; Arathi Basin = Arathibäckenet; The Barrens = Kargmarkerna;
 --  Darkspear Islands = Darkspearöarna (serverns egen arena, namnet bevaras).
 --  Warsong Gulch, Orgrimmar, Durotar m.fl. egennamn står orörda.
---  dungeon/instance -> instans; raid -> raid (jfr "Konvertera till raid").
+--  dungeon/instance -> instans; raid -> raid, plural raids ("Instanser & Raids", "Instanser och raids");
+--  gruppstorlek N-manna: 10-manna raids, 20-manna raids, 40-manna raids, 5-manna instanser (jfr "Konvertera till raid").
+--  Stamnamn som översätts (beslutade undantag): Skullsplitter = Skallkrossarna,
+--  Timbermaw = Skogsbjörnarna (Skogsbjörnarnas Näste, skogsbjörns- i sammansättningar).
 --  Serverns humorsträngar översätts rakt (facepalms, LOL, "världens minsta fiol", hejarop, vågor).
 --  Nyckeln måste matcha källan tecken för tecken, även dubbla mellanslag ("Horde.  They") och
 --  inledande mellanslag (" Season 1"), annars träffar posten aldrig.

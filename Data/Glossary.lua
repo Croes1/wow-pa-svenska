@@ -14,8 +14,12 @@
 --  * Beskrivande namn (varelsetyper, grupper, föremål) översätts till naturliga
 --    sammansättningar enligt ordlistan: Skogsspindel, Övergiven ande.
 --  * Stamnamn + titel binds med bindestreck, och stamnamnet böjs som i skickad data:
---    Vissenbark-yxkastare, Boulderfist-oger, Slitherblade-myrmidon, Skullsplitter-jägare
---    (stammen: Skullsplitterna). Efternamn på -hoof följer skickad data (Bena Vinterhov).
+--    Vissenbark-yxkastare, Boulderfist-oger, Slitherblade-myrmidon.
+--    Efternamn på -hoof följer skickad data (Bena Vinterhov).
+--    Beslutade undantag, där stamnamnet översätts: Skullsplitter = Skallkrossarna
+--    (Skallkrossar-krigare, Skallkrossarbete, Skallkrossarnas husdjur) och Timbermaw =
+--    Skogsbjörnarna (Skogsbjörnarnas Näste, skogsbjörns- i sammansättningar:
+--    Skogsbjörnstunika, Kraftigt skogsbjörnsbälte). Andra stammar byter inte namn utan beslut.
 --  * Naturlig svenska före ordagrann översättning, men behåll fantasyns ordförråd
 --    (häxdoktor, myrmidon, vederstygglighet, åsködla).
 --  * Idiom översätts efter mening, inte ordagrant: Other Fish to Fry = Annat att ta itu med.
@@ -29,7 +33,9 @@
 --  * "från X" (ursprung) och "till X" (mål) är olika riktningar: kontrollera mot källan.
 --  * "Bring N X to Y in Z" där X redan innehåller platsen: upprepa inte platsen i målet
 --    ("Lämna de 8 stulna förnödenheterna till Jandia.").
---  * dungeon/instance -> instans; raid -> raid (jfr "Konvertera till raid").
+--  * dungeon/instance -> instans; raid -> raid, i plural raids ("Instanser & Raids", "Instanser och raids").
+--    Gruppstorlek skrivs N-manna: 10-manna raids, 20-manna raids, 40-manna raids, 5-manna instanser
+--    (inte "N-mans"). Jfr "Konvertera till raid".
 --
 -- Termer utan egen post (engelska = svenska)
 --  Lord Admiral = Herr Amiral; Executor = exekutor (High Executor = högexekutor);
@@ -48,14 +54,19 @@
 --  Kopparstav, Silverstav); Panther Mastery = Pantermästerskap; Tiger Mastery = Tigerbehärskning.
 --  Ana'thek the Cruel = Ana'thek den Grymme; broken/shattered armor = sönderslagna rustningen.
 --  Venture Co. i löpande text = Äventyrsbolaget / Äventyrsbolagets (inline vid ordlisteposten).
+--  Honor Points = Äropoäng ("Honor" = Ära); Honorable Kills = Ärorika dråp.
+--  Mark of Honor = Hedersmärke (undantag från Honor = Ära).
+--  Hall of Legends = Legendernas sal.
+--  disenchant = bryta ner: spelnamnet är Nedbrytning (Nedbrytning (PT), Ökad nedbrytning),
+--  i UI "Nedbrutna föremål" och "Material utvunna vid nedbrytning".
 --
--- Kända avvikelser mellan dessa beslut och befintliga poster (kontrollerade 2026-11-21, inte ändrade)
---  * Föremål: names_item "Craftsman's Writ ..." = "Yrkesmannens skrivelse ..." (uppdragstitlarna
---    heter "Hantverksorder: ..."). names_item och Item.lua 279383 ger "Stulna frivindsförnödenheter".
---  * names_general "Skullsplitter" = "Skallkluvare" (föremål och besvärjelser), medan uppdragstext
---    behåller stamnamnet. "Bloodsail Buccaneers" = "Blodseglens bukanjärer" här men
---    "Blodssegelfribytarna" i Ui.lua. "Honor Points" = "Ärepoäng" i spell-namn men "Äropoäng"
---    i Ui.lua; "Rank Points" = "Rankpoäng" i spell-namn men "Gradpoäng" i Ui.lua.
+-- Medvetna avvikelser (beslutade "ok", ändras inte)
+--  * Föremål: names_item "Craftsman's Writ ..." = "Yrkesmannens skrivelse ..." medan uppdragstitlarna
+--    heter "Hantverksorder: ...". names_item och Item.lua 279383 ger "Stulna frivindsförnödenheter"
+--    medan uppdrag 98069 heter "Stulna förnödenheter från Frivindsposten".
+--  * "Bloodsail Buccaneers" = "Blodseglens bukanjärer" här men "Blodssegelfribytarna" i Ui.lua.
+--    "Rank Points" = "Rankpoäng" i spell-namn men "Gradpoäng" i Ui.lua.
+--  * Skullbasher = Skallkrossaren (föremål 269257) och föremål 9521 heter också Skallkrossaren.
 ---------------------------------------------------------------------------
 local _, WPS = ...
 WPS.L.names_glossary_zone = {

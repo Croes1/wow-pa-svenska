@@ -195,14 +195,15 @@ The marker is `wps:skillnad` (Swedish for "difference") followed by a reason. Th
   - *Rogue* is always *Skurk* (class, villain, the Undercity district, mob names). The shipped exceptions are *scalawag* = *skälm* and the harpy *Roguefeather*, which follows the shipped data. If unsure, keep the English word and let a reviewer decide.
 - Place names are translated as in the glossary (Stormvind, Järnsmedjan, Mörkby, Skymningsskogen, Våtmarkerna, Understaden, Kargmarkerna). Find them with `check-data.py search`.
 - System messages follow the templates in `Chat.lua` (*Ditt anseende hos %s har ökat.*), not free wording.
-- dungeon/instance → *instans*; raid → *raid*.
+- dungeon/instance → *instans*; raid → *raid*, plural *raids* (*Instanser & Raids*). Group size is written *N-manna*: *10-manna raids*, *5-manna instanser* (not *N-mans*).
 
 **What stays untranslated.**
 
 - **Personal names** stay in English (*Doctor Marsh*, *Karu*, *Demnul Farmountain*, *Ana'thek*). A rank or title in front of the name is translated: *Guard Thomas* → *vakt Thomas*, *Deputy Feldon* → *Konstapel Feldon*.
 - A creature with a name of its own is a personal name: *Carnage* stays *Carnage* in the quest, while the spell *Carnage* is *Blodbad*.
 - **Descriptive names** (a creature type, a group, an item) are translated into natural Swedish compounds following the glossary: *Forest Spider* → *Skogsspindel*, *Forlorn Spirit* → *Övergiven ande*, *Defias Pillager* → *Defiasplundrare*.
-- A tribe or clan name joins its title with a hyphen: *Vissenbark-yxkastare*, *Boulderfist-oger*, *Skullsplitter-jägare*.
+- A tribe or clan name keeps its name and joins its title with a hyphen: *Vissenbark-yxkastare*, *Boulderfist-oger*, *Slitherblade-myrmidon*.
+- Two tribes are decided exceptions and are translated: *Skullsplitter* = *Skallkrossarna* (*Skallkrossar-krigare*, *Skallkrossarbete*) and *Timbermaw* = *Skogsbjörnarna* (*Skogsbjörnarnas Näste*, and *skogsbjörns-* in compounds such as *Skogsbjörnstunika*). Do not rename any other tribe without a decision.
 
 **Tokens and markup.** The addon and the game client interpret these. They are never translated, never added and never dropped; copy them byte for byte. The validators count them per row.
 
@@ -238,7 +239,8 @@ TERMS
   ("Guard Thomas" -> "vakt Thomas"). A creature with its own name stays English.
   Descriptive names (types, groups) become natural Swedish compounds:
   "Forest Spider" -> "Skogsspindel". Tribe name + title takes a hyphen:
-  "Boulderfist-oger".
+  "Boulderfist-oger". Exceptions: Skullsplitter = Skallkrossarna,
+  Timbermaw = Skogsbjörnarna (Skogsbjörnarnas Näste, skogsbjörns- in compounds).
 
 TOKENS - copy byte for byte, never translate, add or drop (reordering only if
 Swedish grammar requires it):
