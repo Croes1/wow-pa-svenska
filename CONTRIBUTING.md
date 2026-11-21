@@ -142,7 +142,14 @@ In a TSV a line break is written as `\n` or `\r\n` (and a tab as `\t`), because 
 python3 tools/parse-uidump.py "<WTF>/Account/<account>/SavedVariables/wow_pa_svenska.lua" -o "$WORK/ui/dump-YYYY-MM-DD-en.tsv" [--force]
 ```
 
-The dump is raw. It also holds strings that are already in `Data/Ui.lua`, and text that is not game text (other addons, player and guild names, coordinates, quest tracker lines). Check a candidate before translating it: `python3 tools/check-data.py search "TEXT" --exact --lang en --table ui` must find nothing.
+The dump is raw. It also holds strings that are already translated, and text that is not game text (other addons, player and guild names, coordinates). An exact search does **not** show what is missing: a format key with `%s` or `%d`, for example `Cursor: %s X, %s Y  |  Player: %s X , %s Y`, translates many dump rows (also quest tracker lines such as `0/10 Jungle Stalker slain`), and `check-data.py search --exact` finds none of them. Ask `check-ui-translation.lua` instead, because it matches exactly as the addon does. Give it a Swedish file where every row is `x`: a row that reports `got="()"` has no translation yet, and any other `got` is the translation it already has. The tool then ends with `RESULTAT: FEL`, which is expected here:
+
+```bash
+awk -F'\t' 'BEGIN{OFS="\t"} NR==1{print "id","sv"; next} {print $1,"x"}' "$WORK/ui/dump-YYYY-MM-DD-en.tsv" > "$WORK/ui/all-x-sv.tsv"
+lua5.1 tools/check-ui-translation.lua "$WORK/ui/dump-YYYY-MM-DD-en.tsv" "$WORK/ui/all-x-sv.tsv" | grep 'got="()"'   # the rows still to translate
+```
+
+What is left is still raw: skip other addons' text, names and coordinates, and translate only real game strings.
 
 Choose the strings you will translate and make two files that contain **only those ids**: the English file (`id<TAB>area<TAB>en`, the dump rows you chose) and the Swedish file (`id<TAB>swedish`). The merge stops if the ids differ between the files, so do not hand it the whole dump.
 
