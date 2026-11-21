@@ -1400,7 +1400,7 @@ WPS.L.spell = {
 [3616]={n="Gifteffekt"},
 [3617]={n="Tyst självmord"},
 [3618]={n="Själv bedövning"},
-[3621]={n="Skallkluvarens husdjur"},
+[3621]={n="Skallkrossarnas husdjur"},
 [3627]={e="Heals the target for $o1 over $d.",ea="Heals $s1 damage every $t1 seconds.",n="Föryngring",d="Läker målet med $o1 under $d.",a="Läker $s1 skada var $t1:e sekund."},
 [3630]={n="Vilddjursraseri III"},
 [3631]={ea="Attack speed increased by $s1%.",n="Stridsraseri",a="Attackhastighet ökad med $s1 %."},
