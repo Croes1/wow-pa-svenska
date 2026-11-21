@@ -1,4 +1,5 @@
--- Genererad av pipeline/vak.py build. Redigera inte för hand: använd pipeline/overrides.csv.
+-- Platsnamn (WPS.L.zone), engelska -> svenska. Filen underhålls direkt och är addonets
+-- källdata: redigera den här.
 local _, WPS = ...
 WPS.L.zone = {
 ["Blackfathom Deeps"]="Svartdjupen",

@@ -1,4 +1,5 @@
--- Genererad av pipeline/vak.py build. Redigera inte för hand: använd pipeline/overrides.csv.
+-- Besvärjelser och förmågor (WPS.L.spell), nycklade på spell-id. Filen underhålls direkt och är
+-- addonets källdata: redigera den här.
 local _, WPS = ...
 WPS.L.spell = {
 [4]={n="Återkallelsesord för andra"},

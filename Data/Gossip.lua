@@ -1,4 +1,6 @@
--- Genererad av pipeline/vak.py build. Redigera inte för hand: använd pipeline/overrides.csv.
+-- NPC-dialog (WPS.L.gossip). Filen underhålls direkt och är addonets källdata: redigera den här.
+-- Nyckel: "<längd>_<djb2 i hex>" av den engelska texten, samma som Key i GossipText.lua
+-- och WPS.Hash i Core.lua. Hitta inte på nycklar: räkna fram dem med samma algoritm.
 local _, WPS = ...
 WPS.L.gossip = {
 ["100_094194f4"]="Var försiktig. Följ efter oss ut när vi är klara, men håll ett tryggt avstånd ifall vi råkar illa ut.",

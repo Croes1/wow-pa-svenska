@@ -1,4 +1,5 @@
--- Genererad av pipeline/vak.py build: ordlistan, NPC-, zon-, spell- och itemnamn, uppdragstexter.
+-- Ordlistan (WPS.L.names_*), namn utan id, samt uppdragstexter (WPS.L.qtext). Filen underhålls
+-- direkt och är addonets källdata: redigera den här.
 local _, WPS = ...
 WPS.L.names_glossary_zone = {
 ["Academy of Arcane Arts and Sciences"]="Akademin för arkana konster och vetenskaper",
