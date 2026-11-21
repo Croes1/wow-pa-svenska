@@ -20,7 +20,7 @@ Supported file shape (one entry per physical line, UTF-8, LF line endings):
     [3]="Name",                                      -- numeric key, string value
     ["Some English"]="Svensk text", -- trailing comment  -- string key
     }
-    ui["Some English"] = "Svensk text"  -- assignment style (the old UiExtra form)
+    ui["Some English"] = "Svensk text"  -- assignment style
 
 Values are Python str (Lua string), int (non-negative integer), list of str
 (l={...}) or dict of field -> str | int | list. Numeric and string keys stay

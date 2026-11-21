@@ -6,11 +6,17 @@ redan ar oversatt i Data/Quest.lua och Data/Npc.lua, och skriv TSV-filer
 med bara det som saknas.
 
 Usage:
-  python3 tools/select-untranslated.py <quest-en.tsv> <creature-en.tsv>
-    python3 tools/select-untranslated.py <quest-en.tsv> <creature-en.tsv> \
-        <gameobject-en.tsv> <pagetext-en.tsv>
+  python3 tools/select-untranslated.py <quest-en.tsv> <creature-en.tsv> --work-dir DIR
+  python3 tools/select-untranslated.py <quest-en.tsv> <creature-en.tsv> \\
+      <gameobject-en.tsv> <pagetext-en.tsv> --work-dir DIR
 
-Outputs (in translation/untranslated/), one new numbered file per kind per run:
+  --work-dir  external work directory (required); worklists go to DIR/untranslated/
+  --data-dir  folder with Quest.lua and Npc.lua (default: Data/ in this repository)
+
+What counts as translated is read from the real Data files (the quest table in
+Data/Quest.lua and the npc table in Data/Npc.lua); no TSV export is used.
+
+Outputs (in <work-dir>/untranslated/), one new numbered file per kind per run:
     quests-001.tsv, quests-002.tsv ...        id, text         quests not translated yet
     npcs-001.tsv, ...                         id, name, title  creatures not translated yet
     gameobjects-001.tsv, ...                  id, name, title  game objects
@@ -21,42 +27,24 @@ to also write game-object and page-text worklists.
 Existing files are NEVER overwritten or modified: they grow over time and are
 worked separately. Each run writes the next free number, and only contains IDs
 that are not already in an earlier numbered file of the same kind. Nothing is
-written when there is nothing new.
+written when there is nothing new. Nothing is written inside the repository
+unless --work-dir points there.
 Console summary shows coverage + overlap validation.
 """
-HELP_TEXT = (
-    "Usage:\n"
-    "  python3 tools/select-untranslated.py <quest-en.tsv> <creature-en.tsv>\n"
-    "  python3 tools/select-untranslated.py <quest-en.tsv> <creature-en.tsv> \\\n"
-    "    <gameobject-en.tsv> <pagetext-en.tsv>\n"
-    "\n"
-    "Outputs in translation/untranslated/ (new numbered file per run, never overwritten):\n"
-    "  quests-NNN.tsv       quest IDs and text\n"
-    "  npcs-NNN.tsv         creature IDs, names, and titles\n"
-    "  gameobjects-NNN.tsv  game-object IDs, names, and titles\n"
-    "  pagetext-NNN.tsv     page-text IDs and text\n"
-)
+import argparse
 import os
 import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-OUT = os.path.join(ROOT, "translation", "untranslated")
+sys.path.insert(0, HERE)
+import datalua  # noqa: E402
 
-ID_RE = re.compile(r"^\[(\d+)\]=")
 
-
-def ids_from_lua(path):
-    ids = set()
-    if not os.path.exists(path):
-        return ids
-    with open(path, encoding="utf-8") as fh:
-        for line in fh:
-            m = ID_RE.match(line)
-            if m:
-                ids.add(int(m.group(1)))
-    return ids
+def ids_from_lua(path, table):
+    """Integer keys of one table in a Data file (parsed with datalua; fails on unknown syntax)."""
+    return {k for k in datalua.DataFile.read(path).table(table).keys() if isinstance(k, int)}
 
 
 def read_tsv(path, wide):
@@ -80,10 +68,10 @@ def clean(text, cr=False):
     return text.replace("\n", "\\n")
 
 
-def existing_ids(prefix):
+def existing_ids(out, prefix):
     """IDs already present in earlier numbered files of this kind."""
     ids = set()
-    for path in numbered_files(prefix):
+    for path in numbered_files(out, prefix):
         with open(path, encoding="utf-8") as fh:
             for line in fh:
                 head = line.split("\t", 1)[0]
@@ -92,28 +80,28 @@ def existing_ids(prefix):
     return ids
 
 
-def numbered_files(prefix):
+def numbered_files(out, prefix):
     pat = re.compile(r"^" + re.escape(prefix) + r"-(\d+)\.tsv$")
-    if not os.path.isdir(OUT):
+    if not os.path.isdir(out):
         return []
-    return sorted(os.path.join(OUT, f) for f in os.listdir(OUT) if pat.match(f))
+    return sorted(os.path.join(out, f) for f in os.listdir(out) if pat.match(f))
 
 
-def write_new(prefix, header, rows):
+def write_new(out, prefix, header, rows):
     """Write rows (id, line) not seen in earlier files to the next free
     <prefix>-NNN.tsv. Never overwrites. Returns (path or None, count)."""
-    seen = existing_ids(prefix)
+    seen = existing_ids(out, prefix)
     lines = [line for rid, line in rows if rid not in seen]
     if not lines:
         print(f"inget nytt for {prefix}: ingen fil skapad")
         return None, 0
-    os.makedirs(OUT, exist_ok=True)
+    os.makedirs(out, exist_ok=True)
     n = 1
-    nums = [int(re.search(r"-(\d+)\.tsv$", f).group(1)) for f in numbered_files(prefix)]
+    nums = [int(re.search(r"-(\d+)\.tsv$", f).group(1)) for f in numbered_files(out, prefix)]
     if nums:
         n = max(nums) + 1
     while True:
-        path = os.path.join(OUT, f"{prefix}-{n:03d}.tsv")
+        path = os.path.join(out, f"{prefix}-{n:03d}.tsv")
         try:
             # "x" = exclusive create: fails instead of overwriting.
             fh = open(path, "x", encoding="utf-8")
@@ -127,15 +115,28 @@ def write_new(prefix, header, rows):
     return path, len(lines)
 
 
-def main():
-    if len(sys.argv) not in (3, 5):
-        print(HELP_TEXT, file=sys.stderr)
-        return 2
-    quest_tsv, npc_tsv = sys.argv[1:3]
-    translated_q = ids_from_lua(os.path.join(ROOT, "Data", "Quest.lua"))
-    translated_n = ids_from_lua(os.path.join(ROOT, "Data", "Npc.lua"))
-    print(f"Data/Quest.lua: {len(translated_q)} oversatta quests")
-    print(f"Data/Npc.lua:   {len(translated_n)} oversatta npc-namn")
+def main(argv=None):
+    ap = argparse.ArgumentParser(
+        description="Write worklists of the quests, creatures, game objects and page texts "
+                    "that are not yet translated in Data/*.lua.")
+    ap.add_argument("caches", nargs="+",
+                    help="<quest-en.tsv> <creature-en.tsv> [<gameobject-en.tsv> <pagetext-en.tsv>]")
+    ap.add_argument("--work-dir", required=True,
+                    help="external work directory; worklists are written to <work-dir>/untranslated/")
+    ap.add_argument("--data-dir", default=os.path.join(ROOT, "Data"),
+                    help="folder with Quest.lua and Npc.lua (default: Data/ of this repository)")
+    args = ap.parse_args(argv)
+    if len(args.caches) not in (2, 4):
+        ap.error("give 2 caches (quest, creature) or 4 (quest, creature, gameobject, pagetext)")
+    quest_tsv, npc_tsv = args.caches[:2]
+    out = os.path.join(args.work_dir, "untranslated")
+    quest_lua = os.path.join(args.data_dir, "Quest.lua")
+    npc_lua = os.path.join(args.data_dir, "Npc.lua")
+    translated_q = ids_from_lua(quest_lua, "quest")
+    translated_n = ids_from_lua(npc_lua, "npc")
+    print(f"{quest_lua}: {len(translated_q)} oversatta quests")
+    print(f"{npc_lua}:   {len(translated_n)} oversatta npc-namn")
+    print(f"worklists go to {out}")
 
     cached_q = read_tsv(quest_tsv, wide=False)
     cached_n = read_tsv(npc_tsv, wide=True)
@@ -151,9 +152,9 @@ def main():
     new_n = [(rid, name, extra) for rid, name, extra in cached_n
              if rid not in translated_n]
 
-    write_new("quests", "id\ttext\n",
+    write_new(out, "quests", "id\ttext\n",
               [(rid, f"{rid}\t{clean(text)}\n") for rid, text in new_q])
-    write_new("npcs", "id\tname\ttitle\n",
+    write_new(out, "npcs", "id\tname\ttitle\n",
               [(rid, f"{rid}\t{name}\t{extra}\n") for rid, name, extra in new_n])
     print(f"\nkandidater: {len(new_q)} quests, {len(new_n)} npc-namn utan oversattning")
     if new_q:
@@ -162,13 +163,13 @@ def main():
     if new_n:
         print(f"forsta npc: {new_n[0]}")
 
-    if len(sys.argv) == 5:
-        gameobject_tsv, pagetext_tsv = sys.argv[3:5]
+    if len(args.caches) == 4:
+        gameobject_tsv, pagetext_tsv = args.caches[2:4]
         gameobjects = read_tsv(gameobject_tsv, wide=True)
         pagetext = read_tsv(pagetext_tsv, wide=False)
-        write_new("gameobjects", "id\tname\ttitle\n",
+        write_new(out, "gameobjects", "id\tname\ttitle\n",
                   [(rid, f"{rid}\t{name}\t{extra}\n") for rid, name, extra in gameobjects])
-        write_new("pagetext", "id\ttext\n",
+        write_new(out, "pagetext", "id\ttext\n",
                   [(rid, f"{rid}\t{clean(text, cr=True)}\n") for rid, text, _ in pagetext])
     return 0
 

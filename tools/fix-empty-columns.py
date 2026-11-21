@@ -12,8 +12,12 @@ tyst - den raden ska skickas till Gemma igen, inte lappas.
 Anvandning:
   python3 tools/fix-empty-columns.py <engelsk-referens-tsv> <ut-tsv>
 
-  quests: referens = translation/segmented/quests-batch-XX-en-segmented.tsv
-          utdata   = translation/out/quests-batch-XX-sv.tsv
+  quests: referens = <arbetskatalog>/segmented/quests-batch-XX-en-segmented.tsv
+          utdata   = <arbetskatalog>/out/quests-batch-XX-sv.tsv
+
+Bada filerna anges med explicita sokvagar (arbetskatalogen ligger utanfor
+repot). Verktyget skriver ENDAST over <ut-tsv>, och bara om alla rader gar att
+reparera; vid FEL andras ingenting.
 
 FEL (exit 1): saknad rad, fel id/ordning, referensrad utan 6 kolumner eller
 en saknad kolumn vars engelska motsvarighet INTE ar tom.

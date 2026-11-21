@@ -1,229 +1,349 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-tools/merge-translation.py - sammanfogar fardiga omgangar (translation/out/)
-till addon-datafilerna utan att rora de genererade Data/Quest.lua / Npc.lua.
+tools/merge-translation.py - insert new, approved translation rows into the real
+Data/*.lua files.
 
-Skapar/applicerar som Tillagg (jfr Data/UiExtra.lua):
-  Data/QuestExtra.lua -> nya nycklar i WPS.L.quest  ([id]={t,o,d,p,c})
-  Data/NpcExtra.lua   -> nya nycklar i WPS.L.npc    ([id]="Namn")
-och kopplar in dem i wow_pa_svenska.toc (Data\\QuestExtra.lua /
-Data\\NpcExtra.lua laggs in efter resp. huvudfil om de saknas).
+Nothing is regenerated. The rows of the explicit input are compared with the
+target table, rows whose key is new are inserted, everything else in the target is
+left byte for byte as it was. No Extra file is created and the .toc is never edited.
 
-Kolumner i indata:
-  quests: id<TAB>title<TAB>objectives<TAB>description<TAB>progress<TAB>reward
-          -> falt t,o,d,p,c. Tomt falt far ingen nyckel: addonet byter bara
-             falt som finns, sa fragmentraderna landar dar segmenteringen
-             lade dem (beslut: translation/batches/review/DECISIONS-*.md).
-  npcs:   id<TAB>name
+  quests  Data/Quest.lua  table quest   [id]={t,d,o,p,c}
+  npcs    Data/Npc.lua    table npc     [id]="Name"
+  ui      Data/Ui.lua     table ui      ["English"]="Svenska"
 
-Regler:
-  - id som redan finns i Data/Quest.lua, Data/Npc.lua eller i extra-filen
-    HOPPAS OVER och rapporteras - aldre granskat innehall skrivs aldrig over.
-  - deterministiskt: id sorteras numeriskt, varje rad far batchproveniens
-    som kommentar. Omkorning appendar bara nya rader; gamla rader rors ej.
-  - Inga falt hittas pa: exakt det som finns i TSV:n.
+gameobjects and pagetext have no runtime table in the addon and are refused.
+
+Input (--input is required; a file, or a directory of batch outputs):
+  quests  id<TAB>title<TAB>objectives<TAB>description<TAB>progress<TAB>reward
+          A directory means every quests-batch-NN-sv.tsv in it, in batch order.
+          An empty field gets no key: the addon only replaces fields that exist.
+  npcs    id<TAB>name        (a directory means npcs-batch-NN-sv.tsv)
+  ui      --input is the English dump (id<TAB>area<TAB>en, as written by
+          parse-uidump.py) and --sv the Swedish file (id<TAB>sv); rows are paired by id.
+An optional header line (first column "id") is skipped.
+
+Line breaks in a cell are written as escapes because a TSV row is one line: \\r\\n,
+\\n and \\r all mean one real line break (stored as a Lua \\n, the form the other quests
+use), and \\t means a tab (for ui only \\n and \\t are decoded, as in
+check-ui-translation.lua). Every other character, including quotes and a lone backslash,
+is taken literally and escaped for Lua on the way out. Placeholders such as $B, $N, %s
+and |c...|r are never touched.
+
+Rules:
+  - Structural problems abort the whole run and nothing is written: wrong column count,
+    non-numeric or duplicate id, ids that differ between the ui files.
+  - Rows that are well formed but unusable (a quest with every field empty, an empty npc
+    name or ui text, control characters) are rejected: reported and skipped.
+  - A key that already exists in the target is never overwritten: it is skipped and
+    reported with the target file and key. --overwrite replaces such entries instead and
+    lists every old and new value; use it only for a deliberate correction.
+  - New entries go in deterministically (see datalua.py): in id order, in place in sorted
+    tables, appended in Ui.lua.
+  - The target is replaced atomically after the result has been re-parsed and, if
+    luac5.1 is installed, syntax checked. A failed check leaves the target untouched.
 
 Usage:
-  python3 tools/merge-translation.py            # sammanfoga allt som saknas
-  python3 tools/merge-translation.py --torr     # rapportera utan att skriva
+  python3 tools/merge-translation.py quests --input DIR_OR_FILE [--dry-run]
+  python3 tools/merge-translation.py npcs --input DIR_OR_FILE [--dry-run]
+  python3 tools/merge-translation.py ui --input dump-en.tsv --sv dump-sv.tsv [--dry-run]
+
+  --dry-run    report additions, collisions and rejections; write nothing
+  --data-dir   directory holding the Data files (default: Data/ in this repository)
+  --overwrite  replace existing entries instead of skipping them
+
+Exit status: 0 on success (also when rows were skipped or rejected), 1 on a structural
+error or a failed check, 2 on a usage error.
 """
+import argparse
 import glob
 import os
 import re
+import shutil
+import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-DATA = os.path.join(ROOT, "Data")
-OUT = os.path.join(ROOT, "translation", "out")
-TOC = os.path.join(ROOT, "wow_pa_svenska.toc")
+sys.path.insert(0, HERE)
+import datalua  # noqa: E402
 
-ID_RE = re.compile(r"\[(\d+)\]\s*=")   # matchar bde "[id]=" och "LQ[id]=" / "LN[id]="
 BATCH_RE = re.compile(r"batch-(\d+)")
-FIELDS = (("t", 0), ("o", 1), ("d", 2), ("p", 3), ("c", 4))  # index i falt-tuppeln (utan id)
+# Quest fields in the order Data/Quest.lua uses for most entries; the TSV columns are title, objectives,
+# description, progress, reward (t, o, d, p, c).
+QUEST_COLUMNS = (("t", 1), ("d", 3), ("o", 2), ("p", 4), ("c", 5))
+QUEST_BREAKS = re.compile(r"\\r\\n|\\n|\\r|\\t")
+UI_BREAKS = re.compile(r"\\n|\\t")
+CONTROL_RE = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
+
+KINDS = {
+    "quests": {"file": "Quest.lua", "table": "quest", "pattern": "quests-batch-*-sv.tsv"},
+    "npcs": {"file": "Npc.lua", "table": "npc", "pattern": "npcs-batch-*-sv.tsv"},
+    "ui": {"file": "Ui.lua", "table": "ui", "pattern": None},
+}
+NO_RUNTIME_TABLE = ("gameobjects", "pagetext")
+SHOW = 10   # how many collisions/rejections to list before summarising
 
 
-def fail(msg):
-    print(f"FEL: {msg}")
-    sys.exit(1)
+class MergeError(Exception):
+    pass
 
 
-def lua_str(s):
-    out = s.replace("\\", "\\\\").replace('"', '\\"')
-    out = out.replace("\r", "\\r").replace("\n", "\\n").replace("\t", "\\t")
-    return '"' + out + '"'
+def decode_cell(text, ui=False):
+    """Turn the TSV escapes for line breaks and tabs into the real characters."""
+    pattern = UI_BREAKS if ui else QUEST_BREAKS
+    return pattern.sub(lambda m: "\t" if m.group() == "\\t" else "\n", text)
 
 
-def ids_from_lua(path):
-    ids = set()
-    if os.path.exists(path):
-        with open(path, encoding="utf-8") as fh:
-            for line in fh:
-                m = ID_RE.search(line)  # search (inte match): raden kan brja med LQ[ / LN[
-                if m:
-                    ids.add(int(m.group(1)))
-    return ids
+def input_files(path, kind):
+    if os.path.isdir(path):
+        pattern = KINDS[kind]["pattern"]
+        if not pattern:
+            raise MergeError(f"--input for {kind} must be a file, not a directory: {path}")
+        files = sorted(glob.glob(os.path.join(path, pattern)),
+                       key=lambda p: int(BATCH_RE.search(os.path.basename(p)).group(1)))
+        if not files:
+            raise MergeError(f"no {pattern} files in {path}")
+        return files
+    if not os.path.isfile(path):
+        raise MergeError(f"input not found: {path}")
+    return [path]
 
 
-def read_rows(kind, path):
-    """Lista (id, falt-tuple, kallfil) ur en utdatafil; kolumner valideras."""
-    rows, seen = [], set()
-    with open(path, encoding="utf-8") as fh:
-        for ln, line in enumerate(fh, 1):
-            line = line.rstrip("\n")
-            if not line:
-                continue
-            if ln == 1 and line.startswith("id\t"):
-                continue  # eventuell rubrikrad
-            parts = line.split("\t")
-            want = 6 if kind == "quests" else 2
-            if len(parts) != want:
-                fail(f"{path} rad {ln}: {len(parts)} kolumner (vantade {want})")
-            if not parts[0].isdigit():
-                fail(f"{path} rad {ln}: icke-numeriskt id {parts[0]!r}")
-            rid = int(parts[0])
-            if rid in seen:
-                fail(f"{path} rad {ln}: dubblett-id {rid}")
-            seen.add(rid)
-            rows.append((rid, tuple(parts[1:]), os.path.basename(path)))
-    return rows
-
-
-def collect(kind):
-    pattern = {"quests": "quests-batch-*-sv.tsv", "npcs": "npcs-batch-*-sv.tsv"}[kind]
-    files = sorted(glob.glob(os.path.join(OUT, pattern)),
-                   key=lambda p: int(BATCH_RE.search(p).group(1)))
+def read_tsv(path, columns):
+    """Rows as (lineno, cells); the header line is skipped. Structural errors raise MergeError."""
+    try:
+        with open(path, encoding="utf-8", newline="") as fh:
+            raw = fh.read()
+    except (OSError, UnicodeDecodeError) as exc:
+        raise MergeError(f"cannot read {path}: {exc}")
+    if "\r" in raw:
+        raise MergeError(f"{path}: contains CR characters; save the file with LF line endings")
+    lines = raw.split("\n")
+    if lines and lines[-1] == "":
+        lines.pop()
     rows = []
-    for path in files:
-        rows.extend(read_rows(kind, path))
-    seen = {}
-    for rid, _f, src in rows:
-        if rid in seen:
-            fail(f"id {rid} forekommer i bade {seen[rid]} och {src}")
-        seen[rid] = src
+    for number, line in enumerate(lines, 1):
+        if not line.strip():
+            raise MergeError(f"{path}:{number}: unexpected blank line")
+        cells = line.split("\t")
+        if number == 1 and cells[0] == "id":
+            continue
+        if len(cells) != columns:
+            raise MergeError(f"{path}:{number}: {len(cells)} columns, expected {columns}")
+        if not cells[0].isdigit():
+            raise MergeError(f"{path}:{number}: non-numeric id {cells[0]!r}")
+        rows.append((number, cells))
     return rows
 
 
-def extra_path(name):
-    return os.path.join(DATA, name)
+def check_text(text, label):
+    """Why a decoded text cannot be stored, or None."""
+    if CONTROL_RE.search(text):
+        return f"{label} contains a control character"
+    return None
 
 
-def write_file(path, header, entry_lines, merge_lines):
-    """Skriver filen HELT frn grunden (idempotent): header + extra-tabell +
-    in-sgningsslinga med nil-vakt. Samma TSV -> samma fil byte fr byte;
-    omkorning tappar aldrig rader eftersom utgngen bygger p TSV:n."""
-    text = (header
-            + "local extra = {\n" + "\n".join(entry_lines) + "\n}\n\n"
-            + merge_lines)
-    with open(path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(text)
+def quest_rows(path):
+    out, rejected = [], []
+    for number, cells in read_tsv(path, 6):
+        key = int(cells[0])
+        value = {}
+        problem = None
+        for field, col in QUEST_COLUMNS:
+            text = decode_cell(cells[col])
+            if text == "":
+                continue            # empty field: no key
+            problem = problem or check_text(text, f"field {field}")
+            value[field] = text
+        if problem:
+            rejected.append((path, number, key, problem))
+        elif not value:
+            rejected.append((path, number, key, "every field is empty"))
+        else:
+            out.append((key, value, path, number))
+    return out, rejected
 
 
-QUEST_LOOP = (
-    "for id, add in pairs(extra) do\n"
-    "    if LQ[id] == nil then LQ[id] = add end   -- skriv aldrig over granskat innehll\n"
-    "end\n"
-)
-
-NPC_LOOP = (
-    "for id, namn in pairs(extra) do\n"
-    "    if LN[id] == nil then LN[id] = namn end   -- skriv aldrig over granskat innehll\n"
-    "end\n"
-)
-
-
-def quest_header():
-    return (
-        "-- Tillgg till WPS.L.quest: godkanda omgngar ur translation/out/,\n"
-        "-- sammanfogade av tools/merge-translation.py. Gr inte handandringar hr:\n"
-        "-- nsta krning regenererar filen, gamla rader rrs aldrig om.\n"
-        "-- Flt t,o,d,p,c; tomt flt = ingen nyckel (addonet byter bara flt som finns).\n"
-        "-- l-rader (sprarrader i trakern) saknas: tckningsbegrnsning, se PIPELINE.md;\n"
-        "-- sparraderna frblir engelska till vidare, oskadligt.\n"
-        "local _, WPS = ...\n"
-        "local LQ = WPS.L.quest\n\n"
-    )
+def npc_rows(path):
+    out, rejected = [], []
+    for number, cells in read_tsv(path, 2):
+        key = int(cells[0])
+        name = decode_cell(cells[1]).strip()
+        problem = ("the name is empty" if not name else check_text(name, "the name"))
+        if problem:
+            rejected.append((path, number, key, problem))
+        else:
+            out.append((key, name, path, number))
+    return out, rejected
 
 
-def npc_header():
-    return (
-        "-- Tillgg till WPS.L.npc: godknda omgngar ur translation/out/,\n"
-        "-- sammanfogade av tools/merge-translation.py. Gr inte handndringar hr:\n"
-        "-- nsta krning regenererar filen, gamla rader rrs aldrig om.\n"
-        "-- Personnamn str kvar orandrade med avsikt (translation/PROMPT-GEMMA.md).\n"
-        "local _, WPS = ...\n"
-        "local LN = WPS.L.npc\n\n"
-    )
-
-
-def update_toc():
-    wanted = (("Data\\QuestExtra.lua", "Data\\Quest.lua"),
-              ("Data\\NpcExtra.lua", "Data\\Npc.lua"))
-    with open(TOC, encoding="utf-8") as fh:
-        lines = fh.read().splitlines()
-    changed = False
-    for entry, after in wanted:
-        if entry in lines:
+def ui_rows(en_path, sv_path):
+    en = {}
+    for number, cells in read_tsv(en_path, 3 if _has_area(en_path) else 2):
+        if cells[0] in en:
+            raise MergeError(f"{en_path}:{number}: duplicate id {cells[0]}")
+        en[cells[0]] = (number, cells[-1])
+    sv = {}
+    for number, cells in read_tsv(sv_path, 2):
+        if cells[0] in sv:
+            raise MergeError(f"{sv_path}:{number}: duplicate id {cells[0]}")
+        sv[cells[0]] = (number, cells[1])
+    if set(en) != set(sv):
+        missing = sorted(set(en) - set(sv))[:5]
+        extra = sorted(set(sv) - set(en))[:5]
+        raise MergeError(f"ids differ between {en_path} and {sv_path}: only in English {missing}, only in Swedish {extra}")
+    out, rejected, seen = [], [], {}
+    for rid in sorted(en, key=int):
+        number, en_text = en[rid]
+        en_text, sv_text = decode_cell(en_text, ui=True), decode_cell(sv[rid][1], ui=True)
+        problem = None
+        if not en_text.strip():
+            problem = "the English text is empty"
+        elif not sv_text.strip():
+            problem = "the Swedish text is empty"
+        else:
+            problem = check_text(en_text, "the English text") or check_text(sv_text, "the Swedish text")
+        if problem:
+            rejected.append((en_path, number, rid, problem))
             continue
-        if after not in lines:
-            fail(f".toc saknar ankarpunkten {after!r}; kan inte infoga {entry!r}")
-        lines.insert(lines.index(after) + 1, entry)
-        changed = True
-    if changed:
-        with open(TOC, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write("\n".join(lines) + "\n")
-    return changed
+        if en_text in seen:
+            raise MergeError(f"{en_path}: ids {seen[en_text]} and {rid} have the same English text {en_text!r}")
+        seen[en_text] = rid
+        out.append((en_text, sv_text, en_path, number))
+    return out, rejected
 
 
-def main():
-    dry = "--torr" in sys.argv
-    qrows = collect("quests")
-    nrows = collect("npcs")
-    print(f"utdata-rader: quests {len(qrows)}, npcs {len(nrows)}")
+def _has_area(path):
+    with open(path, encoding="utf-8") as fh:
+        first = fh.readline().rstrip("\n").split("\t")
+    return len(first) == 3
 
-    # Hoppskyddet gller bara Data-huvudfilerna: extra-filerna regenereras HELT
-    # ur TSV:erna vid varje korning (idempotent inget append, inget kan tappas).
-    q_existing = ids_from_lua(os.path.join(DATA, "Quest.lua"))
-    n_existing = ids_from_lua(os.path.join(DATA, "Npc.lua"))
 
-    q_new = [(rid, f, s) for rid, f, s in qrows if rid not in q_existing]
-    n_new = [(rid, f, s) for rid, f, s in nrows if rid not in n_existing]
-    print(f"nya quests: {len(q_new)} (hoppade {len(qrows) - len(q_new)} redan versatta)")
-    print(f"nya npcs:   {len(n_new)} (hoppade {len(nrows) - len(n_new)} redan versatta)")
+def collect(kind, inputs, sv):
+    """All usable rows of the input as (key, value, path, line) plus the rejected ones."""
+    rows, rejected = [], []
+    if kind == "ui":
+        if len(inputs) != 1 or not sv:
+            raise MergeError("ui needs exactly one --input (English file) and --sv (Swedish file)")
+        en_path = input_files(inputs[0], kind)[0]
+        if not os.path.isfile(sv):
+            raise MergeError(f"input not found: {sv}")
+        print(f"reading {en_path}")
+        print(f"reading {sv}")
+        return ui_rows(en_path, sv)
+    if sv:
+        raise MergeError("--sv is only used with ui")
+    reader = quest_rows if kind == "quests" else npc_rows
+    files = []
+    for item in inputs:
+        files.extend(input_files(item, kind))
+    seen = {}
+    for path in files:
+        print(f"reading {path}")
+        part, bad = reader(path)
+        # a rejected row still occupies its id: a repeated id is a structural error either way
+        for key, src, number in ([(k, s_, n) for k, _v, s_, n in part] + [(k, p, n) for p, n, k, _why in bad]):
+            if key in seen:
+                raise MergeError(f"id {key} appears in both {seen[key]} and {src}:{number}")
+            seen[key] = f"{src}:{number}"
+        rows.extend(part)
+        rejected.extend(bad)
+    return rows, rejected
 
-    q_lines = []
-    for rid, fields, src in sorted(q_new, key=lambda r: r[0]):
-        body = ", ".join(f"{k}={lua_str(fields[i])}" for k, i in FIELDS if fields[i])
-        if not body:
-            print(f"VARNING: quest {rid} har alla falt tomma - hoppar over")
-            continue
-        label = src[:-4] if src.endswith(".tsv") else src
-        q_lines.append(f"[{rid}]={{{body}}}, -- {label}")
 
-    n_lines = []
-    for rid, fields, src in sorted(n_new, key=lambda r: r[0]):
-        name = fields[0].strip()
-        if not name:
-            print(f"VARNING: npc {rid} har tomt namn - hoppar over")
-            continue
-        label = src[:-4] if src.endswith(".tsv") else src
-        n_lines.append(f"[{rid}]={lua_str(name)}, -- {label}")
+def short(value, width=60):
+    text = repr(value)
+    return text if len(text) <= width else text[:width - 3] + "..."
 
-    if dry:
-        print(f"--torr: skulle skriva {len(q_lines)} quest-rader och {len(n_lines)} npc-rader")
+
+def luac_check(tmp):
+    luac = shutil.which("luac5.1")
+    if luac is None:
+        return
+    result = subprocess.run([luac, "-p", tmp], capture_output=True, text=True)
+    if result.returncode != 0:
+        raise datalua.DataError("luac5.1 rejected the result: " + result.stderr.strip())
+
+
+def merge(kind, inputs, sv, data_dir, dry_run, overwrite):
+    spec = KINDS[kind]
+    target = os.path.join(data_dir, spec["file"])
+    rows, rejected = collect(kind, inputs, sv)
+    print(f"target {target} (table {spec['table']})")
+    df = datalua.DataFile.read(target)
+    table = df.table(spec["table"])
+
+    added, collisions = [], []
+    for key, value, src, number in sorted(rows, key=lambda r: r[0]):
+        if key in table:
+            collisions.append((key, value, src, number))
+        else:
+            added.append((key, value))
+    replaced = collisions if overwrite else []
+    skipped = [] if overwrite else collisions
+
+    for key, value, src, number in skipped[:SHOW]:
+        print(f"SKIP  {spec['file']} {datalua.key_text(key)} already exists: {short(table.get(key))}  (input {src}:{number})")
+    if len(skipped) > SHOW:
+        print(f"SKIP  ... and {len(skipped) - SHOW} more existing keys")
+    for key, value, src, number in replaced[:SHOW]:
+        print(f"REPLACE {spec['file']} {datalua.key_text(key)}\n    old: {short(table.get(key), 100)}\n    new: {short(value, 100)}")
+    if len(replaced) > SHOW:
+        print(f"REPLACE ... and {len(replaced) - SHOW} more")
+    for path, number, key, why in rejected[:SHOW]:
+        print(f"REJECT {path}:{number} id {key}: {why}")
+    if len(rejected) > SHOW:
+        print(f"REJECT ... and {len(rejected) - SHOW} more")
+
+    verb = "would add" if dry_run else "added"
+    print(f"{verb}: {len(added)}   skipped (already in {spec['file']}): {len(skipped)}   "
+          f"rejected: {len(rejected)}" + (f"   replaced: {len(replaced)}" if overwrite else ""))
+    if dry_run:
+        print("--dry-run: nothing written")
+        return 0
+    if not added and not replaced:
+        print("nothing to write")
         return 0
 
-    if q_lines:
-        write_file(extra_path("QuestExtra.lua"), quest_header(), q_lines, QUEST_LOOP)
-    if n_lines:
-        write_file(extra_path("NpcExtra.lua"), npc_header(), n_lines, NPC_LOOP)
+    df.insert(spec["table"], added)
+    for key, value, _src, _n in replaced:
+        df.replace(spec["table"], key, value)
+    df.write(check=luac_check)
+    if shutil.which("luac5.1") is None:
+        print("note: luac5.1 not found; the result was checked by datalua.py only")
 
-    toc_changed = update_toc()
-    print(f"QuestExtra.lua: +{len(q_lines)} rader    NpcExtra.lua: +{len(n_lines)} rader")
-    print(f".toc: {'uppdaterad' if toc_changed else 'redan kopplad'}")
-    print("KLART - kor luac5.1 -p pd de nya filerna och testsviten innan release.")
+    # Post-condition: read the file back and compare every row with the input.
+    again = datalua.DataFile.read(target).table(spec["table"])
+    wanted = dict(added)
+    wanted.update({k: v for k, v, _s, _n in replaced})
+    bad = [k for k, v in wanted.items() if again.get(k) != v]
+    if bad:
+        raise MergeError(f"verification failed for {len(bad)} entries after writing {target}, e.g. {bad[:3]}")
+    print(f"wrote {target}")
     return 0
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(
+        description="Insert new approved translation rows into Data/*.lua (see the module docstring).")
+    ap.add_argument("kind", choices=sorted(KINDS) + list(NO_RUNTIME_TABLE))
+    ap.add_argument("--input", action="append", required=True, metavar="PATH",
+                    help="TSV file or directory of batch outputs (repeatable except for ui)")
+    ap.add_argument("--sv", metavar="FILE", help="ui only: the Swedish file (id<TAB>sv)")
+    ap.add_argument("--data-dir", default=os.path.join(ROOT, "Data"), help="directory with the Data files")
+    ap.add_argument("--dry-run", action="store_true", help="report only; write nothing")
+    ap.add_argument("--overwrite", action="store_true",
+                    help="replace existing entries instead of skipping them (deliberate corrections only)")
+    args = ap.parse_args(argv)
+    if args.kind in NO_RUNTIME_TABLE:
+        ap.error(f"{args.kind} has no runtime table in the addon; keep those batches in the work directory")
+    try:
+        return merge(args.kind, args.input, args.sv, args.data_dir, args.dry_run, args.overwrite)
+    except (MergeError, datalua.DataError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        print("nothing was written", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
 -- Exporterar ordlistan i Data/Glossary.lua till TSV (tabb-separerad): tabell, engelska, svenska.
--- Användning:
---   lua5.1 tools/export-glossary.lua core  >  translation/glossary-core.tsv   (den kurerade ordlistan)
---   lua5.1 tools/export-glossary.lua all   >  translation/glossary-all.tsv    (även spell-/item-namn och questrader)
+-- Skriver bara till stdout; omdirigera till en fil utanför repot, t.ex. i arbetskatalogen:
+--   lua5.1 tools/export-glossary.lua core  >  <arbetskatalog>/glossary-core.tsv   (den kurerade ordlistan)
+--   lua5.1 tools/export-glossary.lua all   >  <arbetskatalog>/glossary-all.tsv    (även spell-/item-namn och questrader)
+-- Läser alltid Data/Glossary.lua i det här repot, oavsett varifrån verktyget körs.
 local scriptDir = (arg and arg[0] or ""):match("^(.*[/\\])") or "./"
 local base = scriptDir .. "../Data/"
 local mode = (arg and arg[1]) or "core"

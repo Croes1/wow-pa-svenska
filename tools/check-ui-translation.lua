@@ -1,10 +1,15 @@
 -- tools/check-ui-translation.lua — offline-kontroll av ett UI-översättningspar:
---   lua5.1 tools/check-ui-translation.lua translation/ui/dump-<datum>-en.tsv translation/ui/dump-<datum>-sv.tsv
+--   lua5.1 tools/check-ui-translation.lua <en.tsv> <sv.tsv> [Data/Ui.lua]
 --
--- Laddar riktiga tabeller (Data/Ui.lua + Data/UiExtra.lua), bygger exakt- och
--- formatmatchning som UI.lua gör (Compile/Fill ur Chat.lua) och jämför varje
+-- Filerna ligger i arbetskatalogen (utanför repot), t.ex. <arbetskatalog>/ui/dump-<datum>-en.tsv.
+-- Laddar den riktiga tabellen i Data/Ui.lua (tredje argumentet pekar annars ut en annan
+-- Ui.lua; standard är Data/Ui.lua i reporot, oavsett varifrån verktyget körs), bygger exakt-
+-- och formatmatchning som UI.lua gör (Compile/Fill ur Chat.lua) och jämför varje
 -- en-rads svar mot sv-filen. Rader där översättningen är oförändrad godtas
--- (brus). Exit 0 = OK, 1 = FEL. Kör från reporoten. Nätverksfri.
+-- (brus). Exit 0 = OK, 1 = FEL. Skriver ingenting. Nätverksfri.
+--
+-- Nya rader förs in i Data/Ui.lua med tools/merge-translation.py ui; kör den här
+-- kontrollen före och efter.
 local function Escape(s)
 	return (s:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0"))
 end
@@ -63,9 +68,10 @@ local function ReadRows(path)
 	return rows
 end
 
-local wps = { L = {} }
-assert(loadfile("Data/Ui.lua"))(nil, wps)
-assert(loadfile("Data/UiExtra.lua"))(nil, wps)
+local scriptDir = (arg and arg[0] or ""):match("^(.*[/\\])") or "./"
+local uiPath = arg[3] or (scriptDir .. "../Data/Ui.lua")
+local wps = { L = { ui = {} } }
+assert(loadfile(uiPath))(nil, wps)
 local ui = wps.L.ui
 
 local formats = {}
@@ -91,8 +97,9 @@ local function Translate(text)
 	return nil
 end
 
-local en = ReadRows(arg[1] or error("användning: check-ui-translation.lua <en.tsv> <sv.tsv>"))
-local sv = ReadRows(arg[2] or error("användning: check-ui-translation.lua <en.tsv> <sv.tsv>"))
+local usage = "användning: check-ui-translation.lua <en.tsv> <sv.tsv> [Data/Ui.lua]"
+local en = ReadRows(arg[1] or error(usage))
+local sv = ReadRows(arg[2] or error(usage))
 local byId = {}
 for _, r in ipairs(sv) do
 	if byId[r.id] then error("dubbelt id i sv-filen: " .. r.id) end
