@@ -483,7 +483,7 @@ WPS.L.ui = {
 ["Cap increase this week: %s"]="Taket ökas den här veckan med: %s",
 ["Next Rewards at Rank %s"]="Nästa belöningar vid grad %s",
 ["Faction Tabard"]="Fraktionsvapenskjorta",
-["Rewards may be purchased at the Hall of Legends in Orgrimmar."]="Belöningar kan köpas i Legendarernas hall i Orgrimmar.",
+["Rewards may be purchased at the Hall of Legends in Orgrimmar."]="Belöningar kan köpas i Legendernas sal i Orgrimmar.",
 ["Each week, the Rank Points cap is increased, up to a maximum of %s for Rank %s."]="Varje vecka ökas taket för gradpoäng, upp till som mest %s för grad %s.",
 
 ---------------------------------------------------------------------------
@@ -631,7 +631,7 @@ WPS.L.ui = {
 ["Highest Skinning skill"]="Högsta flåningskunskap",
 ["Highest Tailoring skill"]="Högsta skrädderikunskap",
 ["Inscriptions learned"]="Lärda inskriptioner",
-["Items disenchanted"]="Uttrullade föremål",
+["Items disenchanted"]="Nedbrutna föremål",
 ["Largest heal cast"]="Största kastade läkning",
 ["Largest heal received"]="Största mottagna läkning",
 ["Largest hit dealt"]="Största utdelade träff",
@@ -642,7 +642,7 @@ WPS.L.ui = {
 ["Mage Portals taken"]="Använda magikerportaler",
 ["Mage portal taken most"]="Mest använda magikerportal",
 ["Mana potions consumed"]="Konsumerade manadrycker",
-["Materials produced from disenchanting"]="Material utvunna vid uttrullning",
+["Materials produced from disenchanting"]="Material utvunna vid nedbrytning",
 ["Mekgineer Thermaplugg kills (Gnomeregan)"]="Mekgineer Thermapluggs dräp (Gnomeregan)",
 ["Most Horde factions at Exalted"]="Flest hordfraktioner på Upphöjd",
 ["Most factions at Exalted"]="Flest fraktioner på Upphöjd",
