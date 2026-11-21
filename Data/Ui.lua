@@ -795,4 +795,9 @@ WPS.L.ui = {
 ["Speak with Wharfmaster Lozgil in Booty Bay."]="Tala med hamnmästare Lozgil i Bytesbukten.",
 ["Travel to Hammerfall in the Arathi Highlands and speak with Zengu."]="Res till Hammarfall i Arathihöglandet och tala med Zengu.",
 ["Light the Sacred Fire of Life"]="Tänd Livets heliga eld",
+["%d/%d Online"]="%d/%d online",
+["Group Invite"]="Gruppinbjudan",
+["Group Settings"]="Gruppinställningar",
+["Guild Settings"]="Gilleinställningar",
+["Show Offline Members"]="Visa medlemmar som är offline",
 }
