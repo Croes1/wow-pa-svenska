@@ -13,18 +13,22 @@ is converted with tools/parse-wdb.py, and the results are combined per type:
   page text (WPTX)   -> pagetextcache-en.tsv    one row per id (first wins)
 
 Only the output files for types that were found are written. Existing files
-for other types are left alone. Output is overwritten, so keep a copy or use
-git to undo a run.
+for other types are left alone. An existing output file is never overwritten
+unless --force is given.
 
 Usage:
-  python3 tools/combine-wdb.py <folder> [<folder> ...] [-r] [--out-dir DIR]
+  python3 tools/combine-wdb.py <folder> [<folder> ...] [-r] (--work-dir DIR | --out-dir DIR) [--force]
 
-  -r  also read .wdb files in all subfolders of the given folders.
+  -r          also read .wdb files in all subfolders of the given folders.
+  --work-dir  external work directory; the *-en.tsv files go to DIR/cache/
+  --out-dir   write the *-en.tsv files straight into this folder instead
+  --force     overwrite output files that already exist
+
+Nothing is written inside the repository unless you point --work-dir or
+--out-dir there. The files read and written are printed.
 
 Example:
-  python3 tools/combine-wdb.py -r .../cache_wow .../WoW/Cache/WDB/enUS
-
-Default --out-dir is the translation/ folder of this repository.
+  python3 tools/combine-wdb.py -r .../cache_wow .../WoW/Cache/WDB/enUS --work-dir ~/wow-pa-svenska-work
 """
 import argparse
 import importlib.util
@@ -33,7 +37,6 @@ import sys
 import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
 PARSER = os.path.join(HERE, "parse-wdb.py")
 
 # magic (as read from the file) -> (output file name, dedupe rule)
@@ -129,17 +132,27 @@ def main(argv=None):
     ap.add_argument("folders", nargs="+", help="folder(s) containing .wdb files")
     ap.add_argument("-r", "--recursive", action="store_true",
                     help="also read .wdb files in all subfolders")
-    ap.add_argument("--out-dir", default=os.path.join(ROOT, "translation"),
-                    help="where the *-en.tsv files are written (default: translation/)")
+    where = ap.add_mutually_exclusive_group(required=True)
+    where.add_argument("--work-dir", help="external work directory; output goes to <work-dir>/cache/")
+    where.add_argument("--out-dir", help="folder that receives the *-en.tsv files directly")
+    ap.add_argument("--force", action="store_true",
+                    help="overwrite output files that already exist")
     args = ap.parse_args(argv)
+    out_dir = args.out_dir or os.path.join(args.work_dir, "cache")
 
     found = collect(args.folders, recursive=args.recursive)
     if not found:
         sys.exit("no supported .wdb files found in the given folders "
                  "(use -r to also search subfolders)")
 
+    if not args.force:
+        clash = [os.path.join(out_dir, TYPES[m][0]) for m in found
+                 if os.path.exists(os.path.join(out_dir, TYPES[m][0]))]
+        if clash:
+            sys.exit("refusing to overwrite (use --force): " + ", ".join(clash))
+
     parser = load_parser()
-    os.makedirs(args.out_dir, exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
     with tempfile.TemporaryDirectory() as workdir:
         for magic, paths in found.items():
             out_name, dedupe = TYPES[magic]
@@ -153,7 +166,7 @@ def main(argv=None):
                 continue
             header = blocks[0].split("\n")[0]
             header, rows, removed = combine_lines(header, blocks, dedupe)
-            out_path = os.path.join(args.out_dir, out_name)
+            out_path = os.path.join(out_dir, out_name)
             with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
                 fh.write(header + "\n")
                 for row in rows:

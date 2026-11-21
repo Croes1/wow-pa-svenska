@@ -321,7 +321,7 @@ local function DumpStop()
 	if WPS.db and WPS.db.uiDump then
 		for _ in pairs(WPS.db.uiDump) do total = total + 1 end
 	end
-	WPS.Print(("dump: klar — %d texter total. /reload eller logga ut för att spara, skicka sedan WPSDB.lua."):format(total))
+	WPS.Print(("dump: klar — %d texter total. /reload eller logga ut för att spara, skicka sedan wow_pa_svenska.lua (WTF/Account/<konto>/SavedVariables)."):format(total))
 end
 
 function WPS.UIDump(arg)

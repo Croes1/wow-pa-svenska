@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-tools/fix-empty-columns.py - lagger tappade tomma slutkolumner i Gemma-utdata.
+tools/fix-empty-columns.py - lagger tappade tomma slutkolumner i oversattarens utdata.
 
-Gemma tar ibland bort de avslutande tomma kolumnerna (progress/reward) nar de
+Oversattaren tar ibland bort de avslutande tomma kolumnerna (progress/reward) nar de
 ar tomma och skriver t.ex. 4 kolumner stallen for 6. Detta verktyg fyller pa
 dem - men ENDAST om den engelska referensfilen visar att de saknade
 kolumnerna ska vara tomma. Nar engelskan har text saknas sadant innehall
-tyst - den raden ska skickas till Gemma igen, inte lappas.
+tyst - den raden ska goras om, inte lappas.
 
 Anvandning:
   python3 tools/fix-empty-columns.py <engelsk-referens-tsv> <ut-tsv>
 
-  quests: referens = translation/segmented/quests-batch-XX-en-segmented.tsv
-          utdata   = translation/out/quests-batch-XX-sv.tsv
+  quests: referens = <arbetskatalog>/segmented/quests-batch-XX-en-segmented.tsv
+          utdata   = <arbetskatalog>/out/quests-batch-XX-sv.tsv
+
+Bada filerna anges med explicita sokvagar (arbetskatalogen ligger utanfor
+repot). Verktyget skriver ENDAST over <ut-tsv>, och bara om alla rader gar att
+reparera; vid FEL andras ingenting.
 
 FEL (exit 1): saknad rad, fel id/ordning, referensrad utan 6 kolumner eller
 en saknad kolumn vars engelska motsvarighet INTE ar tom.
@@ -79,7 +83,7 @@ def main():
                   f"(engelskan ar tom dar)")
         else:
             print(f"FEL: id {ucells[0]} saknar kolumner {missing} men ENGELSKAN har text dar - "
-                  f"svenskt innehall kan vara tappat: skicka raden till Gemma igen")
+                  f"svenskt innehall kan vara tappat: gor om raden")
             return 1
 
     with open(sys.argv[2], "w", encoding="utf-8", newline="") as fh:
