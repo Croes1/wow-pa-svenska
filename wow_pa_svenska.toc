@@ -2,7 +2,7 @@
 ## Title: Wow på Svenska
 ## Notes: Svensk översättning av quests, items, spells, buffar, NPC:er och chattmeddelanden. /wps
 ## Author: Croes
-## Version: 1.2.0
+## Version: 1.3.0
 ## X-License: GPL-3.0-or-later
 ## SavedVariables: WPSDB
 ## IconTexture: Interface\Icons\INV_Misc_Book_09
