@@ -39,7 +39,7 @@ end
 ---------------------------------------------------------------------------
 -- /wps fel: spelaren rapporterar en översättning som blev fel i spelet.
 -- Sparar det som senast visades (WPS.last) med kommentaren i WPSDB.reports.
--- Spelaren skickar WPSDB.lua som GitHub Issue (se CONTRIBUTING.md); underhållaren rättar översättningen.
+-- Spelaren skickar SavedVariables/wow_pa_svenska.lua som GitHub Issue (se CONTRIBUTING.md); underhållaren rättar översättningen.
 ---------------------------------------------------------------------------
 
 local function CopyTable(t)

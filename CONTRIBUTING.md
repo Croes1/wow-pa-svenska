@@ -11,7 +11,7 @@ The easiest way to report an incorrect translation is in-game:
 1. Hover over the text or open the dialogue containing the error.
 2. Type `/wps fel <comment>` in chat.
 3. Reload the interface with `/reload` or log out to save the report.
-4. Find `WTF/Account/<account>/SavedVariables/WPSDB.lua`.
+4. Find `WTF/Account/<account>/SavedVariables/wow_pa_svenska.lua`.
 5. Attach the file to a [GitHub Issue](https://github.com/Croes1/wow-pa-svenska/issues).
 
 Include a short explanation of what you think the correct translation should be.
@@ -134,7 +134,7 @@ In a TSV a line break is written as `\n` or `\r\n` (and a tab as `\t`), because 
 **UI strings** follow the same pattern. `/wps dump` in game collects the strings that are not translated yet into `WPSDB.uiDump`:
 
 ```bash
-python3 tools/parse-uidump.py "<WTF>/Account/<account>/SavedVariables/WPSDB.lua" -o "$WORK/ui/dump-YYYY-MM-DD-en.tsv" [--force]
+python3 tools/parse-uidump.py "<WTF>/Account/<account>/SavedVariables/wow_pa_svenska.lua" -o "$WORK/ui/dump-YYYY-MM-DD-en.tsv" [--force]
 # translate: a second file "$WORK/ui/dump-YYYY-MM-DD-sv.tsv" with  id<TAB>swedish
 lua5.1 tools/check-ui-translation.lua "$WORK/ui/dump-YYYY-MM-DD-en.tsv" "$WORK/ui/dump-YYYY-MM-DD-sv.tsv"
 python3 tools/merge-translation.py ui --input "$WORK/ui/dump-YYYY-MM-DD-en.tsv" --sv "$WORK/ui/dump-YYYY-MM-DD-sv.tsv" --dry-run

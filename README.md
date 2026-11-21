@@ -58,7 +58,7 @@ Hittat en konstig översättning? Använd `/wps fel <kommentar>` i spelet.
 
 Rapporterna sparas i:
 
-`WTF/Account/<konto>/SavedVariables/WPSDB.lua`
+`WTF/Account/<konto>/SavedVariables/wow_pa_svenska.lua`
 
 Skicka rapporten via ett [GitHub Issue](https://github.com/Croes1/wow-pa-svenska/issues) så kan översättningen granskas och rättas.
 
