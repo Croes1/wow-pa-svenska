@@ -221,17 +221,15 @@ class ValidatorQuestTest(unittest.TestCase):
         self.assertEqual(res.returncode, 2)
 
     def test_real_batch_smoke(self):
-        src = ROOT / "translation" / "batches" / "quests-batch-01.tsv"
-        if not src.exists():
-            self.skipTest("quests-batch-01.tsv saknas")
+        """A real 10-row quest batch (tests/fixtures/quests-batch-sample.tsv) validates, and a lost token is caught."""
+        src = ROOT / "tests" / "fixtures" / "quests-batch-sample.tsv"
         rows = pairs_from(src.read_text(encoding="utf-8"))
         dst = write_file(self.dir, "dst01.tsv", quests_out(rows))
         res = run_tool(str(src), dst, "quests")
         self.assertEqual(res.returncode, 0, res.stdout)
         token_row = next((index for index, (_, body) in enumerate(rows)
                           if vb.TOKEN_RE.search(body)), None)
-        if token_row is None:
-            self.skipTest("quest batch has no placeholder to corrupt")
+        self.assertIsNotNone(token_row, "the fixture must contain a placeholder to corrupt")
         rid, body = rows[token_row]
         token = vb.TOKEN_RE.search(body)
         corrupt = body[:token.start()] + body[token.end():]

@@ -1,4 +1,9 @@
--- Genererad av pipeline/vak.py build. Redigera inte för hand: använd pipeline/overrides.csv.
+-- Gränssnittstexter (WPS.L.ui), engelska -> svenska. Filen underhålls direkt och är addonets
+-- källdata: redigera den här. Allt styrs av rutan "Fönster och knappar" i /wps.
+-- Poster utan %s/%d matchas exakt. Poster med %s/%d är formatsträngar och kompileras av
+-- WPS.CompileFormat (Chat.lua), precis som "Level %d". Saknas en sträng i klienten sker inget:
+-- poster som aldrig matchas är ofarliga.
+-- Först kommer den alfabetiska grunduppsättningen, därefter tematiska avsnitt.
 local _, WPS = ...
 WPS.L.ui = {
 ["%s (Complete)"]="%s (klart)",
@@ -236,7 +241,7 @@ WPS.L.ui = {
 ["Search abilities, keywords"]="Sök förmågor, nyckelord",
 ["Secondary"]="Sekundär",
 ["Self Highlight"]="Markera dig själv",
-["Send Mail"]="Skicka post",
+["Send Mail"]="Skicka brev",
 ["Set Focus"]="Sätt fokus",
 ["Set Role"]="Välj roll",
 ["Settings"]="Inställningar",
@@ -282,4 +287,507 @@ WPS.L.ui = {
 ["XP: %d/%d"]="Erf: %d/%d",
 ["Yes"]="Ja",
 ["You have died. Release to the nearest graveyard?"]="Du har dött. Frigör anden vid närmaste kyrkogård?",
+
+---------------------------------------------------------------------------
+-- Flikar och rubriker på karaktärssidan
+---------------------------------------------------------------------------
+["Character"]="Rollfigur",
+["Reputation"]="Anseende",
+["Skills"]="Färdigheter",
+["Pet"]="Husdjur",
+["Currency"]="Valuta",
+["Skill"]="Färdighet",
+["Titles"]="Titlar",
+["Title"]="Titel",
+["Rank"]="Grad",
+["Experience"]="Erfarenhet",
+["Mounts"]="Ridjur",
+
+---------------------------------------------------------------------------
+-- Anseendegrader (FACTION_STANDING_LABEL_*).
+-- Neutral, Friendly och Honored finns redan i Data/Ui.lua.
+---------------------------------------------------------------------------
+["Hated"]="Hatad",
+["Hostile"]="Fientlig",
+["Unfriendly"]="Ovänlig",
+["Revered"]="Vördad",
+["Exalted"]="Upphöjd",
+
+---------------------------------------------------------------------------
+-- Klasser och raser som fristående ord (statspanel, tränare, anseende).
+-- Samma ord som Core.lua (CLASS_SV/RACE_SV) använder i questtexter.
+---------------------------------------------------------------------------
+["Warrior"]="Krigare",
+["Mage"]="Magiker",
+["Priest"]="Präst",
+["Rogue"]="Skurk", -- ersatte "Skälm" (ursprunglig översättning)
+["Warlock"]="Häxmästare",
+["Hunter"]="Jägare",
+["Paladin"]="Paladin",
+["Shaman"]="Schaman",
+["Druid"]="Druid",
+["Human"]="Människa",
+["Dwarf"]="Dvärg",
+["Night Elf"]="Nattalv",
+["Gnome"]="Gnom",
+["Orc"]="Orch",
+["Tauren"]="Tauren",
+["Troll"]="Troll",
+["Blood Elf"]="Blodalv",
+["Draenei"]="Draenei",
+
+---------------------------------------------------------------------------
+-- Statspanelen
+---------------------------------------------------------------------------
+["Armor"]="Rustning",
+["Defense"]="Försvar",
+["Melee"]="Närstrid",
+["Melee Attack Power"]="Attackkraft i närstrid",
+["Spell Power"]="Besvärjelsekraft",
+["All Resistances"]="Alla motstånd",
+["Fire Resistance"]="Eldmotstånd",
+["Fire Resist"]="Eldmotstånd",
+["Frost Resistance"]="Frostmotstånd",
+["Frost Resist"]="Frostmotstånd",
+["Nature Resistance"]="Naturmotstånd",
+["Nature Resist"]="Naturmotstånd",
+["Shadow Resistance"]="Skuggmotstånd",
+["Shadow Resist"]="Skuggmotstånd",
+["Arcane Resistance"]="Arkanmotstånd",
+["Arcane Resist"]="Arkanmotstånd",
+["Holy Resistance"]="Heligt motstånd",
+["Holy Resist"]="Heligt motstånd",
+
+---------------------------------------------------------------------------
+-- Färdigheter: vapen, sekundära och yrken ("Skills"-fliken m.m.).
+-- Daggers, Fist Weapons, Blacksmithing, Leatherworking, Skinning, First Aid,
+-- Cooking och Fishing finns redan i Data/Ui.lua.
+---------------------------------------------------------------------------
+["Swords"]="Svärd",
+["Two-Handed Swords"]="Tvåhandssvärd",
+["Axes"]="Yxor",
+["Two-Handed Axes"]="Tvåhandsyxor",
+["Maces"]="Klubbor",
+["Two-Handed Maces"]="Tvåhandsklubbor",
+["Polearms"]="Stångvapen",
+["Staves"]="Stavar",
+["Bows"]="Bågar",
+["Guns"]="Gevär",
+["Crossbows"]="Armborst",
+["Thrown"]="Kastvapen",
+["Wands"]="Trollstavar",
+["Unarmed"]="Obeväpnad",
+["Riding"]="Ridning",
+["Lockpicking"]="Dyrkning",
+["Poisons"]="Gifter",
+["Herbalism"]="Örtkunskap",
+["Mining"]="Gruvbrytning",
+["Tailoring"]="Skrädderi",
+["Engineering"]="Ingenjörskonst",
+["Alchemy"]="Alkemi",
+["Enchanting"]="Förtrollning",
+["Jewelcrafting"]="Juvelsmide",
+
+-- Rubriker i grupperingen på färdighetsfliken
+["Weapon Skills"]="Vapenfärdigheter",
+["Class Skills"]="Klassfärdigheter",
+["Secondary Skills"]="Sekundära färdigheter",
+["Armor Proficiencies"]="Rustningsvanor",
+
+-- Yrkes- och träningsgrader (Apprentice/Journeyman finns redan)
+["Expert"]="Expert",
+["Artisan"]="Hantverkare",
+["Master"]="Mästare",
+
+---------------------------------------------------------------------------
+-- Tränarfönstret
+---------------------------------------------------------------------------
+["Train"]="Lär dig",
+["Training"]="Utbildning",
+["Available"]="Tillgängliga",
+
+---------------------------------------------------------------------------
+-- Husdjur
+---------------------------------------------------------------------------
+["Happy"]="Glad",
+["Content"]="Nöjd",
+["Unhappy"]="Olycklig",
+
+---------------------------------------------------------------------------
+-- Fraktionsnamn som saknades i ordlistan (names_general i Data/Glossary.lua).
+-- Övriga fraktioner finns redan där: Stormwind=Stormvind, Ironforge=Järnsmedjan,
+-- Darnassus, Orgrimmar, Thunder Bluff=Dunderklippan, Undercity=Understaden,
+-- Ratchet=Spärrhake, Everlook=Utkiken, Darkmoon Faire=Mörkmånemarknaden,
+-- Steamwheedle Cartel=Ångvisslekartellen, Silverwing Sentinels m.fl.
+---------------------------------------------------------------------------
+["Gnomeregan Exiles"]="Gnomeregans landsförvisade",
+["Silvermoon City"]="Silvermånstaden",
+["Frostwolf Clan"]="Frostvargsklanen",
+["The Defilers"]="Besudlarna",
+["Timbermaw Hold"]="Timmerkäftens hålla",
+["Wintersaber Trainers"]="Vintersabeltränarna",
+["Hydraxian Waterlords"]="Hydraxians vattenherrar",
+["Zandalar Tribe"]="Zandalarklanen",
+["Brood of Nozdormu"]="Nozdormus kull",
+["Gelkis Clan Centaur"]="Gelkisklanens kentaurer",
+["Magram Clan Centaur"]="Magramklanens kentaurer",
+
+---------------------------------------------------------------------------
+-- [2026-11-15] Karaktärssidan i sin helhet: statistik, valuta, PvP,
+-- yrkesbeskrivningar, fraktionsbeskrivningar.
+-- Terminologibeslut och alternativ står i blocket nedan och vid enskilda poster.
+---------------------------------------------------------------------------
+-- Terminologibeslut för UI-texter (posterna ligger i avsnitten nedan)
+--  Honor Points = Äropoäng ("Honor" = Ära); Rank Points = Gradpoäng (jfr ui["Rank"] = "Grad");
+--  Civilian = Civilist (PvP grad 0, båda sidorna); Faction Tabard = Fraktionsvapenskjorta;
+--  Hall of Legends = Legendarernas hall (ingen ordlistepost, fri men konsekvent);
+--  Schematics = ritningar (jfr "Schematic: X" = "Ritning: X" i Data/Glossary.lua);
+--  Wealth = Förmögenhet; Statistics = Statistik; Energy = Energi.
+--  Honorable Kills = Ärorika dråp; Killing Blows = Dödande slag; kills = dräp (statistiktonen);
+--  Expertise = Sakkunskap (jfr träffchans/väjning); Glancing Blows = Halvträffar;
+--  disenchant = uttrulla; soulstone = själsten.
+--  Earthen Ring = Jordringen; Powderfuse = Krutstubinen (jfr Spärrhake/Utkiken för gobelfraktioner);
+--  Blackwater Raiders = Blackwaters pirater; Bloodsail Buccaneers = Blodssegelfribytarna.
+--  Gutterspeak = Rännspråk; Orcish = Orkiska; "Language: %s" = "Språk: %s" som reservformat.
+--  Alterac Valley = Alteracdalen; Arathi Basin = Arathibäckenet; The Barrens = Kargmarkerna;
+--  Darkspear Islands = Darkspearöarna (serverns egen arena, namnet bevaras).
+--  Warsong Gulch, Orgrimmar, Durotar m.fl. egennamn står orörda.
+--  dungeon/instance -> instans; raid -> raid (jfr "Konvertera till raid").
+--  Serverns humorsträngar översätts rakt (facepalms, LOL, "världens minsta fiol", hejarop, vågor).
+--  Nyckeln måste matcha källan tecken för tecken, även dubbla mellanslag ("Horde.  They") och
+--  inledande mellanslag (" Season 1"), annars träffar posten aldrig.
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+-- Rollfigur: statspanelen
+---------------------------------------------------------------------------
+["Energy"]="Energi",
+
+---------------------------------------------------------------------------
+-- Anseende: fraktionsbeskrivningar i höger panel
+---------------------------------------------------------------------------
+["This tribe of exiled trolls has joined forces with Thrall and the Horde.  They now call Durotar their home, which they share with their orc allies."]="Den här stammen av förvisade troll har slagit sig samman med Thrall och Horden. De kallar numera Durotar för sitt hem, som de delar med sina orchallierade.",
+
+---------------------------------------------------------------------------
+-- Färdigheter: yrkesbeskrivningar i höger panel
+---------------------------------------------------------------------------
+["Higher engineering skill allows you to learn higher level engineering schematics.  Schematics can be found on trainers around the world as well as from quests and monsters."]="Högre ingenjörskonst gör att du kan lära dig planritningar på högre nivåer. Planritningar hittar du hos lärare runt om i världen samt från uppdrag och monster.",
+
+---------------------------------------------------------------------------
+-- Spelare mot spelare (gradpoäng, veckotak, belöningar)
+---------------------------------------------------------------------------
+["Season 1"]="Säsong 1",
+["Season %s"]="Säsong %s", -- skydd om klienten skriver "Season 2" o.d.
+["Civilian"]="Civilist",
+["Rank Points: %s / %s"]="Gradpoäng: %s / %s",
+["Cap increase this week: %s"]="Taket ökas den här veckan med: %s",
+["Next Rewards at Rank %s"]="Nästa belöningar vid grad %s",
+["Faction Tabard"]="Fraktionsvapenskjorta",
+["Rewards may be purchased at the Hall of Legends in Orgrimmar."]="Belöningar kan köpas i Legendarernas hall i Orgrimmar.",
+["Each week, the Rank Points cap is increased, up to a maximum of %s for Rank %s."]="Varje vecka ökas taket för gradpoäng, upp till som mest %s för grad %s.",
+
+---------------------------------------------------------------------------
+-- Valuta (äropoäng och gränssnittet runt listan)
+---------------------------------------------------------------------------
+["Honor Points"]="Äropoäng",
+["Honor is gained by killing members of the opposite faction in PvP combat. You can use honor points to purchase special items."]="Ära tjänas genom att döda medlemmar av motståndarsidan i PvP-strid. Du kan använda äropoäng för att köpa specialföremål.",
+["Maximum"]="Maximalt", -- alternativ: "Högsta antal"
+["Unused"]="Oanvända",
+["Show on Backpack"]="Visa på ryggväskan",
+
+---------------------------------------------------------------------------
+-- Statistik (titel, kategorier och rader)
+---------------------------------------------------------------------------
+["Statistics"]="Statistik",
+["Wealth"]="Förmögenhet",
+["Times camped"]="Gånger blivit campad", -- dataterm; beslut i planen
+["Talent tree respecs"]="Omspecialiseringar av talangträdet", -- alternativ: "Ändringar av talangträdet"
+["Total gold acquired"]="Totalt samlat guld",
+["Average gold earned per day"]="Genomsnittligt förtjänat guld per dag",
+["Gold looted"]="Plundrat guld",
+["Gold from quest rewards"]="Guld från uppdragsbelöningar",
+["Gold earned from auctions"]="Guld intjänat på auktioner",
+["Auctions posted"]="Upplagda auktioner",
+["Auction purchases"]="Auktionsköp",
+["Most expensive bid on auction"]="Dyresta budet på auktion",
+["Most expensive auction sold"]="Dyresta sålda auktionen",
+["Gold from vendors"]="Guld från handlare",
+["Gold spent on travel"]="Guld spenderat på resor",
+
+---------------------------------------------------------------------------
+-- [2026-11-15, omgång 2] Fullsvit ur /wps dump (217 strängar): statistik,
+-- färdighets- och fraktionsbeskrivningar, statspanel, PvP/valuta.
+
+---------------------------------------------------------------------------
+-- Formatnycklar (siffror/markup fångas oförändrade)
+---------------------------------------------------------------------------
+["Language: %s"]="Språk: %s",
+["Language: Gutterspeak"]="Språk: Rännspråk",
+["Language: Orcish"]="Språk: Orkiska",
+["Each week, the Rank Points cap is increased, up to a maximum of |cnHIGHLIGHT_FONT_COLOR:%s|r for |cnHIGHLIGHT_FONT_COLOR:Rank %s|r."]="Varje vecka ökas taket för gradpoäng, upp till som mest |cnHIGHLIGHT_FONT_COLOR:%s|r för |cnHIGHLIGHT_FONT_COLOR:grad %s|r.",
+["Rank Points: |cnHIGHLIGHT_FONT_COLOR:%s|r"]="Gradpoäng: |cnHIGHLIGHT_FONT_COLOR:%s|r",
+["Chance to |cFFFFFFFFHit|r, and to avoid being |cFFFFFFFFDodged|r or |cFFFFFFFFParried|r: %s\n\nChance to |cFFFFFFFFCritically Hit|r: %s\n\n|cFFFFFFFFGlancing Blows|r occur 100% of the time and deal 89% less damage"]="Chans att |cffffffffträffa|r, och att undvika att bli |cffffffffväjd|r eller |cffffffffparerad|r: %s\n\nChans att |cffffffffträffa kritiskt|r: %s\n\n|cffffffffHalvträffar|r inträffar 100 % av tiden och gör 89 % mindre skada",
+["Chance to |cFFFFFFFFHit|r: %s\n\nChance to |cFFFFFFFFCritically Hit|r: %s"]="Chans att |cffffffffträffa|r: %s\n\nChans att |cffffffffträffa kritiskt|r: %s",
+["|cffffd100Rank #%s for your level|r  |cffffffff%s|r"]="|cffffd100Grad #%s för din nivå|r  |cffffffff%s|r",
+["Not ranked at your level. Ranked from 1 to 30."]="Ej rankad på din nivå. Rankas från 1 till 30.",
+["|cFFFFFFFFAgainst Raid Bosses|r"]="|cffffffffMot raidbossar|r",
+["|cFFFFFFFFEqual-Level Enemy|r"]="|cffffffffJämnivåfiende|r",
+
+---------------------------------------------------------------------------
+-- Statistikkategorier och övergripande
+---------------------------------------------------------------------------
+[" Season 1"]=" Säsong 1",
+["Battlegrounds"]="Slagfält",
+["Dungeons & Raids"]="Instanser & rais",
+["Dungeons and Raids"]="Instanser och rais",
+["Boss Kills"]="Bossdräp",
+["Kills"]="Dräp",
+["Creatures"]="Varelser",
+["Gear"]="Utrustning",
+["Consumables"]="Förbrukningsartiklar",
+["Travel"]="Resor",
+["Honorable Kills"]="Ärorika dråp",
+["Killing Blows"]="Dödande slag",
+["Alterac Valley Honorable Kills"]="Ärorika dråp i Alteracdalen",
+["Alterac Valley Killing Blows"]="Dödande slag i Alteracdalen",
+["Alterac Valley battles"]="Strider i Alteracdalen",
+["Alterac Valley towers captured"]="Erövrade torn i Alteracdalen",
+["Alterac Valley towers defended"]="Försvarade torn i Alteracdalen",
+["Alterac Valley victories"]="Segrar i Alteracdalen",
+["Arathi Basin Honorable Kills"]="Ärorika dråp i Arathibäckenet",
+["Arathi Basin Killing Blows"]="Dödande slag i Arathibäckenet",
+["Arathi Basin bases assaulted"]="Angripna baser i Arathibäckenet",
+["Arathi Basin bases defended"]="Försvarade baser i Arathibäckenet",
+["Arathi Basin battles"]="Strider i Arathibäckenet",
+["Arathi Basin victories"]="Segrar i Arathibäckenet",
+["Archmage Arugal kills (Shadowfang Keep)"]="Ärkimagen Arugals dräp (Shadowfang Keep)",
+["Average quests completed per day"]="Uppdrag fullbordade i genomsnitt per dag",
+["Bandage used most"]="Mest använda förband",
+["Bandages used"]="Använda förband",
+["Battleground Honorable Kills"]="Ärorika dråp på slagfält",
+["Battleground Killing Blows"]="Dödande slag på slagfält",
+["Battleground with the most Honorable Kills"]="Slagfält med flest ärorika dråp",
+["Battleground with the most Killing Blows"]="Slagfält med flest dödande slag",
+["Battlegrounds played"]="Spelade slagfält",
+["Battlegrounds won"]="Vunna slagfält",
+["Bazzalan kills (Ragefire Chasm)"]="Bazzalans dräp (Ragefire Chasm)",
+["Beverages consumed"]="Konsumerade drycker",
+["Blacksmithing Plans learned"]="Lärda smidesritningar",
+["Cairne Bloodhoof leads his people, the Proud Tauren, from this mighty Horde capital."]="Cairne Bloodhoof leder sitt folk, de stolta taurenerna, från denna mäktiga hordhuvudstad.",
+["Capital of the Steamwheedle Cartel and home to goblinhood's finest engineers, alchemists and merchants."]="Huvudstad i Ångvisslekartellen och hem för goblingsläktets främsta ingenjörer, alkemister och handelsmän.",
+["Deaths"]="Dödsfall",
+["Deaths from Hogger"]="Dödsfall orsakade av Hogger",
+["Deaths from Vanndar Stormpike"]="Dödsfall orsakade av Vanndar Stormpike",
+["Deaths from drowning"]="Dödsfall genom drunkning",
+["Deaths from falling"]="Dödsfall genom fall",
+["Deaths from fatigue"]="Dödsfall av utmattning",
+["Deaths from fire and lava"]="Dödsfall genom eld och lava",
+["Deaths in Alterac Valley"]="Dödsfall i Alteracdalen",
+["Deaths in Arathi Basin"]="Dödsfall i Arathibäckenet",
+["Deaths in Darkspear Islands"]="Dödsfall på Darkspearöarna",
+["Deaths in Warsong Gulch"]="Dödsfall i Warsong Gulch",
+["Different creature types killed"]="Olika dräpta varelsestyper",
+["Duels lost"]="Förlorade dueller",
+["Duels won"]="Vunna dueller",
+["Edwin VanCleef Kills (Deadmines)"]="Edwin VanCleefs dräp (Deadmines)",
+["Elixirs consumed"]="Konsumerade elixir",
+["Enchanting formulae learned"]="Lärda förtrollningsformler",
+["Engineering Schematics learned"]="Lärda ingenjörsritningar",
+["Epic items acquired"]="Förvärvade episka föremål",
+["Epic items looted"]="Plundrade episka föremål",
+["Equipped epic items in item slots"]="Utrustade episka föremål i föremålsplatser",
+["Expertise:"]="Sakkunskap:",
+["Extra bank slots purchased"]="Köpta extra bankplatser",
+["First Aid Manuals learned"]="Lärda första-hjälpen-manualer",
+["First Aid skill"]="Färdighet i första hjälpen",
+["Fish and other things caught"]="Fångad fisk och annat",
+["Fish caught"]="Fångad fisk",
+["Fishing daily quests completed"]="Fullbordade fiskedaguppdrag",
+["Fishing skill"]="Fiskefärdighet",
+["Flasks consumed"]="Konsumerade elixirflaskor",
+["Flight paths taken"]="Använda flyglinjer",
+["Food eaten"]="Förtärd mat",
+["Gold spent at barber shops"]="Guld spenderat hos barberare",
+["Gold spent on postage"]="Guld spenderat på porto",
+["Gold spent on talent tree respecs"]="Guld spenderat på omspecialiseringar av talangträdet",
+["Greed rolls made on loot"]="Girighetsslag på byte",
+["Health potions consumed"]="Konsumerade läkande drycker",
+["Higher cooking skill allows you to learn higher level cooking recipes.  Recipes can be found on trainers around the world as well as from quests and as drops from monsters."]="Högre matlagningskunskap gör att du kan lära dig recept på högre nivåer. Recept hittar du hos lärare runt om i världen samt från uppdrag och som plundring från monster.",
+["Higher defense makes you harder to hit and makes monsters less likely to land a crushing blow."]="Högre försvar gör dig svårare att träffa och gör att monster i mindre utsträckning landar ett förkrossande slag.",
+["Higher first aid skill allows you to learn higher level first aid abilities.  First aid abilities can be found on trainers around the world as well as from quests and as drops from monsters."]="Högre första-hjälpen-kunskap gör att du kan lära dig första-hjälpen-förmågor på högre nivåer. Förmågorna hittar du hos lärare runt om i världen samt från uppdrag och som plundring från monster.",
+["Higher fishing skill increases your chance of catching fish in bodies of water around the world.  If you are having trouble catching fish in a given area, move to a lower level area or purchase a fishing lure and try again."]="Högre fiskekunskap ökar din chans att fånga fisk i vattendrag runt om i världen. Har du svårt att fånga fisk i ett visst område, bege dig till ett område på lägre nivå eller köp ett fiskelock och försök igen.",
+["Higher mining skill allows you to harvest more difficult minerals nodes around the world.  If you cannot harvest a specific mineral, then increase your skill by mining easier to mine minerals in lower level areas."]="Högre gruvbrytningskunskap låter dig bryta svårare mineraler runt om i världen. Kan du inte bryta en viss mineral, öka din kunskap genom att bryta lättare mineraler i områden på lägre nivå.",
+["Higher poison skill allows more powerful poisons to be crafted. Reagents can be purchased from poison vendors and shady dealers, then combined into deadly concoctions that rot, weaken, and wither foes."]="Högre giftkunskap gör att starkare gifter kan framställas. Material köps av giftförsäljare och skumma handlare och kombineras till dödliga brygder som ruttnar, försvagar och förtär fiender.",
+["Higher skill increases your chance to hit."]="Högre kunskap ökar din chans att träffa.",
+["Higher weapon skill increases your chance to hit."]="Högre vapenkunskap ökar din chans att träffa.",
+["Highest Alchemy skill"]="Högsta alkemikunskap",
+["Highest Blacksmithing skill"]="Högsta smideskunskap",
+["Highest Enchanting skill"]="Högsta förtrollningskunskap",
+["Highest Engineering skill"]="Högsta ingenjörskunskap",
+["Highest Herbalism skill"]="Högsta örtkunskap",
+["Highest Inscription skill"]="Högsta inskriptionskunskap",
+["Highest Leatherworking skill"]="Högsta lädersmideskunskap",
+["Highest Mining skill"]="Högsta gruvbrytningskunskap",
+["Highest Skinning skill"]="Högsta flåningskunskap",
+["Highest Tailoring skill"]="Högsta skrädderikunskap",
+["Inscriptions learned"]="Lärda inskriptioner",
+["Items disenchanted"]="Uttrullade föremål",
+["Largest heal cast"]="Största kastade läkning",
+["Largest heal received"]="Största mottagna läkning",
+["Largest hit dealt"]="Största utdelade träff",
+["Largest hit received"]="Största mottagna träff",
+["Leatherworking Patterns learned"]="Lärda lädersmidesmönster",
+["Led by Sylvanas Windrunner, the Forsaken have joined a tenuous alliance with the Horde and established this capital in the vast depths under the Ruins of Lordaeron."]="Under Sylvanas Windrunners ledning har de bortglömda ingått en skör allians med Horden och upprättat denna huvudstad i de djupa gångarna under Lordaerons ruiner.",
+["Legendary items acquired"]="Förvärvade legendariska föremål",
+["Mage Portals taken"]="Använda magikerportaler",
+["Mage portal taken most"]="Mest använda magikerportal",
+["Mana potions consumed"]="Konsumerade manadrycker",
+["Materials produced from disenchanting"]="Material utvunna vid uttrullning",
+["Mekgineer Thermaplugg kills (Gnomeregan)"]="Mekgineer Thermapluggs dräp (Gnomeregan)",
+["Most Horde factions at Exalted"]="Flest hordfraktioner på Upphöjd",
+["Most factions at Exalted"]="Flest fraktioner på Upphöjd",
+["Most factions at Honored or higher"]="Flest fraktioner på Ärad eller högre",
+["Most factions at Revered or higher"]="Flest fraktioner på Vördad eller högre",
+["Most gold ever owned"]="Flest guld någonsin i ägo",
+["Mounts owned"]="Ägda ridjur",
+["Mutanus the Devourer kills (Wailing Caverns)"]="Mutanus den Uppslukares dräp (Wailing Caverns)",
+["Nature:"]="Natur:",
+["Need rolls made on loot"]="Behovsslag på byte",
+["New Set"]="Ny uppsättning",
+["Number of hugs"]="Antal kramar",
+["Number of times hearthed"]="Antal hemteleporteringar",
+["Part of the Steamwheedle Cartel, this goblin city provides a neutral haven for those that wish to trade goods and services in the Barrens."]="En del av Ångvisslekartellen; denna goblinstad erbjuder en neutral tillflykt för den som vill handla med varor och tjänster i Kargmarkerna.",
+["Powderfuse"]="Krutstubinen",
+["Professions at maximum skill"]="Yrken på maxfärdighet",
+["Professions learned"]="Lärda yrken",
+["Quests abandoned"]="Övergivna uppdrag",
+["Quests completed"]="Fullbordade uppdrag",
+["Rath'mael Kills (Ruins of Lordaeron)"]="Rath'mael-dräp (Ruins of Lordaeron)",
+["Rebirthed by druids"]="Pånyttfödda av druiderna",
+["Redeemed by paladins"]="Förlossade av paladiner",
+["Resurrected by priests"]="Återupplivade av präster",
+["Resurrected by soulstones"]="Återupplivade av själstenar",
+["Revived by druids"]="Återväckta av druiderna",
+["Secondary skills at maximum skill"]="Sekundära färdigheter på maxfärdighet",
+["Select a currency to view its details."]="Välj en valuta för att se dess detaljer.",
+["Smelting Recipes learned"]="Lärda smältningsrecept",
+["Spirit returned to body by shamans"]="Andar återförda till kroppen av schamaner",
+["Summons accepted"]="Antagna framkallningar",
+["Tailoring Patterns learned"]="Lärda skrädderimönster",
+["The Earthen Ring is a loose collective of Horde-aligned shamans and druids who seek to maintain and nurture the balance of nature on Azeroth."]="Jordringen är en lös sammanslutning av hordvänliga schamaner och drudier som söker bevara och vårda naturens balans på Azeroth.",
+["This booming coastal city is run by Baron Revilgaz of the Blackwater Raiders.  Mortal enemies of the Bloodsail Buccaneers and part of the Steamwheedle Cartel."]="Den här blomstrande kuststaden drivs av baron Revilgaz från Blackwaters pirater. Dödsfiender till Blodssegelfribytarna och en del av Ångvisslekartellen.",
+["Total 10-player raids entered"]="Totalt besökta 10-mans rais",
+["Total 20-player raids entered"]="Totalt besökta 20-mans rais",
+["Total 40-player raids entered"]="Totalt besökta 40-mans rais",
+["Total 5-player dungeons entered"]="Totalt besökta 5-mans instanser",
+["Total Honorable Kills"]="Totalt antal ärorika dråp",
+["Total Killing Blows"]="Totalt antal dödande slag",
+["Total cheers"]="Totalt antal hejarop",
+["Total damage done"]="Totalt utdelad skada",
+["Total damage received"]="Totalt mottagen skada",
+["Total deaths"]="Totalt dödsfall",
+["Total deaths from opposite faction"]="Totalt dödsfall orsakade av motståndarsidan",
+["Total deaths from other players"]="Totalt dödsfall orsakade av andra spelare",
+["Total deaths in 10-player raids"]="Totalt dödsfall i 10-mans rais",
+["Total deaths in 20-player raids"]="Totalt dödsfall i 20-mans rais",
+["Total deaths in 40-player raids"]="Totalt dödsfall i 40-mans rais",
+["Total deaths in 5-player dungeons"]="Totalt dödsfall i 5-mans instanser",
+["Total facepalms"]="Totala facepalms",
+["Total factions encountered"]="Totalt antal påträffade fraktioner",
+["Total healing done"]="Totalt utdelad läkning",
+["Total healing received"]="Totalt mottagen läkning",
+["Total kills"]="Totalt antal dräp",
+["Total kills that grant experience or honor"]="Totalt antal dräp som ger erfarenhet eller ära",
+["Total raid and dungeon deaths"]="Totalt dödsfall i instanser och rais",
+["Total times LOL'd"]="Totalt antal LOL",
+["Total times playing world's smallest violin"]="Antal gånger världens minsta fiol spelats",
+["Total waves"]="Totalt antal vågor",
+["Vanity pets owned"]="Ägda sällskapsdjur",
+["Warsong Gulch Honorable Kills"]="Ärorika dråp i Warsong Gulch",
+["Warsong Gulch Killing Blows"]="Dödande slag i Warsong Gulch",
+["Warsong Gulch battles"]="Strider i Warsong Gulch",
+["Warsong Gulch flags captured"]="Erövrade flaggor i Warsong Gulch",
+["Warsong Gulch flags returned"]="Återförda flaggor i Warsong Gulch",
+["Warsong Gulch victories"]="Segrar i Warsong Gulch",
+["Weapon skills at maximum skill"]="Vapenfärdigheter på maxfärdighet",
+["World Honorable Kills"]="Ärorika dråp i omvärlden",
+["World Killing Blows"]="Dödande slag i omvärlden",
+
+---------------------------------------------------------------------------
+-- Karaktärssidan: utrustningshanteraren (flikknapp)
+---------------------------------------------------------------------------
+["Equipment Manager"]="Utrustningshanteraren",
+["Equip"]="Utrusta",
+["Save"]="Spara",
+["A strong arm of the Steamwheedle Cartel, this port is home to seafaring sailors and back-alley dealers spanning the eastern sea trading routes."]="Som en stark arm av Ångvisslekartellen är denna hamn hem för sjöfolk och bakgatshandlare som spänner över de östra sjöhandelsrutterna.",
+["Continent with the most Honorable Kills"]="Världsdel med flest ärorika dråp",
+["Continent with the most Killing Blows"]="Världsdel med flest dödande slag",
+["Cooking Recipes known"]="Kända matlagningsrecept",
+["Cooking daily quests completed"]="Fullbordade matlagningsdaguppdrag",
+["Cooking skill"]="Matlagningsfärdighet",
+["Creature type killed the most"]="Oftast dräpt varelsestyp",
+["Creatures killed"]="Dräpta varelser",
+["Critters killed"]="Dräpta smådjur",
+["Dalaran Cooking Awards gained"]="Förvärvade matlagningsutmärkelser från Dalaran",
+["Founded by Thrall, this Horde capital city is home to many of the proud orc clans of Durotar."]="Denna hordhuvudstad grundades av Thrall och är hem för många av Durotars stolta orkklaner.",
+["Aku'mai kills (Blackfathom Deeps)"]="Aku'mai-dräp (Blackfathom Deeps)",
+["Alchemy Recipes learned"]="Lärda alkemirecept",
+["Allows the wearing of cloth armor."]="Ger tillstånd att bära tygrustning.",
+["Allows the wearing of leather armor."]="Ger tillstånd att bära läderrustning.",
+["Healthstones used"]="Använda hälsostensar",
+["Darkspear Islands Honorable Kills"]="Ärorika dråp på Darkspearöarna",
+["Darkspear Islands Killing Blows"]="Dödande slag på Darkspearöarna",
+["Darkspear Islands bases assaulted"]="Angripna baser på Darkspearöarna",
+["Darkspear Islands bases defended"]="Försvarade baser på Darkspearöarna",
+["Darkspear Islands battles"]="Strider på Darkspearöarna",
+["Darkspear Islands flags captured"]="Erövrade flaggor på Darkspearöarna",
+["Darkspear Islands victories"]="Segrar på Darkspearöarna",
+---------------------------------------------------------------------------
+-- [2026-11-18] dump-2026-11-16 / dump-2027-11-17_1 (identiska filer): koordinatrad,
+-- uppdragsspårare, kartzoner, uppdragslogg med nivåprefix och fiskenivåer.
+-- Formatposter (%s) fångar tal/färgkoder oförändrade i samma ordning.
+---------------------------------------------------------------------------
+["Cursor: %s X, %s Y  |  Player: %s X , %s Y"]="Markör: %s X, %s Y  |  Spelare: %s X , %s Y",
+["Cursor: ---"]="Markör: ---",
+["Player"]="Spelare",
+["City of Dalaran"]="Staden Dalaran",
+["%s/%s Boulderfist Enforcer slain"]="%s/%s Boulderfist-ordningsvakt dräpt",
+["%s/%s Jungle Stalker slain"]="%s/%s Djungellurpassare dräpt",
+["%s/%s Mosh'Ogg Brute slain"]="%s/%s Mosh'Ogg-råskinn dräpt",
+["%s/%s Stranglethorn Tiger slain"]="%s/%s Strypetörnstiger dräpt",
+["%s/%s Mosh'Ogg Witch Doctor slain"]="%s/%s Mosh'Ogg-häxdoktor dräpt",
+["%s/%s Carnivorous Weed slain"]="%s/%s Köttätande växt dräpt",
+["%s/%s Boulderfist Ogre slain"]="%s/%s Boulderfist-oger dräpt",
+["Blasted Lands |c%s(%s)|r"]="Sprängda landen |c%s(%s)|r",
+["Darkshore |c%s(%s)|r"]="Mörkstranden |c%s(%s)|r",
+["Duskwood |c%s(%s)|r"]="Skymningsskogen |c%s(%s)|r",
+["Dustwallow Marsh |c%s(%s)|r"]="Dammträsket |c%s(%s)|r",
+["Felwood |c%s(%s)|r"]="Fördärvsskogen |c%s(%s)|r",
+["Hillsbrad Foothills |c%s(%s)|r"]="Hillsbrads förberg |c%s(%s)|r",
+["Stranglethorn Vale |c%s(%s)|r"]="Strypetörnsdalen |c%s(%s)|r",
+["|c%sFishing %d|r"]="|c%sFiske %d|r",
+["[%s] The Hammer May Fall"]="[%s] Hammaren kan falla",
+["[%s] The Kolkar of Desolace"]="[%s] Kolkar i Ödelandet",
+["[%s] Helcular's Revenge"]="[%s] Helculars hämnd",
+["[%s] Key to the City"]="[%s] Nyckeln till staden",
+["[%s] Panther Mastery"]="[%s] Pantermästerskap",
+["[%s] Prison Break In"]="[%s] Inbrott i fängelset",
+["[%s] Stone Tokens"]="[%s] Stentokens",
+["[%s] Tiger Mastery"]="[%s] Tigerbehärskning",
+["[%s] Encrusted Tail Fins"]="[%s] Inkrusterade stjärtfenor",
+["[%s] Family Tree"]="[%s] Släktträd",
+["[%s] Martek the Exiled"]="[%s] Martek den landsförvisade",
+["[%s] The Vile Reef"]="[%s] Det vidriga revet",
+["[%s] Goblin Sponsorship"]="[%s] Goblinsponsring",
+["[%s] The Defense of Grom'gol"]="[%s] Försvaret av Grom'gol",
+["[%s] Mok'thardin's Enchantment"]="[%s] Mok'thardins förtrollning",
+["[%s] Weed Whacked"]="[%s] Ogräsröjt",
+["[%s] Bloodscalp Clan Heads"]="[%s] Blodskalpklanens huvuden",
+["[%s] Raptor Mastery"]="[%s] Raptormästerskap",
+["Bring Fizzle's Letter to Martek the Exiled in the Badlands."]="För Fizzles brev till Martek den landsförvisade i Ofärdsmarken.",
+["Deliver Cliffwatcher Longhorn Report to Nataka Longhorn at Ghost Walker Post in Desolace."]="Lämna Klippvaktslånghornsrapport till Nataka Longhorn vid Spökvandrarposten i Ödelandet.",
+["Speak with Felgur Twocuts at Ghost Walker Post in Desolace."]="Tala med Felgur Twocuts vid Spökvandrarposten i Ödelandet.",
+["Speak with Wharfmaster Lozgil in Booty Bay."]="Tala med hamnmästare Lozgil i Bytesbukten.",
+["Travel to Hammerfall in the Arathi Highlands and speak with Zengu."]="Res till Hammarfall i Arathihöglandet och tala med Zengu.",
+["Light the Sacred Fire of Life"]="Tänd Livets heliga eld",
 }

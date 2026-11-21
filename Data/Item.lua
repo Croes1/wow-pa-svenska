@@ -1,4 +1,6 @@
--- Genererad av pipeline/vak.py build. Redigera inte för hand: använd pipeline/overrides.csv.
+-- Föremål (WPS.L.item), nycklade på föremåls-id. Filen underhålls direkt och är addonets
+-- källdata: redigera den här. Fält: n = namn, d = beskrivning, h = WPS.Hash av den engelska
+-- beskrivningsraden (så att Tooltips.lua hittar rätt rad att byta ut).
 local _, WPS = ...
 WPS.L.item = {
 [25]={n="Slitet kortsvärd"},

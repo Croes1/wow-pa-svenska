@@ -10,16 +10,13 @@
 Core.lua
 Template.lua
 Data\Quest.lua
-Data\QuestExtra.lua
 Data\Item.lua
 Data\Spell.lua
 Data\Gossip.lua
 Data\Npc.lua
-Data\NpcExtra.lua
 Data\Zone.lua
 Data\Glossary.lua
 Data\Ui.lua
-Data\UiExtra.lua
 Quest.lua
 Tooltips.lua
 Chat.lua

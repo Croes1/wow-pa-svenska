@@ -36,7 +36,7 @@ function WPS.Print(...)
 	print("|cff33ff99WPS|r:", ...)
 end
 
--- Samma hashfunktion som pipeline/vak.py (lua_hash) och collectorn.
+-- djb2. Samma hash ger nycklarna i Data/Gossip.lua (se Key i GossipText.lua).
 function WPS.Hash(s)
 	local h = 5381
 	for i = 1, #s do

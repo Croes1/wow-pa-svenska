@@ -4,7 +4,6 @@
 import contextlib
 import importlib.util
 import io
-import os
 import subprocess
 import sys
 import tempfile
@@ -38,19 +37,18 @@ class ExtendedBatchTest(unittest.TestCase):
     def test_selector_creates_gameobject_and_pagetext_worklists(self):
         selector = load_script("select_untranslated", "select-untranslated.py")
         data_dir = self.root / "Data"
-        out_dir = self.root / "translation" / "untranslated"
-        write(data_dir / "Quest.lua", "[1]={t=\"Old quest\"},\n")
-        write(data_dir / "Npc.lua", "[10]=\"Old NPC\",\n")
+        work = self.root / "work"
+        out_dir = work / "untranslated"
+        write(data_dir / "Quest.lua", "local _, WPS = ...\nWPS.L.quest = {\n[1]={t=\"Old quest\"},\n}\n")
+        write(data_dir / "Npc.lua", "local _, WPS = ...\nWPS.L.npc = {\n[10]=\"Old NPC\",\n}\n")
         quest = write(self.root / "quest.tsv", "id\ttext\n1\tOld quest\n2\tNew quest\n")
         npc = write(self.root / "npc.tsv", "id\tname\ttitle\n10\tOld NPC\t\n11\tNew NPC\tGuard\n")
         gameobject = write(self.root / "gameobject.tsv", "id\tname\textra\n20\tOld Iron Gate\t\n")
         pagetext = write(self.root / "pagetext.tsv", "id\ttext\n2013\tA book page.\n")
 
-        with patch.object(selector, "ROOT", str(self.root)), \
-             patch.object(selector, "OUT", str(out_dir)), \
-             patch.object(selector.sys, "argv", ["select-untranslated.py", str(quest), str(npc), str(gameobject), str(pagetext)]), \
-             contextlib.redirect_stdout(io.StringIO()):
-            selector.main()
+        with contextlib.redirect_stdout(io.StringIO()):
+            selector.main([str(quest), str(npc), str(gameobject), str(pagetext),
+                           "--work-dir", str(work), "--data-dir", str(data_dir)])
 
         self.assertEqual((out_dir / "quests-001.tsv").read_text(encoding="utf-8"),
                          "id\ttext\n2\tNew quest\n")
@@ -63,9 +61,9 @@ class ExtendedBatchTest(unittest.TestCase):
 
     def test_batch_generator_reads_optional_worklists(self):
         generator = load_script("make_batches", "make-batches.py")
-        source = self.root / "translation"
-        worklists = source / "untranslated"
-        output = source / "batches"
+        work = self.root / "work"
+        worklists = work / "untranslated"
+        output = work / "batches"
         write(worklists / "quests-001.tsv", "id\ttext\n1\tQuest\n")
         write(worklists / "npcs-001.tsv", "id\tname\ttitle\n2\tNPC\t\n")
         write(worklists / "gameobjects-001.tsv",
@@ -75,13 +73,10 @@ class ExtendedBatchTest(unittest.TestCase):
         write(worklists / "pagetext-001.tsv",
               "id\ttext\n20\tPage one.\n21\tPage two.\n")
 
-        with patch.object(generator, "SRC", str(source)), \
-             patch.object(generator, "UNTRANSLATED", str(worklists)), \
-             patch.object(generator, "OUT", str(output)), \
-             patch.object(generator, "GAMEOBJECT_BATCH", 2), \
+        with patch.object(generator, "GAMEOBJECT_BATCH", 2), \
              patch.object(generator, "PAGETEXT_BATCH", 1), \
              contextlib.redirect_stdout(io.StringIO()):
-            generator.main()
+            self.assertEqual(generator.main(["--work-dir", str(work)]), 0)
 
         self.assertTrue((output / "gameobjects-batch-01.tsv").exists())
         self.assertEqual((output / "gameobjects-batch-01.tsv").read_text(encoding="utf-8"),

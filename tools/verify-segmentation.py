@@ -2,14 +2,17 @@
 # -*- coding: utf-8 -*-
 """
 tools/verify-segmentation.py - deterministisk kontroll av den engelska
-segmenteringsfilen (Task A i translation/PROMPT-GEMMA.md).
+segmenteringsfilen (steg A: segmenteringen, se CONTRIBUTING.md).
 
-Anvandning:
+Anvandning (explicita sokvagar; ingen hardkodad katalog):
   python3 tools/verify-segmentation.py <kalla-batch-tsv> <segmenterad-en-tsv> [review-tsv]
+
+Enda fil som skrivs ar review-filen, och bara om nagon rad ruttas dit. Utan
+tredje argumentet hamnar den i review/ bredvid kallfilen (i arbetskatalogen).
 
 Regeln: de fem faltene title+objectives+description+progress+reward,
 sammanfogade utan mellanrum, ska vara EN exakt partition av kalltexten.
-Enda normalisering som ar tillaten (dokumenterad i PROMPT-GEMMA.md):
+Enda normalisering som ar tillaten (dokumenterad i CONTRIBUTING.md):
 kallradens inledande och avslutande blanka tecken far tappas (t.ex.
 mellanslaget fore titeln i " WANTED: ..."). Allt annat gar byte for byte:
 inga ord far tillkomma, forsvinna, ordnas om eller fa nytt mellanrum.

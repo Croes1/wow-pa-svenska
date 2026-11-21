@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-tools/validate-batch.py - strukturell kontroll av en Gemma-omgang innan
+tools/validate-batch.py - strukturell kontroll av en oversatt omgang innan
 den salls in.
 
-Anvandning:
+Anvandning (alla sokvagar ar explicita; verktyget laser bara och skriver ingenting):
   python3 tools/validate-batch.py <in-tsv> <ut-tsv> quests
   python3 tools/validate-batch.py <in-tsv> <ut-tsv> npcs
 
@@ -30,7 +30,7 @@ FEL (exit 1):
 VARNINGAR (exit 0, mansklig titt):
   - tom titel; legitimt for ofullstandiga kallposter (t.ex. 93429/98070 i
     quests-batch-01/14). Segmenteringssteget ruttar sadana poster till
-    translation/review/ via tools/verify-segmentation.py
+    review-mappen i arbetskatalogen via tools/verify-segmentation.py
   - utdatafalt identiskt med engelskan (promptens oforandrad-fallback)
   - npcs: namn oforandrat (personnamn SKA lamnas orandrade; varningen
     finns for att beskrivande namn inte ska smyga forbi)
