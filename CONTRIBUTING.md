@@ -174,7 +174,7 @@ Remove completed work from `$WORK` only after the merged translations are commit
 ["Carnage"]="Carnage", -- wps:skillnad creature name, kept English; the spell is "Blodbad"
 ```
 
-The marker is `wps:skillnad` (Swedish for "difference") followed by a reason. The reason is required: a marker without one is itself a warning and silences nothing. It silences the warning for that English term, whatever the case, wherever its entries are, so one marker is enough. The marker only has effect on entries with an English text as key (the `names_*` tables, `zone`, `ui` and `qtext`), not on the id-keyed tables or `gossip`. List all markers with `python3 tools/check-data.py search skillnad --lang comment`.
+The marker is `wps:skillnad` followed by a reason. The reason is required: a marker without one is itself a warning and silences nothing. It silences the warning for that English term, whatever the case, wherever its entries are, so one marker is enough. The marker only has effect on entries with an English text as key (the `names_*` tables, `zone`, `ui` and `qtext`), not on the id-keyed tables or `gossip`. List all markers with `python3 tools/check-data.py search skillnad --lang comment`.
 
 ### Translation guidelines
 
