@@ -16,6 +16,17 @@ The easiest way to report an incorrect translation is in-game:
 
 Include a short explanation of what you think the correct translation should be.
 
+For tooltip problems that a single report cannot show (text that flickers between English and Swedish, lines that are translated only sometimes), turn on the tooltip log: `/wps tipdebug on`, hover the item or spell for a few seconds, then `/reload` and attach the same file. The log is in `WPSDB.tipLog`, one line per event:
+
+| Line | Meaning |
+|---|---|
+| `post item <tooltip> id=… <result> \| <name before> -> <name after>` | The game rebuilt the tooltip and the addon's post-call ran; `<result>` says what it did (`done`, `name-fallback`, `skip:…`) |
+| `dlines` / `dline` | The lines the game built the tooltip from (`data.lines`) next to what the tooltip shows; listed in full once per item or spell |
+| `frame L3 <old> -> <new>` | A tooltip line (`L` left, `R` right) changed text in that frame |
+| `walk-set <line> <en> -> <sv>` | The 0.2 s UI walk (`UI.lua`) translated a line |
+
+Logging switches itself off at every login; `/wps tipdebug off` stops it earlier.
+
 You can also open an issue directly on GitHub.
 
 ## Collecting missing game text

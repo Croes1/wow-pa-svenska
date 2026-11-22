@@ -54,6 +54,31 @@ end
 
 local Translate
 
+-- "Rogue, Druid" (argument i "Classes: %s"): översätts del för del, men bara om alla delar har en
+-- översättning. Annars lämnas listan orörd hellre än att blanda språk.
+local function TranslateList(text, depth)
+	if not text:find(", ", 1, true) then return nil end
+	local out = {}
+	for part in (text .. ", "):gmatch("(.-), ") do
+		local sv = Translate(part, depth)
+		if not sv then return nil end
+		out[#out + 1] = sv
+	end
+	return table.concat(out, ", ")
+end
+
+-- Rutan "Avstånd i meter": "30 yd" blir "27 m" (1 yard = 0,9144 meter). Under 10 meter med en
+-- decimal och decimalkomma ("4,6 m"), annars avrundat till heltal.
+local function ToMeters(s)
+	return (s:gsub("([%d%.]+) yd", function(n)
+		local v = tonumber(n)
+		if not v then return nil end
+		local m = v * 0.9144
+		if m >= 10 then return ("%d m"):format(math.floor(m + 0.5)) end
+		return (("%.1f"):format(m):gsub("%.", ","):gsub(",0$", "")) .. " m"
+	end))
+end
+
 local function TranslatePlain(text, depth)
 	local sv = Name(text)
 	if sv then return sv end
@@ -103,9 +128,11 @@ local function TranslatePlain(text, depth)
 			-- Argumenten översätts också: "Pass on Loot: No", "Level 27 |cff..Hunter|r", "%s (Complete)".
 			for i, n in ipairs(f.order) do
 				local a = caps[i]
-				args[n] = (depth < 2 and Translate(a, depth + 1)) or a
+				args[n] = (depth < 2 and (Translate(a, depth + 1) or TranslateList(a, depth + 1))) or a
 			end
-			return Fill(f.sv, args)
+			local out = Fill(f.sv, args)
+			if WPS.On("meters") then out = ToMeters(out) end
+			return out
 		end
 	end
 end
@@ -129,6 +156,10 @@ local function Apply(fs)
 	if isSecret(text) or type(text) ~= "string" or text == "" then return end
 	local sv = Translate(text)
 	if sv and sv ~= text then
+		if WPS.TipLog and WPS.db and WPS.db.tipDebug then
+			local n = fs.GetName and fs:GetName()
+			if n and n:find("^GameTooltipText") then WPS.TipLog("walk-set", n, text, "->", sv) end
+		end
 		fs:SetText(sv)
 		WPS.Remember("ui", { en = text, sv = sv })
 	end
@@ -141,8 +172,15 @@ end
 local hookedFS = setmetatable({}, { __mode = "k" })
 local busy = false
 
+-- Item- och spelltooltips översätts i Tooltips.lua (TranslateDataLines). Där ska genomgången inte röra
+-- något: den skulle bara kunna översätta andra addons rader, och de ska vara kvar på engelska.
+local function Handled(frame)
+	return frame and WPS.tooltipHandled and WPS.tooltipHandled[frame]
+end
+
 local function AfterSetText(fs)
 	if busy or not WPS.On("ui") then return end
+	if Handled(fs.GetParent and fs:GetParent()) then return end
 	busy = true
 	pcall(Apply, fs)
 	busy = false
@@ -173,7 +211,7 @@ local function Walk(frame, depth)
 end
 
 local function SafeWalk(frame)
-	if WPS.On("ui") then pcall(Walk, frame, 0) end
+	if WPS.On("ui") and not Handled(frame) then pcall(Walk, frame, 0) end
 end
 
 ---------------------------------------------------------------------------

@@ -7,7 +7,7 @@ local function Status()
 	for _, c in ipairs(WPS.CATEGORIES) do
 		WPS.Print(("  %s: %s – %s"):format(c.key, WPS.db[c.key] and "|cff00ff00på|r" or "|cffff4444av|r", c.label))
 	end
-	WPS.Print("Kommandon: /wps (öppna panelen), /wps orig (växla original/svenska), /wps diag, /wps status, /wps fel <kommentar>, /wps dump (samla engelska texter)")
+	WPS.Print("Kommandon: /wps (öppna panelen), /wps orig (växla original/svenska), /wps diag, /wps status, /wps fel <kommentar>, /wps dump (samla engelska texter), /wps tipdebug on|off (logg för felsökning av tooltips)")
 	WPS.Print("Tips: håll Alt över en tooltip för engelskan. Bind en tangent under Alternativ > Tangentbindningar > AddOns.")
 end
 
@@ -119,7 +119,9 @@ local function RefreshPanel()
 end
 
 local function SetAll(on)
-	for _, c in ipairs(WPS.CATEGORIES) do WPS.db[c.key] = on end
+	for _, c in ipairs(WPS.CATEGORIES) do
+		if not c.noall then WPS.db[c.key] = on end
+	end
 	RefreshPanel()
 end
 
@@ -226,6 +228,18 @@ SlashCmdList.WPS = function(msg)
 		Diag()
 	elseif cmd == "dump" then
 		Dump(arg)
+	elseif cmd == "tipdebug" then
+		-- Tooltiploggen (Tooltips.lua) till WPSDB.tipLog. on rensar den gamla loggen.
+		if arg == "on" then
+			WPS.db.tipDebug, WPS.db.tipLog = true, {}
+			WPS.Print("tipdebug: |cff00ff00på|r (loggen rensad). Håll muspekaren över det som blir fel några sekunder, skriv sedan /reload och skicka wow_pa_svenska.lua (WTF/Account/<konto>/SavedVariables).")
+		elseif arg == "off" then
+			WPS.db.tipDebug = nil
+			WPS.Print("tipdebug: |cffff4444av|r. Loggen ligger kvar tills nästa /wps tipdebug on; /reload sparar den.")
+		else
+			WPS.Print(("tipdebug: %s, %d rader i loggen. /wps tipdebug on|off"):format(
+				WPS.db.tipDebug and "|cff00ff00på|r" or "|cffff4444av|r", WPS.db.tipLog and #WPS.db.tipLog or 0))
+		end
 	elseif WPS.db[cmd] ~= nil then
 		if arg == "on" or arg == "off" then
 			WPS.db[cmd] = arg == "on"

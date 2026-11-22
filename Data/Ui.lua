@@ -800,4 +800,82 @@ WPS.L.ui = {
 ["Group Settings"]="Gruppinställningar",
 ["Guild Settings"]="Gilleinställningar",
 ["Show Offline Members"]="Visa medlemmar som är offline",
+
+---------------------------------------------------------------------------
+-- Tooltips: Blizzards egna rader i föremåls- och besvärjelsetooltips. Översätts i samma
+-- bildruta som spelet bygger tooltipen (TranslateDataLines i Tooltips.lua).
+-- Main Hand, Off Hand, Ranged, Thrown och vapentyperna i plural finns redan ovan;
+-- Shirt, Cloth, Leather, Mail, Shield, Sword, Mace och Fishing Pole i Data/Glossary.lua.
+-- "Cooldown" saknas medvetet: nedkylning eller återhämtning är inte beslutat.
+---------------------------------------------------------------------------
+-- Platser
+["Head"]="Huvud",
+["Neck"]="Hals",
+["Shoulder"]="Axlar",
+["Back"]="Rygg",
+["Chest"]="Bröst",
+["Wrist"]="Handleder",
+["Hands"]="Händer",
+["Waist"]="Midja",
+["Legs"]="Ben",
+["Feet"]="Fötter",
+["Finger"]="Finger",
+["Trinket"]="Smycke",
+["One-Hand"]="Enhand",
+["Two-Hand"]="Tvåhand",
+["Held In Off-hand"]="Bihand",
+-- Vapen- och rustningstyper (singular)
+["Axe"]="Yxa",
+["Dagger"]="Dolk",
+["Staff"]="Stav",
+["Bow"]="Båge",
+["Gun"]="Gevär",
+["Crossbow"]="Armborst",
+["Wand"]="Trollstav",
+["Polearm"]="Stångvapen",
+["Fist Weapon"]="Knytnävsvapen",
+["Plate"]="Plåt",
+-- Bindning och övrigt
+["Soulbound"]="Själsbunden",
+["Binds when picked up"]="Binder vid upptagning",
+["Binds when equipped"]="Binder vid användning",
+["Unique"]="Unik",
+["Unique-Equipped"]="Unik att bära",
+["Quest Item"]="Uppdragsföremål",
+["<Right Click to Read>"]="<Högerklicka för att läsa>",
+-- Rader med tal
+["Requires Level %d"]="Kräver nivå %d",
+["Requires %s (%d)"]="Kräver %s (%d)",
+["Classes: %s"]="Klasser: %s",
+["Durability %d / %d"]="Hållbarhet %d / %d",
+["%d Armor"]="%d rustning",
+["+%d Agility"]="+%d smidighet",
+["+%d Stamina"]="+%d uthållighet",
+["+%d Strength"]="+%d styrka",
+["+%d Intellect"]="+%d intellekt",
+["+%d Spirit"]="+%d ande",
+["+%d Fire Resistance"]="+%d eldmotstånd",
+["+%d Frost Resistance"]="+%d frostmotstånd",
+["+%d Nature Resistance"]="+%d naturmotstånd",
+["+%d Shadow Resistance"]="+%d skuggmotstånd",
+["+%d Arcane Resistance"]="+%d arkanmotstånd",
+["%s - %s Damage"]="%s - %s skada",
+["Speed %s"]="Hastighet %s",
+["(%s damage per second)"]="(%s skada per sekund)",
+["Equipment Sets: %s"]="Utrustningsset: %s",
+["%d Charges"]="%d laddningar",
+["%d Charge"]="%d laddning",
+-- Effekter när föremålet bärs ("Equip:" = "När utrustad:")
+["Equip: +%d Attack Power."]="När utrustad: +%d attackkraft.",
+["Equip: +%d Attack Power against Demons."]="När utrustad: +%d attackkraft mot demoner.",
+["Equip: Improves your chance to hit by %s%%."]="När utrustad: Ökar din träffchans med %s %%.",
+["Equip: Increased Defense +%d."]="När utrustad: Ökat försvar +%d.",
+["Equip: Adds %d Frost damage to your melee attacks."]="När utrustad: Lägger till %d frostskada på dina närstridsattacker.",
+-- Besvärjelser. Räckvidden räknas om till meter om rutan "Avstånd i meter" är ikryssad (UI.lua).
+["Instant"]="Omedelbar",
+["Melee Range"]="Närstridsavstånd",
+["%s yd range"]="%s yd räckvidd",
+["%d Energy"]="%d energi",
+["%d Mana"]="%d mana",
+["%d Rage"]="%d raseri",
 }

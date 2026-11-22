@@ -17,7 +17,7 @@ function WPS.Remember(slot, data)
 	WPS.last[slot] = data
 end
 
-local DEFAULTS = { quest = true, gossip = true, item = true, spell = true, npc = true, zone = true, chat = true, ui = true, uimenu = true }
+local DEFAULTS = { quest = true, gossip = true, item = true, spell = true, npc = true, zone = true, chat = true, ui = true, uimenu = true, meters = false }
 
 -- Rutorna i inställningspanelen (Options.lua) och /wps <namn> on|off. group styr rubriken i panelen.
 WPS.CATEGORIES = {
@@ -30,6 +30,8 @@ WPS.CATEGORIES = {
 	{ key = "chat", group = "Gränssnitt", label = "Systemmeddelanden i chatten", desc = "Byte, anseende, erfarenhet och liknande" },
 	{ key = "ui", group = "Gränssnitt", label = "Fönster och knappar", desc = "Rollfigurspanel, inställningar, spelmeny, karta och andra Blizzard-fönster" },
 	{ key = "uimenu", group = "Gränssnitt", label = "Högerklicksmenyer", desc = "Menyerna på porträtt och i grupp- och vänlistan" },
+	-- Inte en översättningskategori utan ett val; "Allt på/av" i panelen rör den inte (noall).
+	{ key = "meters", group = "Gränssnitt", label = "Avstånd i meter", desc = "Räckvidd i tooltips räknas om från yards till meter (30 yd blir 27 m)", noall = true },
 }
 
 function WPS.Print(...)
@@ -75,6 +77,7 @@ local function OnEvent(_, event, name)
 		WPSDB = WPSDB or {}
 		-- Dialog följde förr rutan för uppdrag: behåll spelarens val när den nya rutan dyker upp.
 		if WPSDB.gossip == nil and WPSDB.quest ~= nil then WPSDB.gossip = WPSDB.quest end
+		WPSDB.tipDebug = nil -- felsökningen slås på för hand varje session; loggen (tipLog) ligger kvar
 		WPSDB.origLine = nil -- rutan finns inte längre (raden gav taint och togs bort)
 		for k, v in pairs(DEFAULTS) do
 			if WPSDB[k] == nil then WPSDB[k] = v end
