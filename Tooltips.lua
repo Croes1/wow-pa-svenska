@@ -351,6 +351,30 @@ WPS.OnLogin(function()
 		prev = cur
 	end)
 
+	-- Rader som Blizzard lägger till EFTER post-anropen (t.ex. "<Right click for Frame Settings>" på
+	-- porträttens tooltip) finns inte i data.lines och skulle annars bara översättas av UI-genomgången,
+	-- som kommer några bildrutor senare: det blinkar. Bara texterna i EXTRA översätts här, så att
+	-- andra addons rader inte rörs.
+	local EXTRA = { ["<Right click for Frame Settings>"] = true }
+	local function TranslateExtras(tip)
+		if not WPS.On("ui") or not WPS.UITranslate then return end
+		local name = tip:GetName()
+		for i = 1, tip:NumLines() do
+			local fs = _G[name .. "TextLeft" .. i]
+			local text = fs and fs:GetText()
+			if text and not isSecret(text) and EXTRA[text] then
+				local sv = WPS.UITranslate(text)
+				if sv then fs:SetText(sv) end
+			end
+		end
+	end
+	for _, tip in ipairs({ GameTooltip, ItemRefTooltip }) do
+		if tip then
+			pcall(hooksecurefunc, tip, "AddLine", function(self) pcall(TranslateExtras, self) end)
+			pcall(hooksecurefunc, tip, "Show", function(self) pcall(TranslateExtras, self) end)
+		end
+	end
+
 	-- Flaggan från TranslateDataLines gäller bara innehållet den sattes för.
 	for _, tip in ipairs({ GameTooltip, ItemRefTooltip }) do
 		if tip and tip.HookScript then

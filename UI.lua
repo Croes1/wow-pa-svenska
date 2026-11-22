@@ -189,8 +189,28 @@ local function HookFontString(fs)
 	pcall(hooksecurefunc, fs, "SetFormattedText", AfterSetText)
 end
 
+-- Knappar: Blizzard sätter knapptext med Button:SetText ("Create" i yrkesfönstret vid varje
+-- uppdatering). Det skriver knappens FontString inifrån klienten, så hooken på FontString:SetText ovan
+-- märker inget och bara genomgången hinner översätta: det blinkar. Därför hookas knappens egen SetText.
+local hookedButtons = setmetatable({}, { __mode = "k" })
+
+local function AfterButtonSetText(button)
+	local fs = button.GetFontString and button:GetFontString()
+	if fs then AfterSetText(fs) end
+end
+
+local function HookButton(frame)
+	if hookedButtons[frame] or not frame.GetFontString then return end
+	local kind = frame.GetObjectType and frame:GetObjectType()
+	if kind ~= "Button" and kind ~= "CheckButton" then return end
+	hookedButtons[frame] = true
+	pcall(hooksecurefunc, frame, "SetText", AfterButtonSetText)
+	pcall(hooksecurefunc, frame, "SetFormattedText", AfterButtonSetText)
+end
+
 local function Walk(frame, depth)
 	if (frame.IsForbidden and frame:IsForbidden()) or not frame:IsVisible() then return end
+	HookButton(frame)
 	for _, r in ipairs({ frame:GetRegions() }) do
 		if r:GetObjectType() == "FontString" and r:IsVisible() then
 			HookFontString(r)
