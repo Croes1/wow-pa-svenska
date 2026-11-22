@@ -112,6 +112,10 @@ local function OnEvent(_, event, name)
 			local ok, err = pcall(fn)
 			if not ok then WPS.Print("Fel vid start:", err) end
 		end
+		-- Versionen skrivs i chatten vid inloggning och /reload (PLAYER_LOGIN kommer vid båda).
+		local get = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
+		local version = get and get(ADDON, "Version") or "?"
+		WPS.Print(("version %s laddad. /wps öppnar inställningarna."):format(version))
 	end
 end
 
