@@ -147,6 +147,9 @@ function Translate(text, depth)
 end
 WPS.UITranslate = function(text) return Translate(text, 0) end
 
+-- Sätts när Apply bytt en text; HookGameTooltip läser den för att få tooltipen att mäta om sig.
+local textChanged = false
+
 local function Apply(fs)
 	local text = fs:GetText()
 	if isSecret(text) or type(text) ~= "string" or text == "" then return end
@@ -157,6 +160,7 @@ local function Apply(fs)
 			if n and n:find("^GameTooltipText") then WPS.TipLog("walk-set", n, text, "->", sv) end
 		end
 		fs:SetText(sv)
+		textChanged = true
 		WPS.Remember("ui", { en = text, sv = sv })
 	end
 end
@@ -300,13 +304,20 @@ end
 local function HookGameTooltip()
 	local f = GameTooltip
 	if not f or hooked.GameTooltip or not f.HookScript then return end
+	-- Tooltipens bredd räknas ut för den engelska texten innan vi byter den. Den svenska texten är ofta
+	-- längre ("Besvärjelsebok (P)") och klipps då med "...". Show() på en synlig tooltip mäter om den.
+	local function WalkTooltip(self)
+		textChanged = false
+		SafeWalk(self)
+		if textChanged and self:IsShown() then pcall(self.Show, self) end
+	end
 	local ok = pcall(function()
 		f:HookScript("OnShow", function(self)
-			SafeWalk(self)
+			WalkTooltip(self)
 			if tickers.GameTooltip then tickers.GameTooltip:Cancel() end
 			tickers.GameTooltip = C_Timer.NewTicker(INTERVAL, function()
 				if self:IsVisible() then
-					SafeWalk(self)
+					WalkTooltip(self)
 				elseif tickers.GameTooltip then
 					tickers.GameTooltip:Cancel()
 					tickers.GameTooltip = nil
