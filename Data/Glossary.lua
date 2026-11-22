@@ -62,6 +62,12 @@
 --  "Decreased X Cooldown" = "Minskad återhämtning för X", med besvärjelsens svenska namn.
 --  Avstånd: talen i besvärjelsetexterna är yards. Skriv "meter" efter talet som förut ("inom $a1 meter");
 --  addonet visar "yard", eller räknar om till meter när rutan "Avstånd i meter" är på (WPS.SpellDistances).
+--  Guild Master = gillemästare; group leader = gruppledare; Group Finder = Gruppsökare; Legacy = Arv
+--  (menyknappen; osäkert, granska); Character Info = Rollfigursinfo; Quest Log = Uppdragslogg.
+--  Rank i besvärjelser = rang (Rang 2, som "(rang 1)" i Spell.lua); PvP-grad = grad (ui["Rank"]).
+--  "Equip:" på föremål = "När utrustad:". Väskor = "Väska med N platser".
+--  Föremål med slumpad ändelse ("of the Bandit", "of Power") är inte översatta än: ändelserna
+--  behöver ett beslut först (gäller hundratals föremål).
 --  disenchant = bryta ner: spelnamnet är Nedbrytning (Nedbrytning (PT), Ökad nedbrytning),
 --  i UI "Nedbrutna föremål" och "Material utvunna vid nedbrytning".
 --
@@ -272,6 +278,7 @@ WPS.L.names_glossary_zone = {
 ["Grim Guzzler"]="Dystre drickaren",
 ["Grimtotem Post"]="Grimtotemposten",
 ["Grizzled Den"]="Gråsprängda lyan",
+["Grom'gol Base Camp"]="Grom'gol-baslägret",
 ["Grommash Hold"]="Grommashfästet",
 ["Grove of the Ancients"]="De fornas lund",
 ["Gunther's Retreat"]="Gunthers tillflykt",
@@ -843,6 +850,7 @@ WPS.L.names_glossary_item = {
 ["Ashbringer"]="Askbringaren",
 ["Bonescythe"]="Benlie",
 ["Cryptstalker"]="Kryptpirsare",
+["Dreadfrost Saber"]="Skräckfrostsabel", -- wps:skillnad the item is a sword (sabre); the spell of the same name is Skräckfrostlynx
 ["Dreadnaught"]="Skräckpansar",
 ["Dreamwalker"]="Drömvandrare",
 ["E'ko"]="E'ko",
@@ -9294,7 +9302,7 @@ WPS.L.names_spell = {
 ["On Fire!!"]="Eldspelad!!",
 ["On Thin Ice"]="På hal is",
 ["On the Move"]="På vägen",
-["One-Handed Axes"]="Enhandsetyxor",
+["One-Handed Axes"]="Enhandsyxor",
 ["One-Handed Maces"]="Enhands påkar",
 ["One-Handed Swords"]="Enhandsvärd",
 ["One-Handed Weapon Specialization"]="Specialisering i enhandsvapen",
@@ -14612,6 +14620,15 @@ WPS.L.names_spell = {
 ["wr"]="wr",
 }
 WPS.L.names_item = {
+["Demonstrike Emblem"]="Demonslagsemblem",
+["Dog Whistle"]="Hundvisselpipa",
+["Feet of the Lynx"]="Lodjurets fötter",
+["Heat Resistant Mitts"]="Värmetåliga vantar",
+["I'lalai Flayer"]="I'lalaiflåare",
+["Nogg's Gold Ring"]="Noggs guldring",
+["Oathbound Bracers"]="Edsbundna armskydd",
+["Tanned Shoulderpads"]="Garvade axelvaddar",
+["Triprunner Dungarees"]="Triprunner-snickarbyxor",
 ["\"Gold\""]="\"Guld\"",
 ["\"Mage-Eye\" Blunderbuss"]="Muskedundern \"Magiöga\"",
 ["\"Secret\" Bait"]="\"Hemligt\" agn",

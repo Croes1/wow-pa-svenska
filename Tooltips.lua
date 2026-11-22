@@ -229,19 +229,11 @@ local function OnUnit(tooltip, data)
 	if sv and line1 then
 		line1:SetText(sv)
 	end
-	-- Övriga rader: NPC-titel (<Innkeeper>), nivå och typ (Level 26, Beast), Skinnable, uppdrag och
-	-- målrader (5/8 Dragonmaw War Banner). Samma uppslag som gränssnittet (UI.lua).
-	local translate = WPS.UITranslate
-	if translate and name then
-		for i = 2, tooltip:NumLines() do
-			local fs = _G[name .. "TextLeft" .. i]
-			local text = fs and fs:GetText()
-			if text and not isSecret(text) and text ~= "" then
-				local t = translate(text)
-				if t and t ~= text then fs:SetText(t) end
-			end
-		end
-	end
+	-- Övriga rader: NPC-titel (<Innkeeper>), nivå och typ (Level 26, Beast), spelare (Level 38 Undead
+	-- (Player)), Skinnable, uppdrag och målrader (5/8 Dragonmaw War Banner). Bara Blizzards egna rader
+	-- (data.lines): andra addons rader, t.ex. Questies, lämnas på engelska. Samma uppslag som
+	-- gränssnittet (UI.lua).
+	pcall(TranslateDataLines, tooltip, data)
 	tooltip:Show()
 end
 
