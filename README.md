@@ -47,7 +47,7 @@ Några användbara kommandon:
 | `/wps status` | Visar aktiva översättningskategorier |
 | `/wps spell off` | Stänger av översättning av förmågor |
 | `/wps quest on` | Aktiverar uppdragsöversättning |
-| `/wps meters on` | Visar räckvidd i meter i stället för yards (av som standard) |
+| `/wps meters on` | Visar avstånd i meter i stället för yards (av som standard) |
 | `/wps diag` | Visar diagnostikinformation |
 | `/wps fel <kommentar>` | Rapporterar en felaktig översättning |
 | `/wps tipdebug on` / `off` | Loggar tooltips för felsökning (t.ex. text som blinkar) |

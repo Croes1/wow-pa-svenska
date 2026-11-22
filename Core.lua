@@ -31,7 +31,7 @@ WPS.CATEGORIES = {
 	{ key = "ui", group = "Gränssnitt", label = "Fönster och knappar", desc = "Rollfigurspanel, inställningar, spelmeny, karta och andra Blizzard-fönster" },
 	{ key = "uimenu", group = "Gränssnitt", label = "Högerklicksmenyer", desc = "Menyerna på porträtt och i grupp- och vänlistan" },
 	-- Inte en översättningskategori utan ett val; "Allt på/av" i panelen rör den inte (noall).
-	{ key = "meters", group = "Gränssnitt", label = "Avstånd i meter", desc = "Räckvidd i tooltips räknas om från yards till meter (30 yd blir 27 m)", noall = true },
+	{ key = "meters", group = "Gränssnitt", label = "Avstånd i meter", desc = "Avstånd räknas om från yards till meter (30 yards blir 27 m); annars visas yards", noall = true },
 }
 
 function WPS.Print(...)
@@ -70,6 +70,30 @@ function WPS.Name(text)
 			return nil -- namnet hör till en avstängd kategori: lämna engelskan
 		end
 	end
+end
+
+-- Avstånd. Spelet räknar i yards: talen i tooltips och besvärjelsetexter är alltid yards.
+-- Rutan "Avstånd i meter" räknar om talet (1 yard = 0,9144 m); annars står talet kvar och enheten
+-- är yard. Under 10 meter med en decimal och decimalkomma ("4,6"), annars avrundat till heltal.
+function WPS.Meters(yards)
+	local v = tonumber(yards)
+	if not v then return nil end
+	local m = v * 0.9144
+	if m >= 10 then return ("%d"):format(math.floor(m + 0.5)) end
+	return (("%.1f"):format(m):gsub("%.", ","):gsub(",0$", ""))
+end
+
+-- Besvärjelsetexterna i Data/Spell.lua skriver "inom $a1 meter", men talet som spelet fyller i är
+-- yards. Därför byts enheten mot yard, eller talet räknas om när rutan är ikryssad.
+function WPS.SpellDistances(s)
+	if type(s) ~= "string" then return s end
+	return (s:gsub("(%d[%d%.]*) meter", function(n)
+		if WPS.On("meters") then
+			local m = WPS.Meters(n)
+			return m and (m .. " meter")
+		end
+		return n .. " yard"
+	end))
 end
 
 local function OnEvent(_, event, name)

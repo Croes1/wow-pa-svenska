@@ -222,7 +222,7 @@ The marker is `wps:skillnad` followed by a reason. The reason is required: a mar
 
 - Natural, clear Swedish before literal translation, but keep the vocabulary of the Warcraft fantasy (*häxdoktor*, *myrmidon*, *vederstygglighet*).
 - Address the player as *du*, never *ni*. A classic quest-giver voice, slightly archaic but natural; do not stack archaisms (*eder*, *sannerligen*) unless the English is formal-epic. Light spoken style for dialect, no phonetic spelling.
-- Ellipsis is ` ...` with a space before it. Straight quotation marks (`"`), no typographic quotes and no em-dashes in game text. Decimal comma (`1,5`), localized units (`30 sekunder`, `9 meter`), and a space before percent (`$s1 %`).
+- Ellipsis is ` ...` with a space before it. Straight quotation marks (`"`), no typographic quotes and no em-dashes in game text. Decimal comma (`1,5`), localized units (`30 sekunder`, `9 meter`; distance numbers in spell texts are yards, so keep writing `meter` after them and the addon shows `yard` or converts, see `WPS.SpellDistances` in `Core.lua`), and a space before percent (`$s1 %`).
 - Idioms are translated by meaning, not word for word (*Other Fish to Fry* = *Annat att ta itu med*).
 - Do not invent names that are missing from the source: *Lord Admiral* without a name is *Herr Amiral*.
 - Fixed vocabulary:

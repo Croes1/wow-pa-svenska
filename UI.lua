@@ -67,15 +67,11 @@ local function TranslateList(text, depth)
 	return table.concat(out, ", ")
 end
 
--- Rutan "Avstånd i meter": "30 yd" blir "27 m" (1 yard = 0,9144 meter). Under 10 meter med en
--- decimal och decimalkomma ("4,6 m"), annars avrundat till heltal.
+-- Rutan "Avstånd i meter": "30 yd" blir "27 m" (WPS.Meters i Core.lua).
 local function ToMeters(s)
-	return (s:gsub("([%d%.]+) yd", function(n)
-		local v = tonumber(n)
-		if not v then return nil end
-		local m = v * 0.9144
-		if m >= 10 then return ("%d m"):format(math.floor(m + 0.5)) end
-		return (("%.1f"):format(m):gsub("%.", ","):gsub(",0$", "")) .. " m"
+	return (s:gsub("(%d[%d%.]*) yd", function(n)
+		local m = WPS.Meters(n)
+		return m and (m .. " m")
 	end))
 end
 

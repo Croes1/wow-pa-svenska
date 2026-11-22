@@ -806,7 +806,7 @@ WPS.L.ui = {
 -- bildruta som spelet bygger tooltipen (TranslateDataLines i Tooltips.lua).
 -- Main Hand, Off Hand, Ranged, Thrown och vapentyperna i plural finns redan ovan;
 -- Shirt, Cloth, Leather, Mail, Shield, Sword, Mace och Fishing Pole i Data/Glossary.lua.
--- "Cooldown" saknas medvetet: nedkylning eller återhämtning är inte beslutat.
+-- Cooldown = återhämtning (TERMINOLOGIBESLUT i Data/Glossary.lua).
 ---------------------------------------------------------------------------
 -- Platser
 ["Head"]="Huvud",
@@ -878,4 +878,13 @@ WPS.L.ui = {
 ["%d Energy"]="%d energi",
 ["%d Mana"]="%d mana",
 ["%d Rage"]="%d raseri",
+-- Återhämtning. Tiden i "Cooldown remaining: %s" översätts som eget argument.
+["Cooldown remaining: %s"]="Återhämtning kvar: %s",
+["%s sec cooldown"]="%s sek återhämtning",
+["%s min cooldown"]="%s min återhämtning",
+["%d Hr %d Min"]="%d tim %d min",
+["%d Min %d Sec"]="%d min %d sek",
+["%d Hr"]="%d tim",
+["%d Min"]="%d min",
+["%d Sec"]="%d sek",
 }

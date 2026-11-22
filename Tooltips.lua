@@ -179,7 +179,7 @@ local function OnSpell(tooltip, data)
 			local fs = FindLine(tooltip, function(text) return text == resolved end)
 			if fs then
 				local sv = WPS.Resolve(t.e or resolved, t.d, resolved)
-				if sv then fs:SetText(sv) end
+				if sv then fs:SetText(WPS.SpellDistances(sv)) end
 			end
 		end
 	end
@@ -210,7 +210,7 @@ local function OnAura(tooltip, data)
 			end
 			return sv ~= nil
 		end)
-		if fs then fs:SetText(sv) end
+		if fs then fs:SetText(WPS.SpellDistances(sv)) end
 	end
 	tooltip:Show()
 end
