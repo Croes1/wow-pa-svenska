@@ -16,6 +16,17 @@ The easiest way to report an incorrect translation is in-game:
 
 Include a short explanation of what you think the correct translation should be.
 
+For tooltip problems that a single report cannot show (text that flickers between English and Swedish, lines that are translated only sometimes), turn on the tooltip log: `/wps tipdebug on`, hover the item or spell for a few seconds, then `/reload` and attach the same file. The log is in `WPSDB.tipLog`, one line per event:
+
+| Line | Meaning |
+|---|---|
+| `post item <tooltip> id=… <result> \| <name before> -> <name after>` | The game rebuilt the tooltip and the addon's post-call ran; `<result>` says what it did (`done`, `name-fallback`, `skip:…`) |
+| `dlines` / `dline` | The lines the game built the tooltip from (`data.lines`) next to what the tooltip shows; listed in full once per item or spell |
+| `frame L3 <old> -> <new>` | A tooltip line (`L` left, `R` right) changed text in that frame |
+| `walk-set <line> <en> -> <sv>` | The 0.2 s UI walk (`UI.lua`) translated a line |
+
+Logging switches itself off at every login; `/wps tipdebug off` stops it earlier.
+
 You can also open an issue directly on GitHub.
 
 ## Collecting missing game text
@@ -211,7 +222,7 @@ The marker is `wps:skillnad` followed by a reason. The reason is required: a mar
 
 - Natural, clear Swedish before literal translation, but keep the vocabulary of the Warcraft fantasy (*häxdoktor*, *myrmidon*, *vederstygglighet*).
 - Address the player as *du*, never *ni*. A classic quest-giver voice, slightly archaic but natural; do not stack archaisms (*eder*, *sannerligen*) unless the English is formal-epic. Light spoken style for dialect, no phonetic spelling.
-- Ellipsis is ` ...` with a space before it. Straight quotation marks (`"`), no typographic quotes and no em-dashes in game text. Decimal comma (`1,5`), localized units (`30 sekunder`, `9 meter`), and a space before percent (`$s1 %`).
+- Ellipsis is ` ...` with a space before it. Straight quotation marks (`"`), no typographic quotes and no em-dashes in game text. Decimal comma (`1,5`), localized units (`30 sekunder`, `9 meter`; distance numbers in spell texts are yards, so keep writing `meter` after them and the addon shows `yard` or converts, see `WPS.SpellDistances` in `Core.lua`), and a space before percent (`$s1 %`).
 - Idioms are translated by meaning, not word for word (*Other Fish to Fry* = *Annat att ta itu med*).
 - Do not invent names that are missing from the source: *Lord Admiral* without a name is *Herr Amiral*.
 - Fixed vocabulary:

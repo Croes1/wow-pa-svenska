@@ -54,6 +54,27 @@ end
 
 local Translate
 
+-- "Rogue, Druid" (argument i "Classes: %s"): översätts del för del, men bara om alla delar har en
+-- översättning. Annars lämnas listan orörd hellre än att blanda språk.
+local function TranslateList(text, depth)
+	if not text:find(", ", 1, true) then return nil end
+	local out = {}
+	for part in (text .. ", "):gmatch("(.-), ") do
+		local sv = Translate(part, depth)
+		if not sv then return nil end
+		out[#out + 1] = sv
+	end
+	return table.concat(out, ", ")
+end
+
+-- Rutan "Avstånd i meter": "30 yd" blir "27 m" (WPS.Meters i Core.lua).
+local function ToMeters(s)
+	return (s:gsub("(%d[%d%.]*) yd", function(n)
+		local m = WPS.Meters(n)
+		return m and (m .. " m")
+	end))
+end
+
 local function TranslatePlain(text, depth)
 	local sv = Name(text)
 	if sv then return sv end
@@ -103,9 +124,11 @@ local function TranslatePlain(text, depth)
 			-- Argumenten översätts också: "Pass on Loot: No", "Level 27 |cff..Hunter|r", "%s (Complete)".
 			for i, n in ipairs(f.order) do
 				local a = caps[i]
-				args[n] = (depth < 2 and Translate(a, depth + 1)) or a
+				args[n] = (depth < 2 and (Translate(a, depth + 1) or TranslateList(a, depth + 1))) or a
 			end
-			return Fill(f.sv, args)
+			local out = Fill(f.sv, args)
+			if WPS.On("meters") then out = ToMeters(out) end
+			return out
 		end
 	end
 end
@@ -124,12 +147,20 @@ function Translate(text, depth)
 end
 WPS.UITranslate = function(text) return Translate(text, 0) end
 
+-- Sätts när Apply bytt en text; HookGameTooltip läser den för att få tooltipen att mäta om sig.
+local textChanged = false
+
 local function Apply(fs)
 	local text = fs:GetText()
 	if isSecret(text) or type(text) ~= "string" or text == "" then return end
 	local sv = Translate(text)
 	if sv and sv ~= text then
+		if WPS.TipLog and WPS.db and WPS.db.tipDebug then
+			local n = fs.GetName and fs:GetName()
+			if n and n:find("^GameTooltipText") then WPS.TipLog("walk-set", n, text, "->", sv) end
+		end
 		fs:SetText(sv)
+		textChanged = true
 		WPS.Remember("ui", { en = text, sv = sv })
 	end
 end
@@ -141,8 +172,15 @@ end
 local hookedFS = setmetatable({}, { __mode = "k" })
 local busy = false
 
+-- Item- och spelltooltips översätts i Tooltips.lua (TranslateDataLines). Där ska genomgången inte röra
+-- något: den skulle bara kunna översätta andra addons rader, och de ska vara kvar på engelska.
+local function Handled(frame)
+	return frame and WPS.tooltipHandled and WPS.tooltipHandled[frame]
+end
+
 local function AfterSetText(fs)
 	if busy or not WPS.On("ui") then return end
+	if Handled(fs.GetParent and fs:GetParent()) then return end
 	busy = true
 	pcall(Apply, fs)
 	busy = false
@@ -155,8 +193,28 @@ local function HookFontString(fs)
 	pcall(hooksecurefunc, fs, "SetFormattedText", AfterSetText)
 end
 
+-- Knappar: Blizzard sätter knapptext med Button:SetText ("Create" i yrkesfönstret vid varje
+-- uppdatering). Det skriver knappens FontString inifrån klienten, så hooken på FontString:SetText ovan
+-- märker inget och bara genomgången hinner översätta: det blinkar. Därför hookas knappens egen SetText.
+local hookedButtons = setmetatable({}, { __mode = "k" })
+
+local function AfterButtonSetText(button)
+	local fs = button.GetFontString and button:GetFontString()
+	if fs then AfterSetText(fs) end
+end
+
+local function HookButton(frame)
+	if hookedButtons[frame] or not frame.GetFontString then return end
+	local kind = frame.GetObjectType and frame:GetObjectType()
+	if kind ~= "Button" and kind ~= "CheckButton" then return end
+	hookedButtons[frame] = true
+	pcall(hooksecurefunc, frame, "SetText", AfterButtonSetText)
+	pcall(hooksecurefunc, frame, "SetFormattedText", AfterButtonSetText)
+end
+
 local function Walk(frame, depth)
 	if (frame.IsForbidden and frame:IsForbidden()) or not frame:IsVisible() then return end
+	HookButton(frame)
 	for _, r in ipairs({ frame:GetRegions() }) do
 		if r:GetObjectType() == "FontString" and r:IsVisible() then
 			HookFontString(r)
@@ -173,7 +231,7 @@ local function Walk(frame, depth)
 end
 
 local function SafeWalk(frame)
-	if WPS.On("ui") then pcall(Walk, frame, 0) end
+	if WPS.On("ui") and not Handled(frame) then pcall(Walk, frame, 0) end
 end
 
 ---------------------------------------------------------------------------
@@ -246,13 +304,20 @@ end
 local function HookGameTooltip()
 	local f = GameTooltip
 	if not f or hooked.GameTooltip or not f.HookScript then return end
+	-- Tooltipens bredd räknas ut för den engelska texten innan vi byter den. Den svenska texten är ofta
+	-- längre ("Besvärjelsebok (P)") och klipps då med "...". Show() på en synlig tooltip mäter om den.
+	local function WalkTooltip(self)
+		textChanged = false
+		SafeWalk(self)
+		if textChanged and self:IsShown() then pcall(self.Show, self) end
+	end
 	local ok = pcall(function()
 		f:HookScript("OnShow", function(self)
-			SafeWalk(self)
+			WalkTooltip(self)
 			if tickers.GameTooltip then tickers.GameTooltip:Cancel() end
 			tickers.GameTooltip = C_Timer.NewTicker(INTERVAL, function()
 				if self:IsVisible() then
-					SafeWalk(self)
+					WalkTooltip(self)
 				elseif tickers.GameTooltip then
 					tickers.GameTooltip:Cancel()
 					tickers.GameTooltip = nil

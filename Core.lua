@@ -17,7 +17,7 @@ function WPS.Remember(slot, data)
 	WPS.last[slot] = data
 end
 
-local DEFAULTS = { quest = true, gossip = true, item = true, spell = true, npc = true, zone = true, chat = true, ui = true, uimenu = true }
+local DEFAULTS = { quest = true, gossip = true, item = true, spell = true, npc = true, zone = true, chat = true, ui = true, uimenu = true, meters = false }
 
 -- Rutorna i inställningspanelen (Options.lua) och /wps <namn> on|off. group styr rubriken i panelen.
 WPS.CATEGORIES = {
@@ -30,6 +30,8 @@ WPS.CATEGORIES = {
 	{ key = "chat", group = "Gränssnitt", label = "Systemmeddelanden i chatten", desc = "Byte, anseende, erfarenhet och liknande" },
 	{ key = "ui", group = "Gränssnitt", label = "Fönster och knappar", desc = "Rollfigurspanel, inställningar, spelmeny, karta och andra Blizzard-fönster" },
 	{ key = "uimenu", group = "Gränssnitt", label = "Högerklicksmenyer", desc = "Menyerna på porträtt och i grupp- och vänlistan" },
+	-- Inte en översättningskategori utan ett val; "Allt på/av" i panelen rör den inte (noall).
+	{ key = "meters", group = "Gränssnitt", label = "Avstånd i meter", desc = "Avstånd räknas om från yards till meter (30 yards blir 27 m); annars visas yards", noall = true },
 }
 
 function WPS.Print(...)
@@ -70,11 +72,36 @@ function WPS.Name(text)
 	end
 end
 
+-- Avstånd. Spelet räknar i yards: talen i tooltips och besvärjelsetexter är alltid yards.
+-- Rutan "Avstånd i meter" räknar om talet (1 yard = 0,9144 m); annars står talet kvar och enheten
+-- är yard. Under 10 meter med en decimal och decimalkomma ("4,6"), annars avrundat till heltal.
+function WPS.Meters(yards)
+	local v = tonumber(yards)
+	if not v then return nil end
+	local m = v * 0.9144
+	if m >= 10 then return ("%d"):format(math.floor(m + 0.5)) end
+	return (("%.1f"):format(m):gsub("%.", ","):gsub(",0$", ""))
+end
+
+-- Besvärjelsetexterna i Data/Spell.lua skriver "inom $a1 meter", men talet som spelet fyller i är
+-- yards. Därför byts enheten mot yard, eller talet räknas om när rutan är ikryssad.
+function WPS.SpellDistances(s)
+	if type(s) ~= "string" then return s end
+	return (s:gsub("(%d[%d%.]*) meter", function(n)
+		if WPS.On("meters") then
+			local m = WPS.Meters(n)
+			return m and (m .. " meter")
+		end
+		return n .. " yard"
+	end))
+end
+
 local function OnEvent(_, event, name)
 	if event == "ADDON_LOADED" and name == ADDON then
 		WPSDB = WPSDB or {}
 		-- Dialog följde förr rutan för uppdrag: behåll spelarens val när den nya rutan dyker upp.
 		if WPSDB.gossip == nil and WPSDB.quest ~= nil then WPSDB.gossip = WPSDB.quest end
+		WPSDB.tipDebug = nil -- felsökningen slås på för hand varje session; loggen (tipLog) ligger kvar
 		WPSDB.origLine = nil -- rutan finns inte längre (raden gav taint och togs bort)
 		for k, v in pairs(DEFAULTS) do
 			if WPSDB[k] == nil then WPSDB[k] = v end
@@ -85,6 +112,10 @@ local function OnEvent(_, event, name)
 			local ok, err = pcall(fn)
 			if not ok then WPS.Print("Fel vid start:", err) end
 		end
+		-- Versionen skrivs i chatten vid inloggning och /reload (PLAYER_LOGIN kommer vid båda).
+		local get = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
+		local version = get and get(ADDON, "Version") or "?"
+		WPS.Print(("version %s laddad. /wps öppnar inställningarna."):format(version))
 	end
 end
 
