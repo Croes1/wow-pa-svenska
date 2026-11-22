@@ -16,6 +16,48 @@ local function SetText(fs, text)
 	end
 end
 
+-- Målantal: "$1oa" i målen är klientens egen platshållare för antal för mål 1, 2 ...
+-- Klienten räknar ut den för engelska texten men inte för vår svenska, så vi tar värdet från
+-- loggens mål, annars från siffrorna i den engelska texten. Går det inte: nil (engelskan visas).
+local function ObjectiveCounts(text, id, english)
+	local wanted = {}
+	for n in text:gmatch("%$(%d+)oa") do wanted[tonumber(n)] = true end
+	local count = 0
+	for _ in pairs(wanted) do count = count + 1 end
+
+	local values = {}
+	local objectives = id and C_QuestLog and C_QuestLog.GetQuestObjectives and C_QuestLog.GetQuestObjectives(id)
+	if type(objectives) == "table" and #objectives > 0 then
+		for n in pairs(wanted) do
+			local o = objectives[n]
+			if o and o.numRequired and o.numRequired > 0 then values[n] = o.numRequired end
+		end
+	end
+
+	local missing = false
+	for n in pairs(wanted) do
+		if not values[n] then missing = true end
+	end
+	if missing then
+		values = {}
+		local numbers = {}
+		for d in (english or ""):gmatch("%d+") do numbers[#numbers + 1] = d end
+		if #numbers ~= count then return nil end
+		for n in pairs(wanted) do values[n] = numbers[n] end
+		for n in pairs(wanted) do
+			if not values[n] then return nil end
+		end
+	end
+	return values
+end
+
+local function ExpandObjectives(text, id, english)
+	if not text:find("%$%d+oa") then return text end
+	local values = ObjectiveCounts(text, id, english)
+	if not values then return nil end
+	return (text:gsub("%$(%d+)oa", function(n) return tostring(values[tonumber(n)]) end))
+end
+
 -- Målrad: "#/# Murlocfena" + engelsk rad "3/10 Murloc Fin" -> "3/10 Murlocfena".
 local function ObjectiveLine(q, index, english)
 	local tl = q.l and q.l[index]
@@ -46,7 +88,11 @@ local function ApplyQuestInfo()
 	if not q then return end
 	SetText(QuestInfoTitleHeader, q.t)
 	SetText(QuestInfoDescriptionText, q.d)
-	SetText(QuestInfoObjectivesText, q.o)
+	if q.o and QuestInfoObjectivesText then
+		local english = QuestInfoObjectivesText:GetText()
+		local text = ExpandObjectives(q.o, id, english)
+		if text then SetText(QuestInfoObjectivesText, text) end
+	end
 	SetText(QuestInfoRewardText, q.c)
 
 	if q.l and QuestInfoFrame and QuestInfoFrame.questLog and C_QuestLog.GetQuestObjectives then
